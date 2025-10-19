@@ -32,3 +32,8 @@ form[role="search"] input.form-control:focus {
 body {
     padding-top: 70px; 
 }
+
+.form-container{
+  max-width: 350;
+  padding: 1rem;
+}
