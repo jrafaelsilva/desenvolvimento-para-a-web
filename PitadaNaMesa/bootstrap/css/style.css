@@ -25,7 +25,7 @@ form[role="search"] input.form-control {
 }
 
 form[role="search"] input.form-control:focus {
-  border-color: #64a06e;
+  border-color: #517557;
   box-shadow: 0 0 5px rgba(100, 160, 110, 0.4);
 }
 
@@ -36,4 +36,11 @@ body {
 .form-container{
   max-width: 350;
   padding: 1rem;
+}
+
+.bg-receita{
+  background-color:#f5f0d6;
+  font-family: Arial, Helvetica, sans-serif;
+  outline: 2px solid black; 
+  padding: 10px
 }
