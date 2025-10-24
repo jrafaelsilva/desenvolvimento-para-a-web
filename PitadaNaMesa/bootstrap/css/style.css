@@ -5,18 +5,18 @@
 
 }
 .favorite-btn {
-  background-color: white !important;
+  background-color: rgb(255,255,255) !important;
   border: none;
   box-shadow: none;
 }
 
 .favorite-btn i {
-  color: gray;
+  color: rgb(128,128,128);
   transition: color 0.3s ease;
 }
 
 .favorite-btn.active i {
-  color: red;
+  color: rgb(255, 0, 0);
 }
 
 form[role="search"] input.form-control {
@@ -25,22 +25,69 @@ form[role="search"] input.form-control {
 }
 
 form[role="search"] input.form-control:focus {
-  border-color: #517557;
-  box-shadow: 0 0 5px rgba(100, 160, 110, 0.4);
+  border-color: rgb(81, 117, 87);
+  box-shadow: 0 0 5px rgb(100, 160, 110);
 }
 
 body {
     padding-top: 70px; 
 }
 
-.form-container{
-  max-width: 350;
-  padding: 1rem;
-}
-
 .bg-receita{
-  background-color:#f5f0d6;
+  background-color:rgb(243, 203, 143);
   font-family: Arial, Helvetica, sans-serif;
   outline: 2px solid black; 
   padding: 10px
+}
+
+.btn-style {
+  
+  color: rgb(100, 160, 110);
+  font-weight: 600;
+  border: none;
+  transition: 0.3s;
+}
+
+.btn-style:hover {
+ color: rgb(27, 71, 47);
+ transform: scale(1.03);
+}
+
+
+/*outro tipo de botao*/
+.btn-style2 {
+  background-color: transparent;
+  color: rgb(81, 117, 87);
+  border: 2px solid rgb(81, 117, 87);
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-style2:hover {
+  background-color: rgb(81, 117, 87);
+  color: rgb(245, 240, 214);
+}
+
+/*barra de voltar atras*/
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "›"; 
+  color: rgb(81, 117, 87); 
+  font-weight: 500;
+}
+
+.breadcrumb a {
+  color: rgb(81, 117, 87);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb a:hover {
+  color: rgb(27, 71, 47);
+}
+
+.breadcrumb-item.active {
+  color: rgb(0, 0, 0); 
+  font-weight: 600;
 }
