@@ -1,8 +1,17 @@
 /* --- MODIFICAÇÃO: Garante altura total e alinhamento do botão na base --- */
+
+body {
+ 
+  padding-top: 70px; 
+}
+
+.banner {
+ 
+  border-radius: 1rem; 
+  margin-top: 2rem; 
+  max-width: 1000px;
+}
 .card {
-    /* Estas linhas não são mais necessárias devido ao d-flex no col: */
-    /* margin-left: auto; */
-    /* margin-right: auto; */
 
     /* Torna o card num Flex Container para que o conteúdo seja alinhado verticalmente */
     display: flex;
@@ -25,18 +34,6 @@
     /* Já que a linha acima usa 'align-items: center', o botão será centralizado e não esticado */
 }
 
-/* --- NOVO BLOCO: Limita o texto a 2 linhas e adiciona reticências (para .card-text) --- */
-.text-truncate-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Limita a 2 linhas visíveis */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    /* Adiciona alguma margem inferior para o botão, se não estiver já no HTML */
-    margin-bottom: 0.5rem; 
-    /* Adicionado para garantir que o texto não interfere com o alinhamento */
-    text-align: center; 
-}
 /* --- Resto do seu código CSS original --- */
 .favorite-btn {
     background-color: rgb(255, 255, 255) !important;
@@ -54,23 +51,7 @@
 }
 /* ... resto dos estilos ... */
 
-/* Estilos para o botão antigo/padrão */
-.btn-style {
-    color: rgb(100, 160, 110);
-    font-weight: 600;
-    border: none;
-    transition: 0.3s;
-    /* Adiciona padding horizontal para o botão não parecer apenas um link */
-    padding: 0.375rem 0.75rem; 
-    text-decoration: none;
-    border: 1px solid rgb(100, 160, 110); /* Adicionei uma borda fina para definição */
-    border-radius: 0.25rem;
-}
 
-.btn-style:hover {
-    color: rgb(27, 71, 47);
-    transform: scale(1.03);
-}
 
 
 /*outro tipo de botao - Mantido o estilo anterior para referência */
@@ -165,12 +146,3 @@
     }
 }
 
-/* Limita o texto a 2 linhas e adiciona reticências */
-.text-truncate-2 {
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* Limita a 2 linhas visíveis */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 0.5rem; 
-}

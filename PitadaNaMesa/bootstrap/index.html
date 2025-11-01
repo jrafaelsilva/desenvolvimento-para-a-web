@@ -60,6 +60,8 @@
     </nav>
   </header>
 
+<img src="imgs/banner.jpeg" class=" img-fluid d-block mx-auto banner" alt="Banner Pitada na Mesa">
+
 <div class="container"> 
   <div class="fw-bold mb-4 mt-5 fs-4 text-start">Receitas em destaque</div>
 
@@ -68,7 +70,7 @@
     <div class="col d-flex">
       <div class="card h-100">
         <img src="imgs/bolo.morango.webp" class="card-img-top" alt="Bolo de morango">
-        <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn"><i class="bi bi-heart-fill"></i></button>
+        <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn" aria-label="Adicionar aos favoritos"><i class="bi bi-heart-fill"></i></button>
         <div class="card-body text-center">
           <h5 class="card-title">Bolo de morango</h5>
           <p class="card-text text-truncate-2">Deliciosa receita que combina o sabor magnífico do morango com...</p>
@@ -80,7 +82,7 @@
     <div class="col d-flex">
       <div class="card h-100">
         <img src="imgs/picanha" class="card-img-top" alt="Picanha grelhada">
-        <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn"><i class="bi bi-heart-fill"></i></button>
+        <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn" aria-label="Adicionar aos favoritos"><i class="bi bi-heart-fill"></i></button>
         <div class="card-body text-center">
           <h5 class="card-title ">Picanha grelhada</h5>
           <p class="card-text text-truncate-2">Deliciosa receita que combina o suculento sabor da picanha... </p>
@@ -92,10 +94,10 @@
     <div class="col d-flex">
       <div class="card h-100">
         <img src="imgs/bolonhesa.jpg" class="card-img-top" alt="Esparguete à Bolonhesa">
-        <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn"><i class="bi bi-heart-fill"></i></button>
+        <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn" aria-label="Adicionar aos favoritos"><i class="bi bi-heart-fill"></i></button>
         <div class="card-body text-center">
           <h5 class="card-title">Esparguete à Bolonhesa</h5>
-          <p class="card-text text-truncate-2">A clássica receita italiana, reconfortante e cheia de sabor a carne e tomate.</p>
+          <p class="card-text text-truncate-2">A clássica receita italiana, cheia de sabor a carne e tomate.</p>
           <a href="bolonhesa.html" class="btn btn-style2">Abrir receita</a>
         </div>
       </div>
@@ -104,10 +106,10 @@
     <div class="col d-flex">
       <div class="card h-100">
         <img src="imgs/bolodecenoura.png" class="card-img-top" alt="Bolo de Cenoura">
-        <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn"><i class="bi bi-heart-fill"></i></button>
+        <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn" aria-label="Adicionar aos favoritos"><i class="bi bi-heart-fill"></i></button>
         <div class="card-body text-center">
           <h5 class="card-title">Bolo de Cenoura</h5>
-          <p class="card-text text-truncate-2">Um bolo húmido e delicioso, ideal para o lanche, com cobertura de chocolate.</p>
+          <p class="card-text text-truncate-2">Um bolo húmido e delicioso, com cobertura de chocolate.</p>
           <a href="bolodecenoura.html" class="btn btn-style2">Abrir receita</a>
         </div>
       </div>
@@ -116,45 +118,40 @@
   
   <div class="container my-4">
 
-      <div class="d-flex justify-content-between align-items-center mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
         <div class="fw-bold fs-4 text-start">Conheça os nossos Chefs</div>
         <a href="#" class="text-success text-decoration-none d-flex align-items-center fw-semibold">
-          Ver tudo <i class="bi bi-chevron-right ms-1"></i>
+            Ver tudo <i class="bi bi-chevron-right ms-1"></i>
         </a>
-      </div>
-      <div class="row text-start row-cols-2 row-cols-md-3 row-cols-lg-5 g-4"> 
-          <div class="col">
-              <a href="chef-carlos-afonso.html" class="text-decoration-none text-dark d-block text-center">
-                  <div class="chef-wrapper mx-auto"><img src="imgs/Carlos.Afonos.webp" alt="Carlos Afonso" class="img-fluid rounded-circle"></div>
-                  <p class="mt-3 fw-semibold fs-5">Carlos Afonso</p>
-              </a>
-          </div>
-          <div class="col">
-              <a href="chef-margarita.html" class="text-decoration-none text-dark d-block text-center">
-                  <div class="chef-wrapper mx-auto"><img src="imgs/Margarita.Pugovka.webp" alt="Margarita Pugovka" class="img-fluid rounded-circle"></div>
-                  <p class="mt-3 fw-semibold fs-5">Margarita Pugovka</p>
-              </a>
-          </div>
-          <div class="col">
-              <a href="chef-miguel-mesquita.html" class="text-decoration-none text-dark d-block text-center">
-                  <div class="chef-wrapper mx-auto"><img src="imgs/Miguel.Mesquita.webp" alt="Miguel Mesquita" class="img-fluid rounded-circle"></div>
-                  <p class="mt-3 fw-semibold fs-5">Miguel Mesquita</p>
-              </a>
-          </div>
-          <div class="col">
-              <a href="chef-henrique.html" class="text-decoration-none text-dark d-block text-center">
-                  <div class="chef-wrapper mx-auto"><img src="imgs/Henrique.Sá.Pes.webp" alt="Henrique Sá Pes" class="img-fluid rounded-circle"></div>
-                  <p class="mt-3 fw-semibold fs-5">Henrique Sá Pes</p>
-              </a>
-          </div>
-          <div class="col">
-              <a href="chef-outro.html" class="text-decoration-none text-dark d-block text-center">
-                  <div class="chef-wrapper mx-auto"><img src="imgs/Miguel.Mesquita.webp" alt="Outro Chef" class="img-fluid rounded-circle"></div>
-                  <p class="mt-3 fw-semibold fs-5">Outro Chef</p>
-              </a>
-          </div>
-      </div>
     </div>
+
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4"> 
+        <div class="col">
+            <a href="chef-carlos-afonso.html" class="text-decoration-none text-dark d-block text-center">
+                <div class="chef-wrapper mx-auto"><img src="imgs/Carlos.Afonos.webp" alt="Carlos Afonso" class="img-fluid rounded-circle"></div>
+                <p class="mt-3 fw-semibold fs-5">Carlos Afonso</p>
+            </a>
+        </div>
+        <div class="col">
+            <a href="chef-margarita.html" class="text-decoration-none text-dark d-block text-center">
+                <div class="chef-wrapper mx-auto"><img src="imgs/Margarita.Pugovka.webp" alt="Margarita Pugovka" class="img-fluid rounded-circle"></div>
+                <p class="mt-3 fw-semibold fs-5">Margarita Pugovka</p>
+            </a>
+        </div>
+        <div class="col">
+            <a href="chef-miguel-mesquita.html" class="text-decoration-none text-dark d-block text-center">
+                <div class="chef-wrapper mx-auto"><img src="imgs/Miguel.Mesquita.webp" alt="Miguel Mesquita" class="img-fluid rounded-circle"></div>
+                <p class="mt-3 fw-semibold fs-5">Miguel Mesquita</p>
+            </a>
+        </div>
+        <div class="col">
+            <a href="chef-henrique.html" class="text-decoration-none text-dark d-block text-center">
+                <div class="chef-wrapper mx-auto"><img src="imgs/Henrique.Sá.Pes.webp" alt="Henrique Sá Pes" class="img-fluid rounded-circle"></div>
+                <p class="mt-3 fw-semibold fs-5">Henrique Sá Pes</p>
+            </a>
+        </div>
+    </div>
+</div>
 
 
     <div class="container text-center mt-5 mb-5"> 
