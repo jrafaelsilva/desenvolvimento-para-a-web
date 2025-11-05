@@ -1,16 +1,28 @@
-/* --- MODIFICAÇÃO: Garante altura total e alinhamento do botão na base --- */
-
 body {
  
   padding-top: 70px; 
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.bg-fade {
+  background-image: linear-gradient(
+    to bottom, 
+    rgb(239, 229, 178), 
+    rgb(254, 248, 225)
+  );
 }
 
 .banner {
- 
-  border-radius: 1rem; 
-  margin-top: 2rem; 
-  max-width: 1000px;
+  border-radius: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 .card {
 
     /* Torna o card num Flex Container para que o conteúdo seja alinhado verticalmente */
@@ -34,7 +46,6 @@ body {
     /* Já que a linha acima usa 'align-items: center', o botão será centralizado e não esticado */
 }
 
-/* --- Resto do seu código CSS original --- */
 .favorite-btn {
     background-color: rgb(255, 255, 255) !important;
     border: none;
@@ -49,12 +60,9 @@ body {
 .favorite-btn.active i {
     color: rgb(255, 0, 0);
 }
-/* ... resto dos estilos ... */
 
 
-
-
-/*outro tipo de botao - Mantido o estilo anterior para referência */
+/* botao card */
 .btn-style2 {
     background-color: transparent;
     color: rgb(81, 117, 87);
@@ -69,17 +77,15 @@ body {
     color: rgb(245, 240, 214);
 }
 
-/* ... Resto do CSS ... */
 
-
-/*barra de voltar atras*/
+/*bg ingredientes*/
 .bg-receita{
   background-color:rgb(245, 240, 214);
-  font-family: Arial, Helvetica, sans-serif;
   outline: 2px solid rgb(111, 111, 111); 
   padding: 10px
 }
 
+/*barra de voltar atras*/
 .breadcrumb-item + .breadcrumb-item::before {
     content: "›"; 
     color: rgb(111, 111, 111); 
@@ -152,3 +158,51 @@ body {
     }
 }
 
+.timer-sticky {
+  position: fixed;
+  top: 80px;  /* Distância do topo (para não ficar atrás da tua navbar) */
+  right: 20px; /* Distância da direita */
+  
+  /* Estilo visual */
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  /* Z-index para ficar por cima de outro conteúdo */
+  z-index: 1020; 
+  
+  /* Animação suave */
+  transition: all 0.3s ease;
+  
+  /* Importante: para que o botão de pausa fique colado por baixo */
+  display: flex; /* Transforma em flex container */
+  flex-direction: column; /* Alinha os itens em coluna */
+  align-items: center; /* Centra os itens horizontalmente */
+  gap: 0.5rem; /* Espaço entre o temporizador e o botão */
+}
+
+/* Esconde o título e os botões originais */
+.timer-sticky h4,
+.timer-sticky .timer-controls-original { /* Adicionámos uma nova classe ao div dos botões originais */
+   display: none !important; 
+}
+
+/* Ajustamos o tamanho do tempo no modo "colado" */
+.timer-sticky #timer {
+  font-size: 2.5rem; /* Um pouco menor que o display-4 */
+  margin-bottom: 0 !important;
+}
+
+/* Estilo para o novo botão de pausa, que só aparece no modo sticky */
+.timer-sticky #sticky-pause-btn {
+  display: block !important; /* Mostra o botão quando a classe sticky está ativa */
+  margin-top: 0.5rem; /* Um pouco de espaço extra */
+  width: 100%; /* Ocupa a largura total do contentor sticky */
+}
+
+/* Por defeito, o botão de pausa sticky está escondido */
+#sticky-pause-btn {
+    display: none; 
+}
