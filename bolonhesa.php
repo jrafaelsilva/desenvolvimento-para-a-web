@@ -18,7 +18,7 @@
   <header>
     <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgb(245, 240, 214);">
       <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="index.php">
           <img src="imgs/pitada.logo.png" alt="Logótipo" width="100" height="auto">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -29,7 +29,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.html">Página Inicial</a>
+              <a class="nav-link active" aria-current="page" href="index.php">Página Inicial</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -37,13 +37,13 @@
                 Receitas
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="receitasdecarne.html">Carne</a></li>
+                <li><a class="dropdown-item" href="receitasdecarne.php">Carne</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="receitasdepeixe.html">Peixe</a></li>
+                <li><a class="dropdown-item" href="receitasdepeixe.php">Peixe</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="receitasdesobremesa.html">Sobremesa</a></li>
+                <li><a class="dropdown-item" href="receitasdesobremesa.php">Sobremesa</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="receitasdesopas.html">Sopas e Cremes</a></li>
+                <li><a class="dropdown-item" href="receitasdesopas.php">Sopas e Cremes</a></li>
               </ul>
             </li>
             <li class="nav-item">
@@ -63,7 +63,7 @@
           </form>
 
           <li class="nav-item d-flex align-items-center ms-3">
-            <a href="login.html" class="nav-link p-0">
+            <a href="login.php" class="nav-link p-0">
               <i class="bi bi-person-circle fs-4"></i>
             </a>
           </li>
@@ -74,8 +74,8 @@
 
   <nav aria-label="breadcrumb" class="ms-3 mt-4">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-      <li class="breadcrumb-item"><a href="receitasdecarne.html">Receitas de carne</a></li>
+      <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+      <li class="breadcrumb-item"><a href="receitasdecarne.php">Receitas de carne</a></li>
       <li class="breadcrumb-item active" aria-current="page">Bolonhesa</li>
     </ol>
   </nav>
@@ -95,7 +95,7 @@
 
         <div class="container overflow-hidden">
           <div class="row gx-4 py-4 align-items-start">
-              <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+              <div class="col-12 col-md-6 d-flex flex-column">
                   <div class=" mb-4 mt-5 fs-4 text-center ">Ingredientes</div>
                   <div class="p-3 w-75 mt-2 mx-auto">
                     <ul class="list-group">
@@ -112,7 +112,7 @@
                   </ul></div>
               </div>
             <div class="col-12 col-md-6">
-              <div class=" mb-4 mt-5 fs-4 text-center">Modo de Preparação</div>
+              <div class=" mb-4 mt-5 fs-4 text-center ">Modo de Preparação</div>
                 <div class="p-3">
                     <ul class="list-group list-group-flush list-group-numbered">
                       <li class="list-group-item">Num tacho, coza o esparguete em água a ferver durante 8 minutos.</li>

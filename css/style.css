@@ -1,0 +1,168 @@
+body {
+  background-color: rgb(253, 249, 243);
+  padding-top: 70px;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.bg-fade {
+  background-image: linear-gradient(to bottom, rgb(239, 229, 178), rgb(254, 248, 225));
+}
+
+.banner {
+  border-radius: 1rem;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
+.favorite-btn {
+  background-color: rgb(255, 255, 255) !important;
+  border: none;
+  box-shadow: none;
+}
+
+.favorite-btn i {
+  color: rgb(128, 128, 128);
+  transition: color 0.3s ease;
+}
+
+.favorite-btn.active i {
+  color: rgb(255, 0, 0);
+}
+
+.btn-style2 {
+  background-color: transparent;
+  color:  rgb(182, 125, 95);
+  border: 2px solid rgb(182, 125, 95);
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.btn-style2:hover {
+  background-color: rgb(182, 125, 95);
+  border-color: rgb(182, 125, 95); 
+  color: rgb(245, 240, 214);
+}
+
+.bg-receita {
+  background-color: rgb(245, 240, 214);
+  outline: 2px solid rgb(111, 111, 111);
+  padding: 10px;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  content: "›";
+  color: rgb(111, 111, 111);
+  font-weight: 500;
+}
+
+.breadcrumb a {
+  color: rgb(182, 125, 95);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadcrumb a:hover {
+  color: rgb(174, 92, 47);
+}
+
+.breadcrumb-item.active {
+  color: rgb(0, 0, 0);
+  font-weight: 600;
+}
+
+.chef-wrapper {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid  rgb(182, 125, 95);
+  box-shadow: inset 0 0 0 5px rgb(243, 226, 212), 0 0 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.cor-vertudo {
+  color: rgb(182, 125, 95) !important;          /* Cor principal (laranja claro) */
+  text-decoration-color: rgb(182, 125, 95) !important;
+  font-weight: 600;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+
+.cor-vertudo:hover {
+  color: rgb(174, 92, 47) !important;           /* Laranja mais escuro no hover */
+  text-decoration-color: rgb(174, 92, 47) !important;
+  transform: translateX(4px);                   /* Pequeno movimento para a direita */
+}
+.chef-wrapper img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-img-fixed {
+  height: 400px;
+  object-fit: cover;
+}
+
+.carrossel-responsivo {
+  width: 95% !important;
+  margin: 0 auto;
+}
+
+/* Largura específica para desktop (a partir de 992px) */
+@media (min-width: 992px) {
+  .w-lg-60 {
+    width: 50% !important;
+  }
+}
+
+.timer-sticky {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+
+  background-color: rgb(255, 255, 255);
+  border: 1px solid rgb(221, 221, 221);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1020;
+
+  transition: all 0.3s ease;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Esconde título e botões originais */
+.timer-sticky h4,
+.timer-sticky .timer-controls-original {
+  display: none !important;
+}
+
+/* Ajuste de tamanho do tempo */
+.timer-sticky #timer {
+  font-size: 2.5rem;
+  margin-bottom: 0 !important;
+}
+
+/* Botão de pausa (modo sticky) */
+.timer-sticky #sticky-pause-btn {
+  display: block !important;
+  margin-top: 0.5rem;
+  width: 100%;
+}
+
+/* Por defeito, o botão de pausa está escondido */
+#sticky-pause-btn {
+  display: none;
+}

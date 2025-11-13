@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Receitas de carne</title>
+  <title>Receitas de peixe</title>
 
   <!-- Bootstrap local -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -16,7 +16,7 @@
   <header>
     <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgb(245, 240, 214);">
       <div class="container-fluid">
-        <a class="navbar-brand" href="index.html">
+        <a class="navbar-brand" href="index.php">
           <img src="imgs/pitada.logo.png" alt="Logótipo" width="100" height="auto">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -27,7 +27,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.html">Página Inicial</a>
+              <a class="nav-link active" aria-current="page" href="index.php">Página Inicial</a>
             </li>
             <li class="nav-item dropdown">
               <a class="nav-link active dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
@@ -35,13 +35,13 @@
                 Receitas
               </a>
               <ul class="dropdown-menu">
-                <li><a class="dropdown-item" href="receitasdecarne.html">Carne</a></li>
+                <li><a class="dropdown-item" href="receitasdecarne.php">Carne</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="receitasdepeixe.html">Peixe</a></li>
+                <li><a class="dropdown-item" href="receitasdepeixe.php">Peixe</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="receitasdesobremesa.html">Sobremesa</a></li>
+                <li><a class="dropdown-item" href="receitasdesobremesa.php">Sobremesa</a></li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="receitasdesopas.html">Sopas e Cremes</a></li>
+                <li><a class="dropdown-item" href="receitasdesopas.php">Sopas e Cremes</a></li>
               </ul>
             </li>
             <li class="nav-item">
@@ -61,7 +61,7 @@
           </form>
 
           <li class="nav-item d-flex align-items-center ms-3">
-            <a href="login.html" class="nav-link p-0">
+            <a href="login.php" class="nav-link p-0">
               <i class="bi bi-person-circle fs-4"></i>
             </a>
           </li>
@@ -70,52 +70,24 @@
     </nav>
   </header>
 
-
   <nav aria-label="breadcrumb" class="ms-3 mt-4">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-      <li class="breadcrumb-item active" aria-current="page">Receitas de carne</li>
+      <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Receitas de peixe</li>
     </ol>
   </nav>
 
+
    <div class="container">
-    <div class="fw-bold mb-4 mt-5 fs-4 text-start">Receitas de carne</div>
+    <div class="fw-bold mb-4 mt-5 fs-4 text-start">Receitas de peixe</div>
 
-    <div class="row align-items-start mt-5">
-      <div class="col d-flex mb-3">
-        <div class="card" style="width: 18rem;">
-          <img src="imgs/picanha" class="card-img-top" alt="...">
-          <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn">
-            <i class="bi bi-heart-fill"></i>
-          </button>
-          <div class="card-body text-center">
-            <h5 class="card-title ">Picanha grelhada</h5>
-            <p class="card-text">Deliciosa receita que combina o suculento sabor da picanha... </p>
-            <a href="picanha.html" class="btn btn-style2">Abrir receita</a>
-          </div>
-        </div>
-      </div>
 
-      <div class="col d-flex mb-3">
-        <div class="card" style="width: 18rem;">
-          <img src="imgs/bolonhesa.jpg" class="card-img-top" alt="...">
-          <button class="btn btn-light position-absolute bottom-1 end-0 m-2 rounded-circle shadow-sm favorite-btn">
-            <i class="bi bi-heart-fill"></i>
-          </button>
-          <div class="card-body text-center">
-            <h5 class="card-title ">Bolonhesa</h5>
-            <p class="card-text">Deliciosa receita que combina o suculento sabor da picanha... </p>
-            <a href="bolonhesa.html" class="btn btn-style2">Abrir receita</a>
-          </div>
-        </div>
-      </div>
+
 
     </div>
-  </div>
-    
 
 
-  <footer class="text-center text-lg-start mt-5" style="background-color: rgb(245, 240, 214); color: rgb(51, 51, 51);">
+<footer class="text-center text-lg-start mt-5" style="background-color: rgb(245, 240, 214); color: rgb(51, 51, 51);">
   <div class="container p-4">
     <div class="row">
       <!-- Sobre -->
