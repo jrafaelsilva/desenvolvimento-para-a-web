@@ -13,8 +13,8 @@
         <div class="col-lg-4 col-md-6 mb-4 mb-md-0 text-start">
           <h5 class="fw-bold mb-3">Links úteis</h5>
           <ul class="list-unstyled mb-0">
-            <li><a href="#" class="text-decoration-none text-dark">Página Inicial</a></li>
-            <li><a href="#" class="text-decoration-none text-dark">Contactos</a></li>
+            <li><a href="#" class="link-underline-dark link-underline-opacity-0 link-underline-opacity-100-hover text-dark">Página Inicial</a></li>
+            <li><a href="#" class="link-underline-dark link-underline-opacity-0 link-underline-opacity-100-hover text-dark">Contactos</a></li>
           </ul>
         </div>
 

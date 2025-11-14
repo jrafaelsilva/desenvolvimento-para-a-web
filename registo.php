@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Registo - Pitada na Mesa</title>
+  <link rel="shortcut icon" href="imgs/pitada.logo.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
 </head>
@@ -40,8 +41,8 @@
         <button class="btn btn-success w-100 py-2 mt-3" type="submit">Realizar registo</button>
         
         <p class="mt-3 text-center text-body-secondary mb-0">
-          Já tens conta? 
-          <a href="login.php" class="fw-semibold text-decoration-none">Faz login</a>
+          Já tem conta? 
+          <a href="login.php" class="fw-semibold text-decoration-none">Faça login</a>
         </p>
         
       </form>

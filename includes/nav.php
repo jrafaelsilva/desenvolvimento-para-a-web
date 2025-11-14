@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgb(245, 240, 214);">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">
+        <a class="navbar-brand" href="index.php">
             <img src="imgs/pitada.logo.png" alt="Logótipo" width="100" height="auto">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -10,8 +10,8 @@
 
         <div class="collapse navbar-collapse text-start" id="navbarSupportedContent">
             
-            <ul class="navbar-nav ms-lg-auto mb-2 mb-lg-0"> 
-                <li class="nav-item"><a class="nav-link active fs-5" aria-current="page" href="#">Home</a></li>
+            <ul class="navbar-nav ms-lg-auto mb-2 mb-lg-0 me-4"> 
+                
                 <li class="nav-item dropdown">
                     <a class="nav-link active dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">Receitas</a>
@@ -25,7 +25,7 @@
                         <li><a class="dropdown-item" href="receitasdesopa.php">Sopas e Cremes</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link active fs-5" href="#">Minhas Receitas</a></li>
+                <li class="nav-item"><a class="nav-link active fs-5 ms-3" href="#">Minhas Receitas</a></li>
             </ul>
 
             <form class="d-flex align-items-center position-relative me-lg-3 my-2 my-lg-0 w-100 w-lg-auto align-self-lg-center" role="search" style="max-width: 250px;">

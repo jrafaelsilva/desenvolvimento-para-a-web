@@ -3,66 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bolonhesa</title>
-
+  <title>Receitas </title>
+  <link rel="shortcut icon" href="imgs/pitada.logo.png">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
-  <audio id="alarme" src="https://actions.google.com/sounds/v1/alarms/bugle_tune.ogg" preload="auto"></audio>
 
-  <style>
-/* CSS do Timer (mantido) */
-.timer-sticky {
-  position: fixed;
-  top: 90px; 
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  width: 120px;
-  min-height: 100px;
-  background: linear-gradient(135deg, #ffffff, #f3f3f3);
-  border: 2px solid #d6d6d6;
-  border-radius: 12px;
-  padding: 1rem 0.8rem;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-  z-index: 1050;
-  transition: all 0.3s ease;
-}
-
-.timer-sticky.active {
-  display: flex;
-}
-
-.timer-sticky #timer {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #2e7d32;
-  text-align: center;
-}
-
-.timer-sticky #sticky-pause-btn {
-  display: block !important;
-  font-size: 0.9rem;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 6px;
-  width: 100%;
-}
-
-/* NOVO CSS: Garante que a imagem tenha 50% em telas de desktop */
-#receita-img {
-    width: 100%; /* Padrão 100% no mobile */
-}
-@media (min-width: 768px) { /* A partir de 768px (MD breakpoint) */
-    #receita-img {
-        width: 50% !important; /* Força 50% no desktop */
-        max-width: 50%;
-    }
-}
-  </style>
 </head>
 
 <body>
@@ -74,7 +20,7 @@
 
   <nav aria-label="breadcrumb" class="ms-3 mt-4">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="index.php">Home</a></li>
+      <li class="breadcrumb-item"><a href="index.php"></a></li>
       <li class="breadcrumb-item"><a href="receitasdecarne.php">Receitas de carne</a></li>
       <li class="breadcrumb-item active" aria-current="page">Bolonhesa</li>
     </ol>
@@ -146,78 +92,86 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-  <script>
-    const TEMPO_INICIAL_SEGUNDOS = 2100; // 35 minutos
-    let tempoRestante = TEMPO_INICIAL_SEGUNDOS;
-    let cronometro = null;
-    let aDecorrer = false;
+<script>
+  // --- VARIÁVEIS GLOBAIS ---
+  let tempoRestante = 35 * 60; // 35 minutos em segundos (2100)
+  let cronometro = null;
+  let aDecorrer = false;
 
-    const timerDisplay = document.getElementById("timer");
-    const startBtn = document.getElementById("startBtn");
-    const alarme = document.getElementById("alarme");
-    const timerWrapper = document.getElementById("timer-wrapper");
-    const stickyPauseBtn = document.getElementById("sticky-pause-btn");
+  const timerDisplay = document.getElementById("timer");
+  const startBtn = document.getElementById("startBtn");
+  // Os botões "pauseBtn" e "resetBtn" originais foram removidos
+  const alarme = document.getElementById("alarme");
+  const timerWrapper = document.getElementById("timer-wrapper");
+  const stickyPauseBtn = document.getElementById("sticky-pause-btn"); // O nosso botão "sticky"
 
-    function atualizarDisplay() {
-      const min = String(Math.floor(tempoRestante / 60)).padStart(2, '0');
-      const sec = String(tempoRestante % 60).padStart(2, '0');
-      timerDisplay.textContent = `${min}:${sec}`;
-    }
+  // --- FUNÇÃO PARA ATUALIZAR O DISPLAY ---
+  function atualizarDisplay() {
+    const min = String(Math.floor(tempoRestante / 60)).padStart(2, '0');
+    const sec = String(tempoRestante % 60).padStart(2, '0');
+    timerDisplay.textContent = `${min}:${sec}`;
+  }
 
-    function runTimer() {
-      tempoRestante--;
-      atualizarDisplay();
-
-      if (tempoRestante <= 0) {
-        clearInterval(cronometro);
-        alarme.play();
-        alert("⏰ O tempo terminou!");
-        aDecorrer = false;
-        timerWrapper.classList.remove("timer-sticky", "active");
-        stickyPauseBtn.disabled = true;
-        startBtn.disabled = false;
-        tempoRestante = TEMPO_INICIAL_SEGUNDOS;
-        atualizarDisplay();
-      }
-    }
-
-    function iniciarCronometro() {
-      if (aDecorrer) return;
-      aDecorrer = true;
-
-      tempoRestante = TEMPO_INICIAL_SEGUNDOS;
-      atualizarDisplay();
-
-      cronometro = setInterval(runTimer, 1000);
-      startBtn.disabled = true;
-
-      timerWrapper.classList.add("timer-sticky", "active");
-      stickyPauseBtn.disabled = false;
-      stickyPauseBtn.textContent = "Pausar";
-      stickyPauseBtn.classList.remove("btn-success");
-      stickyPauseBtn.classList.add("btn-warning");
-    }
-
-    function togglePausaResume() {
-      if (aDecorrer) {
-        clearInterval(cronometro);
-        aDecorrer = false;
-        stickyPauseBtn.textContent = "Retomar";
-        stickyPauseBtn.classList.replace("btn-warning", "btn-success");
-      } else {
-        if (tempoRestante > 0) {
-          aDecorrer = true;
-          cronometro = setInterval(runTimer, 1000);
-          stickyPauseBtn.textContent = "Pausar";
-          stickyPauseBtn.classList.replace("btn-success", "btn-warning");
-        }
-      }
-    }
-
-    startBtn.addEventListener("click", iniciarCronometro);
-    stickyPauseBtn.addEventListener("click", togglePausaResume);
-
+  // --- FUNÇÃO CENTRAL DO CRONÓMETRO ---
+  // Esta função é chamada a cada segundo
+  function runTimer() {
+    tempoRestante--;
     atualizarDisplay();
-  </script>
+
+    if (tempoRestante <= 0) {
+      clearInterval(cronometro);
+      alarme.play();
+      alert("O tempo terminou!");
+      aDecorrer = false;
+      
+      // Reiniciar o estado quando o tempo acaba
+      timerWrapper.classList.remove("timer-sticky"); // Esconde o timer sticky
+      stickyPauseBtn.disabled = true;                // Desativa o botão sticky
+      startBtn.disabled = false;                     // Re-ativa o botão "Começar" original
+      tempoRestante = 35 * 60;                       // Repõe o tempo
+      atualizarDisplay();                            // Mostra 35:00
+    }
+  }
+
+  // --- FUNÇÃO PARA INICIAR (Chamada pelo "Começar") ---
+  function iniciarCronometro() {
+    if (aDecorrer) return;
+    aDecorrer = true;
+    cronometro = setInterval(runTimer, 1000); // Inicia a contagem
+
+    startBtn.disabled = true; // Desativa o botão "Começar"
+    timerWrapper.classList.add("timer-sticky"); // Mostra o timer "sticky"
+    stickyPauseBtn.disabled = false; // Ativa o botão "sticky"
+    
+    // Configura o botão "sticky" para o estado "Pausar"
+    stickyPauseBtn.textContent = "Pausar";
+    stickyPauseBtn.classList.remove("btn-success"); // Remove a cor "Retomar" (azul)
+    stickyPauseBtn.classList.add("btn-warning"); // Adiciona a cor "Pausar" (amarelo)
+  }
+
+  // --- FUNÇÃO PARA PAUSAR/RETOMAR (Chamada pelo botão "sticky") ---
+  function togglePausaResume() {
+    if (aDecorrer) {
+      // Se está a decorrer -> PAUSAR
+      clearInterval(cronometro);
+      aDecorrer = false;
+      stickyPauseBtn.textContent = "Retomar";
+      stickyPauseBtn.classList.replace("btn-warning", "btn-success"); // Muda para a cor "Retomar" (azul)
+    } else {
+      // Se está pausado -> RETOMAR
+      aDecorrer = true;
+      cronometro = setInterval(runTimer, 1000); // Retoma a contagem
+      stickyPauseBtn.textContent = "Pausar";
+      stickyPauseBtn.classList.replace("btn-success", "btn-warning"); // Volta à cor "Pausar" (amarelo)
+    }
+  }
+
+  // --- EVENTOS DOS BOTÕES ---
+  startBtn.addEventListener("click", iniciarCronometro);
+  stickyPauseBtn.addEventListener("click", togglePausaResume); // O botão sticky agora faz "toggle"
+
+  // Mostrar tempo inicial
+  atualizarDisplay();
+</script>
 </body>
 </html>

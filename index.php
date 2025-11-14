@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Pitada na Mesa</title>
-
+    <title>Pitada na Mesa</title>  
+    <link rel="shortcut icon" href="imgs/pitada.logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
@@ -16,12 +16,10 @@
       require('includes/nav.php');
     ?>
 
-    <!-- Banner principal -->
     <div class="container">
       <img src="imgs/banner.jpeg" class="banner" alt="Banner Pitada na Mesa">
     </div>
 
-    <!-- Receitas em destaque -->
     <div class="container">
       <div class="fw-bold mt-5 fs-4 text-start">Receitas em destaque</div>
 
@@ -61,18 +59,17 @@
       </div>
     </div>
 
-    <!-- Secção dos Chefs -->
     <div class="container mt-5 my-4">
       <div class="d-flex justify-content-between align-items-center mb-5">
         <div class="fw-bold fs-4 text-start">Conheça os nossos Chefs</div>
-        <a href="#" class="text-decoration-none fw-semibold">
+        <a href="chefs.php" class=" fw-semibold cor-vertudo">
           Ver tudo <i class="bi bi-chevron-right ms-1"></i>
         </a>
       </div>
 
       <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-4">
         <div class="col">
-          <a href="chef-carlos-afonso.php" class="text-decoration-none text-dark d-block text-center">
+          <a href="chefs.php#chef-carlos" class="text-decoration-none text-dark d-block text-center">
             <div class="chef-wrapper mx-auto">
               <img src="imgs/Carlos.Afonos.webp" alt="Carlos Afonso" class="img-fluid rounded-circle">
             </div>
@@ -81,7 +78,7 @@
         </div>
 
         <div class="col">
-          <a href="chef-margarita.php" class="text-decoration-none text-dark d-block text-center">
+          <a href="chefs.php#chef-margarida" class="text-decoration-none text-dark d-block text-center">
             <div class="chef-wrapper mx-auto">
               <img src="imgs/Margarita.Pugovka.webp" alt="Margarita Pugovka" class="img-fluid rounded-circle">
             </div>
@@ -90,7 +87,7 @@
         </div>
 
         <div class="col">
-          <a href="chef-miguel-mesquita.php" class="text-decoration-none text-dark d-block text-center">
+          <a href="chefs.php#chef-miguel" class="text-decoration-none text-dark d-block text-center">
             <div class="chef-wrapper mx-auto">
               <img src="imgs/Miguel.Mesquita.webp" alt="Miguel Mesquita" class="img-fluid rounded-circle">
             </div>
@@ -99,44 +96,53 @@
         </div>
 
         <div class="col">
-          <a href="chef-henrique.php" class="text-decoration-none text-dark d-block text-center">
+          <a href="chefs.php#chef-henrique" class="text-decoration-none text-dark d-block text-center">
             <div class="chef-wrapper mx-auto">
-              <img src="imgs/Henrique.Sá.Pes.webp" alt="Henrique Sá Pes" class="img-fluid rounded-circle">
+              <img src="imgs/Henrique.Sá.Pes.webp" alt="Henrique Sá Pessoa" class="img-fluid rounded-circle">
             </div>
-            <p class="mt-3 fw-semibold fs-5">Henrique Sá Pes</p>
+            <p class="mt-3 fw-semibold fs-5">Henrique Sá Pessoa</p>
           </a>
         </div>
       </div>
     </div>
 
-    <!-- Carrossel de receitas de utilizadores -->
     <div class="container text-center mt-5 mb-5">
       <h2 class="mb-4">As receitas dos nossos utilizadores!</h2>
       <p class="text-muted mb-5">Descobre as criações deliciosas dos nossos visitantes 🍰</p>
     </div>
 
     <div class="d-flex justify-content-center">
-      <div id="carouselExampleInterval" class="carousel slide w-100 w-lg-60 carrossel-responsivo" 
+      <div id="carouselExampleInterval" class="carousel slide carousel-fade w-100 w-lg-60 carrossel-responsivo" 
            data-bs-ride="carousel" data-bs-touch="true">
 
         <div class="carousel-inner">
           <div class="carousel-item active" data-bs-interval="2000">
             <img src="imgs/bolo.morango.webp" class="d-block w-100 carousel-img-fixed rounded-3" alt="bolo de ananas">
+            <div class="carousel-caption">
+            <div class="caixa-texto">
+              <h5>Bolo de cenoura</h5>
+              <p>confecionado pela Odete Soares</p>
+            </div>
+          </div>
           </div>
 
           <div class="carousel-item" data-bs-interval="2000">
             <img src="imgs/receitadeuti.jpg" class="d-block w-100 carousel-img-fixed rounded-3" alt="picanha">
-            <div class="carousel-caption d-none d-md-block">
+            <div class="carousel-caption">
+              <div class="caixa-texto">
               <h5>Picanha</h5>
               <p>confecionada pelo Joaquim Pereira</p>
             </div>
           </div>
+          </div>
 
           <div class="carousel-item" data-bs-interval="2000">
-            <img src="imgs/receitadeuti2.webp" class="d-block w-100 carousel-img-fixed rounded-3" alt="bolo de cenoura">
-            <div class="carousel-caption d-none d-md-block">
+            <img src="imgs/cenoura-uti.jpg" class="d-block w-100 carousel-img-fixed rounded-3" alt="bolo de cenoura">
+            <div class="carousel-caption">
+            <div class="caixa-texto">
               <h5>Bolo de cenoura</h5>
               <p>confecionado pela Odete Soares</p>
+            </div>
             </div>
           </div>
         </div>
@@ -153,7 +159,18 @@
       </div>
     </div>
 
-    <!-- Script dos favoritos -->
+  <div class="container-fluid" style="background-color: #f8f9fa;">
+    <div class="container text-center py-5 my-4">
+        <h2 class="fw-bold mb-3">Tem uma receita que o mundo precisa de conhecer?</h2>
+        <p class="lead text-muted mb-4">
+            Partilhe a sua obra-prima com a nossa comunidade e veja-a em destaque no nosso site!
+        </p>
+        
+        <a href="submeter-receita.php" class="btn btn-style2 btn-lg">
+            <i class="bi bi-upload me-2"></i>Enviar a minha receita
+        </a>
+    </div>
+</div>
     <script>
       document.querySelectorAll('.favorite-btn').forEach(btn => {
         btn.addEventListener('click', () => {
