@@ -104,6 +104,23 @@ body {
   transition: all 0.3s ease;
 }
 
+/*carrosel*/
+.caixa-texto {
+  background-color: rgba(10, 6, 4, 0.816);
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 1;
+}
+
+.caixa-texto h5 {
+    font-size: 1.5rem; 
+}
+
+.caixa-texto p {
+    font-size: 1rem; 
+}
+
 .carousel-img-fixed {
   height: 400px;
   object-fit: cover;
@@ -114,7 +131,6 @@ body {
   margin: 0 auto;
 }
 
-/* Largura específica para desktop (a partir de 992px) */
 @media (min-width: 992px) {
   .w-lg-60 {
     width: 50% !important;
@@ -147,13 +163,13 @@ body {
   display: none !important;
 }
 
-/* Ajuste de tamanho do tempo */
+/* Ajusta o tamanho do tempo */
 .timer-sticky #timer {
   font-size: 2.5rem;
   margin-bottom: 0 !important;
 }
 
-/* Botão de pausa (modo sticky) */
+/* Botão de pausa */
 .timer-sticky #sticky-pause-btn {
   display: block !important;
   margin-top: 0.5rem;
@@ -165,21 +181,4 @@ body {
   display: none;
 }
 
-
-
-.caixa-texto {
-  background-color: rgba(10, 6, 4, 0.816);
-  padding: 10px 20px;
-  border-radius: 8px;
-  display: inline-block; /* Ajusta a caixa ao conteúdo */ 
-  margin-bottom: 1;
-}
-
-.caixa-texto h5 {
-    font-size: 1.5rem; 
-}
-
-.caixa-texto p {
-    font-size: 1rem; 
-}
 

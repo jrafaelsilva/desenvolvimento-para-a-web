@@ -4,11 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Receitas de sobremesas</title>
-
-  <!-- Bootstrap local -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Ícones do Bootstrap -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="shortcut icon" href="imgs/pitada.logo.png">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-icons.min.css" rel="stylesheet">
   <link href="css/style.css" rel="stylesheet">
 </head>
 
@@ -38,7 +36,7 @@
           <div class="card-body text-center">
             <h5 class="card-title ">Bolo de morango</h5>
             <p class="card-text">Deliciosa receita que combina o sabor magnífico do morango com...</p>
-            <a href="#" class="btn btn-style2">Abrir receita</a>
+            <a href="bolodemorango.php" class="btn btn-style2">Abrir receita</a>
           </div>
         </div>
       </div>
@@ -52,7 +50,7 @@
           <div class="card-body text-center">
             <h5 class="card-title ">Bolo de morango</h5>
             <p class="card-text">Deliciosa receita que combina o sabor magnífico do morango com...</p>
-            <a href="#" class="btn btn-style2">Abrir receita</a>
+            <a href="bolodemorango.php" class="btn btn-style2">Abrir receita</a>
           </div>
         </div>
       </div>
@@ -66,7 +64,7 @@
           <div class="card-body text-center">
             <h5 class="card-title ">Bolo de morango</h5>
             <p class="card-text">Deliciosa receita que combina o sabor magnífico do morango com...</p>
-            <a href="#" class="btn btn-style2">Abrir receita</a>
+            <a href="bolodemorango.php" class="btn btn-style2">Abrir receita</a>
           </div>
         </div>
       </div>
@@ -80,7 +78,7 @@
           <div class="card-body text-center">
             <h5 class="card-title ">Bolo de morango</h5>
             <p class="card-text">Deliciosa receita que combina o sabor magnífico do morango com...</p>
-            <a href="#" class="btn btn-style2">Abrir receita</a>
+            <a href="bolodemorango.php" class="btn btn-style2">Abrir receita</a>
           </div>
         </div>
       </div>
@@ -92,6 +90,6 @@
       require('includes/footer.php');
     ?>
     
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

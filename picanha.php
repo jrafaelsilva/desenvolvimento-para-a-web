@@ -37,7 +37,7 @@
       <div class="container overflow-hidden">
           <div class="row gx-4 py-1 align-items-start">
               <div class="col-12 col-md-6 d-flex flex-column align-items-center">
-                  <div class=" mb-4 mt-3 fs-4 text-center ">Ingredientes</div>
+                  <div class=" mb-4 mt-5 fs-4 text-center ">Ingredientes</div>
                   <div class="p-3 w-75 mt-2 mx-auto">
                     <ul class="list-group">
                       <li class="list-group-item bg-receita">Picanha</li>
@@ -69,30 +69,25 @@
       require('includes/footer.php');
     ?>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/bootstrap.bundle.min.js"></script>
     
 <script>
-  // --- VARIÁVEIS GLOBAIS ---
-  let tempoRestante = 35 * 60; // 35 minutos em segundos (2100)
+  let tempoRestante = 35 * 60; 
   let cronometro = null;
   let aDecorrer = false;
 
   const timerDisplay = document.getElementById("timer");
   const startBtn = document.getElementById("startBtn");
-  // Os botões "pauseBtn" e "resetBtn" originais foram removidos
   const alarme = document.getElementById("alarme");
   const timerWrapper = document.getElementById("timer-wrapper");
   const stickyPauseBtn = document.getElementById("sticky-pause-btn"); // O nosso botão "sticky"
 
-  // --- FUNÇÃO PARA ATUALIZAR O DISPLAY ---
   function atualizarDisplay() {
     const min = String(Math.floor(tempoRestante / 60)).padStart(2, '0');
     const sec = String(tempoRestante % 60).padStart(2, '0');
     timerDisplay.textContent = `${min}:${sec}`;
   }
 
-  // --- FUNÇÃO CENTRAL DO CRONÓMETRO ---
-  // Esta função é chamada a cada segundo
   function runTimer() {
     tempoRestante--;
     atualizarDisplay();
@@ -103,53 +98,44 @@
       alert("O tempo terminou!");
       aDecorrer = false;
       
-      // Reiniciar o estado quando o tempo acaba
-      timerWrapper.classList.remove("timer-sticky"); // Esconde o timer sticky
-      stickyPauseBtn.disabled = true;                // Desativa o botão sticky
-      startBtn.disabled = false;                     // Re-ativa o botão "Começar" original
-      tempoRestante = 35 * 60;                       // Repõe o tempo
-      atualizarDisplay();                            // Mostra 35:00
+      timerWrapper.classList.remove("timer-sticky"); 
+      startBtn.disabled = false;                     
+      tempoRestante = 35 * 60;                     
+      atualizarDisplay();                            
     }
   }
 
-  // --- FUNÇÃO PARA INICIAR (Chamada pelo "Começar") ---
   function iniciarCronometro() {
     if (aDecorrer) return;
     aDecorrer = true;
-    cronometro = setInterval(runTimer, 1000); // Inicia a contagem
+    cronometro = setInterval(runTimer, 1000); 
 
-    startBtn.disabled = true; // Desativa o botão "Começar"
-    timerWrapper.classList.add("timer-sticky"); // Mostra o timer "sticky"
-    stickyPauseBtn.disabled = false; // Ativa o botão "sticky"
+    startBtn.disabled = true; 
+    timerWrapper.classList.add("timer-sticky"); 
+    stickyPauseBtn.disabled = false; 
     
-    // Configura o botão "sticky" para o estado "Pausar"
     stickyPauseBtn.textContent = "Pausar";
-    stickyPauseBtn.classList.remove("btn-success"); // Remove a cor "Retomar" (azul)
-    stickyPauseBtn.classList.add("btn-warning"); // Adiciona a cor "Pausar" (amarelo)
+    stickyPauseBtn.classList.remove("btn-success");
+    stickyPauseBtn.classList.add("btn-warning"); 
   }
 
-  // --- FUNÇÃO PARA PAUSAR/RETOMAR (Chamada pelo botão "sticky") ---
   function togglePausaResume() {
     if (aDecorrer) {
-      // Se está a decorrer -> PAUSAR
       clearInterval(cronometro);
       aDecorrer = false;
       stickyPauseBtn.textContent = "Retomar";
-      stickyPauseBtn.classList.replace("btn-warning", "btn-success"); // Muda para a cor "Retomar" (azul)
+      stickyPauseBtn.classList.replace("btn-warning", "btn-success"); 
     } else {
-      // Se está pausado -> RETOMAR
       aDecorrer = true;
-      cronometro = setInterval(runTimer, 1000); // Retoma a contagem
+      cronometro = setInterval(runTimer, 1000);
       stickyPauseBtn.textContent = "Pausar";
-      stickyPauseBtn.classList.replace("btn-success", "btn-warning"); // Volta à cor "Pausar" (amarelo)
+      stickyPauseBtn.classList.replace("btn-success", "btn-warning"); 
     }
   }
 
-  // --- EVENTOS DOS BOTÕES ---
   startBtn.addEventListener("click", iniciarCronometro);
-  stickyPauseBtn.addEventListener("click", togglePausaResume); // O botão sticky agora faz "toggle"
+  stickyPauseBtn.addEventListener("click", togglePausaResume); 
 
-  // Mostrar tempo inicial
   atualizarDisplay();
 </script>
 </body>

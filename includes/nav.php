@@ -22,10 +22,10 @@
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="receitasdesobremesa.php">Sobremesa</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="receitasdesopa.php">Sopas e Cremes</a></li>
+                        <li><a class="dropdown-item" href="receitasdesopas.php">Sopas e Cremes</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link active fs-5 ms-3" href="#">Minhas Receitas</a></li>
+                <li class="nav-item"><a class="nav-link active fs-5 ms-lg-3" href="#">Minhas Receitas</a></li>
             </ul>
 
             <form class="d-flex align-items-center position-relative me-lg-3 my-2 my-lg-0 w-100 w-lg-auto align-self-lg-center" role="search" style="max-width: 250px;">

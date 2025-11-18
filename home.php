@@ -1,3 +1,7 @@
+<?php session_start(); 
+require 'includes/connection.php'; 
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
   <head>
@@ -5,17 +9,80 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pitada na Mesa</title>  
     <link rel="shortcut icon" href="imgs/pitada.logo.png">
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
   </head>
 
   <body>
-    <?php
-      require('includes/connection.php');
-      require('includes/nav.php');
-    ?>
+ <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgb(245, 240, 214);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.php">
+            <img src="imgs/pitada.logo.png" alt="Logótipo" width="100" height="auto">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
+        <div class="collapse navbar-collapse text-start" id="navbarSupportedContent">
+            
+            <ul class="navbar-nav ms-lg-auto mb-2 mb-lg-0 me-4"> 
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link active dropdown-toggle fs-5" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">Receitas</a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="receitasdecarne.php">Carne</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="receitasdepeixe.php">Peixe</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="receitasdesobremesa.php">Sobremesa</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="receitasdesopas.php">Sopas e Cremes</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a class="nav-link active fs-5 ms-3" href="#">Minhas Receitas</a></li>
+            </ul>
+
+            <form class="d-flex align-items-center position-relative me-lg-3 my-2 my-lg-0 w-100 w-lg-auto align-self-lg-center" role="search" style="max-width: 250px;">
+                <i class="bi bi-search position-absolute ms-2 text-dark"></i>
+                <input 
+                    class="form-control ps-5 border-0 shadow-sm" type="search" 
+                    placeholder="Pesquise por receitas ..." 
+                    aria-label="Search" 
+                    style="border-radius: 50px; background-color: rgba(229, 223, 194, 1);" />
+            </form>
+            
+            <ul class="navbar-nav">
+    <li class="nav-item dropdown d-flex align-items-center align-self-lg-center"> 
+        <a class="nav-link p-0 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle fs-3"></i>
+        </a>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+            
+            <?php if (isset($_SESSION['logado']) && $_SESSION['logado'] === true): ?>
+
+              
+
+                <li><a class="dropdown-item" href="perfil.php">Perfil</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="logout.php">Terminar Sessão</a></li>
+            
+            <?php else: ?>
+                
+                <li><a class="dropdown-item" href="login.php">Login</a></li>
+                <li><a class="dropdown-item" href="registo.php">Registar</a></li>
+            
+            <?php endif; ?>
+
+        </ul>
+    </li>
+</ul>
+        </div>
+    </div>
+</nav>
     <div class="container">
       <img src="imgs/banner.jpeg" class="banner" alt="Banner Pitada na Mesa">
     </div>
@@ -183,6 +250,6 @@
       require('includes/footer.php');
     ?>
 
-    <script src="js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
