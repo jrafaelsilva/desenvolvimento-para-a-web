@@ -1,0 +1,196 @@
+<?php
+session_start();
+
+// 1. Verificar se está logado (Apenas utilizadores registados podem enviar)
+if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
+    header("Location: login.php");
+    exit;
+}
+
+// 2. Gerar Token CSRF
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+}
+
+// 3. Ler mensagens de erro/sucesso
+$erro = "";
+if (isset($_SESSION['erro_submissao'])) {
+    $erro = $_SESSION['erro_submissao'];
+    unset($_SESSION['erro_submissao']);
+}
+?>
+
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Enviar Receita - Pitada na Mesa</title>
+  <link rel="shortcut icon" href="imgs/pitada.logo.png">
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+  <link href="css/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <?php require('includes/nav.php'); ?>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                
+                <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                    <div class="card-header bg-white border-0 pt-4 pb-0 text-center">
+                        <h2 class="fw-bold display-6" style="color: rgb(182, 125, 95);">Partilha a tua Receita</h2>
+                        <p class="text-muted">Preenche os dados abaixo para adicionares a tua obra-prima ao nosso livro.</p>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+                        
+                        <?php if (!empty($erro)): ?>
+                            <div class="alert alert-danger rounded-3 mb-4 text-center">
+                                <i class="bi bi-exclamation-triangle-fill me-2"></i><?php echo htmlspecialchars($erro); ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <!-- FORMULÁRIO -->
+                        <!-- enctype é OBRIGATÓRIO para envio de ficheiros (imagens) -->
+                        <form action="auth/processar_submissao.php" method="POST" enctype="multipart/form-data">
+                            
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+
+                            <!-- 1. TÍTULO E CATEGORIA -->
+                            <div class="row g-3 mb-4">
+                                <div class="col-md-8">
+                                    <label class="form-label fw-bold text-muted">Nome da Receita</label>
+                                    <input type="text" name="titulo" class="form-control form-control-lg" placeholder="Ex: Bacalhau com Natas" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold text-muted">Categoria</label>
+                                    <select name="categoria" class="form-select form-select-lg" required>
+                                        <option value="" selected disabled>Escolher...</option>
+                                        <option value="Receitas de carne">Carne</option>
+                                        <option value="Peixe">Peixe</option>
+                                        <option value="Sobremesa">Sobremesa</option>
+                                        <option value="Sopas e Cremes">Sopas</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- 2. TEMPO E IMAGEM -->
+                            <div class="row g-3 mb-5">
+                                <div class="col-md-4">
+                                    <label class="form-label fw-bold text-muted">Tempo (minutos)</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-stopwatch"></i></span>
+                                        <input type="number" name="tempo" class="form-control" placeholder="45" min="1" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-8">
+                                    <label class="form-label fw-bold text-muted">Foto do Prato</label>
+                                    <input type="file" name="imagem" class="form-control" accept="image/*" required>
+                                    <div class="form-text">Formatos aceites: JPG, PNG, WEBP.</div>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <!-- 3. INGREDIENTES (Dinâmico) -->
+                            <div class="mb-5">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="fw-bold mb-0 text-center w-100">Ingredientes</h4>
+                                </div>
+                                
+                                <div id="lista-ingredientes">
+                                    <div class="input-group mb-2">
+                                        <span class="input-group-text bg-white"><i class="bi bi-basket"></i></span>
+                                        <input type="text" name="ingredientes[]" class="form-control" placeholder="Ex: 500g de batatas" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="text-center mt-3">
+                                    <button type="button" class="btn btn-outline-secondary rounded-pill btn-sm" onclick="adicionarIngrediente()">
+                                        <i class="bi bi-plus-lg me-1"></i> Adicionar outro ingrediente
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- 4. MODO DE PREPARAÇÃO (Dinâmico) -->
+                            <div class="mb-5">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="fw-bold mb-0 text-center w-100">Modo de Preparação</h4>
+                                </div>
+
+                                <div id="lista-passos">
+                                    <div class="d-flex gap-2 mb-2 align-items-start passo-item">
+                                        <span class="badge bg-dark rounded-circle p-2 mt-1">1</span>
+                                        <textarea name="passos[]" class="form-control" rows="2" placeholder="Descreva este passo..." required></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="text-center mt-3">
+                                    <button type="button" class="btn btn-outline-secondary rounded-pill btn-sm" onclick="adicionarPasso()">
+                                        <i class="bi bi-plus-lg me-1"></i> Adicionar próximo passo
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- BOTÃO ENVIAR -->
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success btn-lg py-3 fw-bold rounded-pill shadow-sm">
+                                    <i class="bi bi-check2-circle me-2"></i>Publicar Receita
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <?php require('includes/footer.php'); ?>
+    <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- Scripts para adicionar campos dinamicamente -->
+    <script>
+        function adicionarIngrediente() {
+            const container = document.getElementById('lista-ingredientes');
+            const div = document.createElement('div');
+            div.className = 'input-group mb-2 fade-in';
+            div.innerHTML = `
+                <span class="input-group-text bg-white"><i class="bi bi-basket"></i></span>
+                <input type="text" name="ingredientes[]" class="form-control" placeholder="Ingrediente..." required>
+                <button type="button" class="btn btn-outline-danger" onclick="this.parentElement.remove()"><i class="bi bi-x-lg"></i></button>
+            `;
+            container.appendChild(div);
+        }
+
+        let contadorPassos = 1;
+        function adicionarPasso() {
+            contadorPassos++;
+            const container = document.getElementById('lista-passos');
+            const div = document.createElement('div');
+            div.className = 'd-flex gap-2 mb-2 align-items-start passo-item fade-in';
+            div.innerHTML = `
+                <span class="badge bg-dark rounded-circle p-2 mt-1">${contadorPassos}</span>
+                <textarea name="passos[]" class="form-control" rows="2" placeholder="Próximo passo..." required></textarea>
+                <button type="button" class="btn btn-outline-danger mt-1" onclick="removerPasso(this)"><i class="bi bi-x-lg"></i></button>
+            `;
+            container.appendChild(div);
+        }
+
+        function removerPasso(btn) {
+            btn.parentElement.remove();
+            // Opcional: Renumerar passos se quiseres ser perfeccionista, 
+            // mas para BD a ordem de envio (array) é que conta.
+        }
+    </script>
+
+    <style>
+        .fade-in { animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</body>
+</html>

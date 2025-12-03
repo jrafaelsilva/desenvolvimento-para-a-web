@@ -1,9 +1,24 @@
+<?php 
+session_start();
+require('includes/connection.php');
+
+// 1. Buscar todos os Chefs por ordem alfabética
+$stmtChefs = $dbh->query("SELECT * FROM chefs ORDER BY nome ASC");
+$lista_chefs = $stmtChefs->fetchAll(PDO::FETCH_ASSOC);
+
+// Preparar ID do utilizador para os corações (Favoritos)
+$id_utilizador_logado = 0;
+if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
+    $id_utilizador_logado = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Os nossos Chefs</title>
+  <title>Os nossos Chefs - Pitada na Mesa</title>
   <link rel="shortcut icon" href="imgs/pitada.logo.png">
   <link href="css/bootstrap.min.css" rel="stylesheet">
   <link href="css/bootstrap-icons.min.css" rel="stylesheet">
@@ -11,9 +26,7 @@
 </head>
 
 <body>
-    <?php 
-        require('includes/nav.php');
-    ?>
+    <?php require('includes/nav.php'); ?>
 
     <div class="ms-3 mt-4">
         <ol class="breadcrumb">
@@ -25,329 +38,163 @@
     <div class="container">
         <div class="fw-bold mb-5 mt-5 fs-4 text-start">Os nossos Chefs</div>
 
-        <div id="chef-carlos" class="mb-5">
-            <div class="d-flex flex-column flex-md-row align-items-center mb-4">
-                
-                <div class="mb-3 mb-md-0">
-                    <img src="imgs/Carlos.Afonos.webp" alt="Carlos Afonso" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid rgb(182, 125, 95); box-shadow: inset 0 0 0 5px rgb(243, 226, 212);">
-                </div>
-                
-                <div class="ms-md-4 text-center text-md-start">
-                    <h2 class="fw-bold">Carlos Afonso</h2>
-                    <p class="text-muted">O Chef Carlos Afonso é uma referência na cozinha de mar em Portugal, conhecido pela sua paixão por ostras e produtos frescos. É o rosto do aclamado "Ostras & Coisas" em Lisboa, onde celebra os sabores autênticos. A sua cozinha é uma fusão de tradição e criatividade com o melhor produto nacional.</p>
-                </div>
-            </div>
+        <?php if (count($lista_chefs) > 0): ?>
             
-            <h4 class="fw-semibold mb-3 text-center text-md-start">Receitas do Chef Carlos</h4>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-                
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
+            <?php foreach($lista_chefs as $chef): ?>
+                <!-- BLOCO DO CHEF (Usa o ID para o link, ex: #chef-1) -->
+                <div id="chef-<?php echo $chef['id']; ?>" class="mb-5 pb-4 border-bottom">
+                    
+                    <!-- PERFIL DO CHEF -->
+                    <div class="d-flex flex-column flex-md-row align-items-center mb-4">
+                        <div class="mb-3 mb-md-0">
+                            <?php 
+                                // Verifica se a imagem existe na pasta
+                                // Nota: Guarda as imagens dos chefs em "imgs/" ou "imgs/chefs/" e o caminho completo na BD
+                                $imgChef = !empty($chef['imagem']) && file_exists($chef['imagem']) ? $chef['imagem'] : 'imgs/avatar/avpadrao.jpg';
+                            ?>
+                            <img src="<?php echo $imgChef; ?>" alt="<?php echo $chef['nome']; ?>" 
+                                 class="rounded-circle shadow-sm" 
+                                 style="width: 150px; height: 150px; object-fit: cover; border: 3px solid rgb(182, 125, 95); padding: 3px;">
+                        </div>
+                        
+                        <div class="ms-md-4 text-center text-md-start">
+                            <h2 class="fw-bold display-6" style="color: rgb(182, 125, 95);"><?php echo $chef['nome']; ?></h2>
+                            <p class="text-muted mt-2" style="max-width: 800px;"><?php echo nl2br($chef['descricao']); ?></p>
                         </div>
                     </div>
-                </div>
-                
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
+                    
+                    <!-- RECEITAS DESTE CHEF (Sub-Query) -->
+                    <?php
+                        // Buscar até 4 receitas deste chef específico
+                        $sqlRec = "SELECT * FROM receitas WHERE id_chef = ? LIMIT 12";
+                        $stmtRec = $dbh->prepare($sqlRec);
+                        $stmtRec->execute([$chef['id']]);
+                        $receitasChef = $stmtRec->fetchAll(PDO::FETCH_ASSOC);
+                    ?>
 
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
+                    <?php if (count($receitasChef) > 0): ?>
+                        <h4 class="fw-semibold mb-3 text-center text-md-start">Receitas de <?php echo $chef['nome']; ?></h4>
+                        
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
+                            <?php foreach($receitasChef as $row): 
+                                $id = $row['id'];
+                                $nome = $row['titulo'];
+                                $imagem = $row['imagem'];
+                                $descricao = !empty($row['descricao']) ? $row['descricao'] : "Uma receita deliciosa.";
+                                $referencia = "receita.php?id=" . $id;
 
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
+                                // Verificar Favorito (Lógica ATIVA)
+                                $e_favorito = false;
+                                if ($id_utilizador_logado > 0) {
+                                    $checkFav = $dbh->prepare("SELECT id FROM favoritos WHERE id_utilizador = ? AND id_receita = ? AND ativado = 1");
+                                    $checkFav->execute([$id_utilizador_logado, $id]);
+                                    if ($checkFav->rowCount() > 0) $e_favorito = true;
+                                }
+                                $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
+                            ?>
+                                <div class="col">
+                                    <div class="card h-100 position-relative shadow-sm border-0">
+                                        <div style="height: 200px; overflow: hidden;" class="rounded-top">
+                                            <img src="<?php echo $imagem; ?>" class="w-100 h-100 object-fit-cover" alt="<?php echo $nome; ?>">
+                                        </div>
+
+                                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
+                                                onclick="toggleFavorito(this, <?= $id ?>, '<?= addslashes($nome) ?>', '<?= $imagem ?>', '<?= $referencia ?>')"
+                                                aria-label="Adicionar aos favoritos">
+                                            <i class="bi bi-heart-fill <?php echo $classe_coracao; ?>"></i>
+                                        </button>
+
+                                        <div class="card-body text-center d-flex flex-column">
+                                            <h5 class="card-title fw-bold"><?php echo $nome; ?></h5>
+                                            <p class="card-text text-truncate-2 small"><?php echo $descricao; ?></p>
+                                            <a href="<?php echo $referencia; ?>" class="btn btn-style2 mt-auto">Abrir receita</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
-                    </div>
+                    <?php else: ?>
+                        <p class="text-muted fst-italic ms-1 text-center text-md-start">Este chef ainda não publicou receitas.</p>
+                    <?php endif; ?>
+
                 </div>
+            <?php endforeach; ?>
+
+        <?php else: ?>
+            <!-- Caso a tabela de chefs esteja vazia -->
+            <div class="text-center py-5">
+                <i class="bi bi-people display-1 text-muted opacity-25"></i>
+                <p class="text-muted mt-3">Ainda não existem chefs registados.</p>
             </div>
-        </div>
-        
-        <hr class="my-5"> 
+        <?php endif; ?>
 
-        <div id="chef-margarida" class="mb-5">
-            <div class="d-flex flex-column flex-md-row align-items-center mb-4">
-                <div class="mb-3 mb-md-0">
-                    <img src="imgs/Margarita.Pugovka.webp" alt="Margarita Pugovka" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid rgb(182, 125, 95); box-shadow: inset 0 0 0 5px rgb(243, 226, 212);">
-                </div>
-                <div class="ms-md-4 text-center text-md-start">
-                    <h2 class="fw-bold">Margarita Pugovka</h2>
-                    <p class="text-muted">Margarita Pugovka é uma aclamada chef de pastelaria de origem letã, mas com uma forte presença em Portugal. Ganhou notoriedade após a sua passagem pela "Ladurée" e tornou-se um fenómeno digital com as suas criações elegantes. É especialista em sobremesas que combinam técnica francesa com um toque moderno.</p>
-                </div>
-            </div>
-            
-            <h4 class="fw-semibold mb-3 text-center text-md-start">Receitas da Chef Margarita</h4>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr class="my-5">
-
-        <div id="chef-miguel" class="mb-5">
-            <div class="d-flex flex-column flex-md-row align-items-center mb-4">
-                <div class="mb-3 mb-md-0">
-                    <img src="imgs/Miguel.Mesquita.webp" alt="Miguel Mesquita" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid rgb(182, 125, 95); box-shadow: inset 0 0 0 5px rgb(243, 226, 212);">
-                </div>
-                <div class="ms-md-4 text-center text-md-start">
-                    <h2 class="fw-bold">Miguel Mesquita</h2>
-                    <p class="text-muted">O Chef Miguel Mesquita é conhecido por transformar a cozinha de conforto em experiências gastronómicas de luxo. Ganhou destaque na "Cantina de Ventozelo", no Douro, onde aposta em produtos locais. A sua filosofia foca-se na sazonalidade e no respeito pelo ingrediente, reinventando receitas tradicionais.</p>
-                </div>
-            </div>
-    
-            <h4 class="fw-semibold mb-3 text-center text-md-start">Receitas do Chef Miguel</h4>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <hr class="my-5"> 
-
-
-        <div id="chef-henrique" class="mb-5">
-            <div class="d-flex flex-column flex-md-row align-items-center mb-4">
-                <div class="mb-3 mb-md-0">
-                    <img src="imgs/Henrique.Sá.Pes.webp" alt="Henrique Sá Pes" class="rounded-circle" style="width: 150px; height: 150px; object-fit: cover; border: 3px solid rgb(182, 125, 95); box-shadow: inset 0 0 0 5px rgb(243, 226, 212);">
-                </div>
-                <div class="ms-md-4 text-center text-md-start">
-                    <h2 class="fw-bold">Henrique Sá Pessoa</h2>
-                    <p class="text-muted">Um dos chefs portugueses mais conceituados, Henrique Sá Pessoa é a mente criativa por trás do "Alma", galardoado com duas estrelas Michelin. A sua carreira é marcada pela excelência técnica e uma cozinha de autor inovadora. É também o cérebro por trás de projetos de sucesso como o "Tapisco".</p>
-                </div>
-            </div>
-            <h4 class="fw-semibold mb-3 text-center text-md-start">Receitas do Chef Henrique</h4>
-            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4">
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 position-relative">
-                        <img src="imgs/picanha.jpg" class="card-img-top" alt="Picanha Grelhada">
-                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
-                                aria-label="Adicionar aos favoritos">
-                            <i class="bi bi-heart-fill"></i>
-                        </button>
-                        <div class="card-body text-center">
-                            <h5 class="card-title">Picanha Grelhada</h5>
-                            <p class="card-text text-truncate-2">A picanha perfeita, suculenta e com um toque especial do chef.</p>
-                            <a href="picanha.php" class="btn btn-style2">Abrir receita</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
     </div>
-    
-    <script>
-      document.querySelectorAll('.favorite-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          btn.classList.toggle('active');
-        });
-      });
-    </script>
 
-    <?php 
-        require('includes/footer.php');
-    ?>
+    <!-- MODAL DE LOGIN -->
+    <div class="modal fade" id="modalLogin" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow border-0">
+          <div class="modal-header border-0 pb-0">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center py-4">
+            <div class="mb-3">
+                <span class="bg-warning bg-opacity-10 text-warning rounded-circle p-3 d-inline-block">
+                    <i class="bi bi-person-lock fs-1"></i>
+                </span>
+            </div>
+            <h5 class="fw-bold mb-2">Login Necessário</h5>
+            <p class="text-muted px-4">Para adicionar esta receita aos teus favoritos, precisas de entrar na tua conta primeiro.</p>
+          </div>
+          <div class="modal-footer border-0 justify-content-center pb-4">
+            <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
+            <a href="login.php" class="btn btn-success rounded-pill px-4">Fazer Login</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <?php require('includes/footer.php'); ?>
     <script src="js/bootstrap.bundle.min.js"></script>
+
+    <!-- SCRIPT DE LIKES (Aponta para a pasta AJAX) -->
+    <script>
+      const isLogado = <?php echo (isset($_SESSION['logado']) && $_SESSION['logado'] === true) ? 'true' : 'false'; ?>;
+
+      function toggleFavorito(btn, id, titulo, imagem, referencia) {
+        
+        if (!isLogado) {
+            const modalElement = document.getElementById('modalLogin');
+            const modal = new bootstrap.Modal(modalElement);
+            modal.show();
+            return;
+        }
+
+        fetch('ajax/ajax_favorito.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id_receita: id,
+                titulo: titulo,
+                imagem: imagem,
+                referencia: referencia
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const icon = btn.querySelector('i');
+            if (data.status === 'adicionado') {
+                icon.classList.remove('text-secondary');
+                icon.classList.add('text-danger'); 
+            } else if (data.status === 'removido') {
+                icon.classList.remove('text-danger');
+                icon.classList.add('text-secondary'); 
+            } else if (data.status === 'erro') {
+                alert('Erro: ' + data.mensagem);
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+      }
+    </script>
 </body>
 </html>

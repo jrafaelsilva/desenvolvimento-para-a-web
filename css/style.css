@@ -99,7 +99,7 @@ body {
 }
 
 .chef-wrapper:hover {
-  transform: translateY(-8px); 
+  transform: scale(1.1); 
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
 }
@@ -182,3 +182,36 @@ body {
 }
 
 
+/*avatar*/
+.avatar-option {
+  display: none; /* Esconde a bolinha do radio button */
+}
+.avatar-label img {
+  border: 3px solid transparent; /* Borda invisível por padrão */
+  border-radius: 50%;
+  cursor: pointer;
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  transition: transform 0.2s;
+}
+/* Quando selecionado, a borda fica castanha e a imagem aumenta ligeiramente */
+.avatar-option:checked + .avatar-label img {
+  border-color: rgb(182, 125, 95);
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(182, 125, 95, 0.4);
+ }
+.avatar-label:hover img {
+   opacity: 0.8;
+}
+
+/*footer*/
+.hover-scale {
+    display: inline-block; /* Necessário para o transform funcionar bem em links */
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.hover-scale:hover {
+    transform: scale(1.2); /* Aumenta 20% */
+    color: rgb(182, 125, 95) !important; /* Muda para a cor da marca (Bege/Castanho) */
+}

@@ -13,17 +13,17 @@
         <div class="col-lg-4 col-md-6 mb-4 mb-md-0 text-start">
           <h5 class="fw-bold mb-3">Links úteis</h5>
           <ul class="list-unstyled mb-0">
-            <li><a href="#" class="link-underline-dark link-underline-opacity-0 link-underline-opacity-100-hover text-dark">Página Inicial</a></li>
-            <li><a href="#" class="link-underline-dark link-underline-opacity-0 link-underline-opacity-100-hover text-dark">Contactos</a></li>
+            <li><a href="index.php" class="link-underline-dark link-underline-opacity-0 link-underline-opacity-100-hover text-dark">Página Inicial</a></li>
+            <li><a href="contactos.php" class="link-underline-dark link-underline-opacity-0 link-underline-opacity-100-hover text-dark">Contactos</a></li>
           </ul>
         </div>
 
         <div class="col-lg-4 col-md-12 mb-4 mb-md-0 text-start">
           <h5 class="fw-bold mb-3">Segue-nos</h5>
-          <a href="#" class="text-dark me-3 fs-4"><i class="bi bi-facebook"></i></a>
-          <a href="#" class="text-dark me-3 fs-4"><i class="bi bi-instagram"></i></a>
-          <a href="#" class="text-dark me-3 fs-4"><i class="bi bi-youtube"></i></a>
-          <a href="#" class="text-dark me-3 fs-4"><i class="bi bi-pinterest"></i></a>
+          <a href="#" class="text-dark me-3 fs-4 hover-scale"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-dark me-3 fs-4 hover-scale"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-dark me-3 fs-4 hover-scale"><i class="bi bi-youtube"></i></a>
+          <a href="#" class="text-dark me-3 fs-4 hover-scale"><i class="bi bi-pinterest"></i></a>
         </div>
       </div>
     </div>
