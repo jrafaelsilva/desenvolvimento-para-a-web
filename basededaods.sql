@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   `comentario` text NOT NULL,
   `data_comentario` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.comentarios: ~9 rows (aproximadamente)
+-- A despejar dados para tabela web2.comentarios: ~11 rows (aproximadamente)
 INSERT INTO `comentarios` (`id`, `id_receita`, `id_utilizador`, `comentario`, `data_comentario`) VALUES
 	(1, 2, 4, 'muito deliciosa, recomendo experimentarem!', '2025-11-24 20:36:58'),
 	(2, 2, 4, 'boa!', '2025-11-24 20:37:44'),
@@ -58,7 +58,9 @@ INSERT INTO `comentarios` (`id`, `id_receita`, `id_utilizador`, `comentario`, `d
 	(6, 1, 5, 'delicia', '2025-11-24 20:52:23'),
 	(7, 2, 3, 'muito boa mesmo', '2025-11-24 21:26:58'),
 	(12, 20, 6, 'Adorei a receita, ficou igualzinho', '2025-11-26 18:16:59'),
-	(13, 45, 4, 'bela', '2025-11-29 15:34:23');
+	(13, 45, 4, 'bela', '2025-11-29 15:34:23'),
+	(14, 45, 3, 'muito bom', '2025-12-11 14:30:29'),
+	(16, 2, 10, 'deliciosa', '2025-12-13 14:25:51');
 
 -- A despejar estrutura para tabela web2.dados_perfil
 DROP TABLE IF EXISTS `dados_perfil`;
@@ -73,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `dados_perfil` (
 
 -- A despejar dados para tabela web2.dados_perfil: ~4 rows (aproximadamente)
 INSERT INTO `dados_perfil` (`id`, `id_utilizador`, `idade`, `prato_favorito`, `avatar`) VALUES
-	(1, 3, NULL, 'francesinha', 'av3.png'),
+	(1, 3, NULL, 'francesinha', 'av4.png'),
 	(2, 4, 23, 'arroz de pato', 'av1.png'),
 	(3, 5, 22, NULL, 'avpadrao.png'),
 	(4, 6, NULL, NULL, 'avpadrao.jpg');
@@ -89,9 +91,9 @@ CREATE TABLE IF NOT EXISTS `favoritos` (
   `referencia` varchar(255) DEFAULT NULL,
   `ativado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.favoritos: ~21 rows (aproximadamente)
+-- A despejar dados para tabela web2.favoritos: ~23 rows (aproximadamente)
 INSERT INTO `favoritos` (`id`, `id_utilizador`, `id_receita`, `titulo_receita`, `imagem_receita`, `referencia`, `ativado`) VALUES
 	(68, 4, 44, 'Leite Creme', 'imgs/sobremesa/leitecreme.jpg', 'receita.php?id=44', 1),
 	(69, 4, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 1),
@@ -100,20 +102,22 @@ INSERT INTO `favoritos` (`id`, `id_utilizador`, `id_receita`, `titulo_receita`, 
 	(72, 9, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 1),
 	(73, 9, 45, 'Pudim de Ovos', 'imgs/sobremesa/pudim.jpg', 'receita.php?id=45', 1),
 	(74, 3, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 0),
-	(75, 3, 45, 'Pudim de Ovos', 'imgs/sobremesa/pudim.jpg', 'receita.php?id=45', 1),
+	(75, 3, 45, 'Pudim de Ovos', 'imgs/sobremesa/pudim.jpg', 'receita.php?id=45', 0),
 	(76, 3, 44, 'Leite Creme', 'imgs/sobremesa/leitecreme.jpg', 'receita.php?id=44', 1),
 	(77, 3, 41, 'Arroz Doce', 'imgs/sobremesa/arrozdoce.jpg', 'receita.php?id=41', 1),
 	(78, 3, 2, 'Bolonhesa', 'imgs/bolonhesa.jpg', 'receita.php?id=2', 0),
 	(79, 3, 1, 'Picanha', 'imgs/picanha.jpg', 'receita.php?id=1', 0),
 	(80, 3, 28, 'Bife à Portuguesa', 'imgs/bife_portuguesa.jpg', 'receita.php?id=28', 0),
-	(81, 3, 32, 'Cozido à Portuguesa', 'imgs/cozido.jpg', 'receita.php?id=32', 1),
-	(82, 3, 42, 'Mousse de Chocolate', 'imgs/sobremesa/mousse.jpg', 'receita.php?id=42', 1),
+	(81, 3, 32, 'Cozido à Portuguesa', 'imgs/cozido.jpg', 'receita.php?id=32', 0),
+	(82, 3, 42, 'Mousse de Chocolate', 'imgs/sobremesa/mousse.jpg', 'receita.php?id=42', 0),
 	(83, 4, 2, 'Bolonhesa', 'imgs/bolonhesa.jpg', 'receita.php?id=2', 0),
 	(84, 4, 32, 'Cozido à Portuguesa', 'imgs/cozido.jpg', 'receita.php?id=32', 1),
 	(85, 4, 42, 'Mousse de Chocolate', 'imgs/sobremesa/mousse.jpg', 'receita.php?id=42', 1),
 	(86, 4, 43, 'Baba de Camelo', 'imgs/sobremesa/babacamelo.jpg', 'receita.php?id=43', 1),
 	(87, 4, 24, 'Sopa da Pedra', 'imgs/sopas/sopapedra.jpg', 'receita.php?id=24', 0),
-	(88, 3, 40, 'Filetes de Pescada', 'imgs/peixe/filetes.jpg', 'receita.php?id=40', 0);
+	(88, 3, 40, 'Filetes de Pescada', 'imgs/peixe/filetes.jpg', 'receita.php?id=40', 0),
+	(90, 10, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 1),
+	(91, 3, 50, 'pataniscas', 'imgs/comunidade/receita_user_10_1765636322.jpg', 'receita.php?id=50', 1);
 
 -- A despejar estrutura para tabela web2.ingredientes
 DROP TABLE IF EXISTS `ingredientes`;
@@ -122,9 +126,9 @@ CREATE TABLE IF NOT EXISTS `ingredientes` (
   `id_receita` int NOT NULL,
   `nome` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=194 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=275 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.ingredientes: ~158 rows (aproximadamente)
+-- A despejar dados para tabela web2.ingredientes: ~169 rows (aproximadamente)
 INSERT INTO `ingredientes` (`id`, `id_receita`, `nome`) VALUES
 	(1, 1, 'Picanha'),
 	(2, 1, 'Sal q.b.'),
@@ -283,7 +287,18 @@ INSERT INTO `ingredientes` (`id`, `id_receita`, `nome`) VALUES
 	(190, 46, 'Maçã, Pera, Banana'),
 	(191, 46, 'Laranja, Kiwi, Morangos'),
 	(192, 46, 'Sumo de laranja natural'),
-	(193, 46, 'Um pouco de Vinho do Porto (opcional)');
+	(193, 46, 'Um pouco de Vinho do Porto (opcional)'),
+	(199, 50, '400 gr de bacalhau desfiado'),
+	(200, 50, '1 cebola grande picada'),
+	(201, 50, '2 dentes de alho picados'),
+	(202, 50, '150 gr de farinha T55 (sem fermento)'),
+	(203, 50, '4 ovos'),
+	(204, 50, '1/2 colher (de chá) de fermento em pó'),
+	(205, 50, '1 colher de sopa de azeite'),
+	(206, 50, '25 ml de leite'),
+	(207, 50, 'Salsa picada a gosto'),
+	(208, 50, 'Sal e pimenta branca a gosto'),
+	(209, 50, 'Óleo para fritar');
 
 -- A despejar estrutura para tabela web2.preparacao
 DROP TABLE IF EXISTS `preparacao`;
@@ -293,9 +308,9 @@ CREATE TABLE IF NOT EXISTS `preparacao` (
   `passo` text NOT NULL,
   `ordem` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=164 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=252 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.preparacao: ~133 rows (aproximadamente)
+-- A despejar dados para tabela web2.preparacao: ~146 rows (aproximadamente)
 INSERT INTO `preparacao` (`id`, `id_receita`, `passo`, `ordem`) VALUES
 	(1, 1, 'Escolha uma picanha com gordura entremeada e com gordura firme de 1 dedo de altura.', 1),
 	(2, 1, 'Sele a picanha, de ambos os lados, em lume alto. E, de seguida, deixe repousar a picanha durante 5 minutos.', 2),
@@ -429,7 +444,20 @@ INSERT INTO `preparacao` (`id`, `id_receita`, `passo`, `ordem`) VALUES
 	(160, 45, 'Desenforme apenas quando estiver frio.', 4),
 	(161, 46, 'Descasque e corte todas as frutas em pedaços pequenos.', 1),
 	(162, 46, 'Coloque numa taça e regue com o sumo de laranja.', 2),
-	(163, 46, 'Deixe marinar no frigorífico antes de servir.', 3);
+	(163, 46, 'Deixe marinar no frigorífico antes de servir.', 3),
+	(168, 50, 'Adicionar o bacalhau num tacho, cobrir com água e levar ao lume a cozer durante 10 minutos.', 1),
+	(169, 50, 'Escorrer o bacalhau, deixar arrefecer um pouco, retirar a pele e as espinhas e desfiar.', 2),
+	(170, 50, 'Pesar 400 gr de bacalhau desfiado numa tigela.', 3),
+	(171, 50, 'Adicionar a cebola picada, o alho picado, a salsa, o azeite e os ovos e misturar tudo muito bem.', 4),
+	(172, 50, 'Adicionar a farinha e o fermento e envolver bem.', 5),
+	(173, 50, 'Adicionar o leite e envolver bem.', 6),
+	(174, 50, 'Temperar com sal e pimenta branca e misturar bem.', 7),
+	(175, 50, 'Aquecer óleo suficiente numa frigideira para fritar as pataniscas.', 8),
+	(176, 50, 'Com uma concha de servir sopa, colocar pequenas quantidades de massa a fritar no óleo quente.', 9),
+	(177, 50, 'Fritar as pataniscas até ficarem douradas e crocantes, virando-as para fritarem dos dois lados.', 10),
+	(178, 50, 'Retirar as pataniscas do óleo com uma escumadeira e colocar numa travessa com papel absorvente.', 11),
+	(179, 50, 'Servir as pataniscas quentes com uma salada e arroz branco.', 12),
+	(245, 50, 'Aproveite!', 13);
 
 -- A despejar estrutura para tabela web2.receitas
 DROP TABLE IF EXISTS `receitas`;
@@ -441,43 +469,46 @@ CREATE TABLE IF NOT EXISTS `receitas` (
   `tempo_preparo` int DEFAULT NULL,
   `descricao` text,
   `id_chef` int DEFAULT NULL,
+  `id_utilizador` int DEFAULT NULL,
+  `estado` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.receitas: ~32 rows (aproximadamente)
-INSERT INTO `receitas` (`id`, `titulo`, `categoria`, `imagem`, `tempo_preparo`, `descricao`, `id_chef`) VALUES
-	(1, 'Picanha', 'Receitas de carne', 'imgs/carne/picanha.jpg', 0, 'Deliciosa receita que combina o suculento sabor da picanha com flor de sal.', 10),
-	(2, 'Bolonhesa', 'Receitas de carne', 'imgs/carne/bolonhesa.jpg', 35, 'Deliciosa receita de esparguete à bolonhesa com carne de novilho e molho de tomate.', 9),
-	(10, 'Bolo de morango', 'Sobremesa', 'imgs/sobremesa/bolo.morango.webp', 40, 'Um bolo suave e húmido, recheado com compota e decorado com morangos frescos.', 2),
-	(11, 'Bolo de cenoura', 'Sobremesa', 'imgs/sobremesa/bolodecenoura.png', 40, 'O clássico bolo de cenoura, fofo e delicioso, perfeito para o lanche.', 2),
-	(19, 'Bacalhau à Brás', 'Peixe', 'imgs/peixe/bacalhau.jpg', 40, 'O prato de bacalhau mais famoso de Portugal, com ovos e batata palha.', 1),
-	(20, 'Caldo Verde', 'Sopas e Cremes', 'imgs/sopas/caldoverde.webp', 45, 'A rainha das sopas portuguesas, com couve galega e chouriço.', 3),
-	(21, 'Sopa de Legumes', 'Sopas e Cremes', 'imgs/sopas/sopalegumes.avif', 30, 'Uma sopa rica em vitaminas, perfeita para iniciar qualquer refeição.', 4),
-	(22, 'Creme de Abóbora', 'Sopas e Cremes', 'imgs/sopas/cremeabobora.jpg', 35, 'Um creme aveludado e doce, com um toque de especiarias.', 3),
-	(23, 'Canja de Galinha', 'Sopas e Cremes', 'imgs/sopas/canja.jpg', 45, 'A tradicional canja reconfortante, ideal para dias frios.', 3),
-	(24, 'Sopa da Pedra', 'Sopas e Cremes', 'imgs/sopas/sopapedra.jpg', 90, 'A famosa sopa de Almeirim, rica e consistente.', 7),
-	(25, 'Gaspacho Alentejano', 'Sopas e Cremes', 'imgs/sopas/gaspacho.jpeg', 20, 'Sopa fria típica do Alentejo, perfeita para o verão.', 3),
-	(26, 'Sopa de Tomate', 'Sopas e Cremes', 'imgs/sopas/sopatomate.webp', 30, 'Sopa reconfortante com ovos escalfados.', 4),
-	(27, 'Creme de Cenoura', 'Sopas e Cremes', 'imgs/sopas/cremecenoura.jpg', 25, 'Simples, rápido e delicioso.', 4),
-	(28, 'Bife à Portuguesa', 'Receitas de carne', 'imgs/carne/bife_portuguesa.webp', 25, 'Bife do lombo com molho de alho, presunto e ovo a cavalo.', 7),
-	(29, 'Carne de Porco à Alentejana', 'Receitas de carne', 'imgs/carne/carne_alentejana.jpg', 60, 'A combinação perfeita entre carne e marisco.', 3),
-	(30, 'Frango Assado no Forno', 'Receitas de carne', 'imgs/carne/frango_forno.jpg', 75, 'Frango suculento com limão e ervas.', 4),
-	(31, 'Rojões à Minhota', 'Receitas de carne', 'imgs/carne/rojoes.jpg', 90, 'Prato tradicional do norte com carne de porco e cominhos.', 3),
-	(32, 'Cozido à Portuguesa', 'Receitas de carne', 'imgs/carne/cozido.jpeg', 120, 'O prato rei da cozinha portuguesa.', 3),
-	(33, 'Arroz de Pato', 'Receitas de carne', 'imgs/carne/arroz_pato.jpg', 80, 'Arroz solto cozido no caldo do pato e gratinado no forno.', 4),
-	(34, 'Dourada Grelhada', 'Peixe', 'imgs/peixe/dourada.jpg', 30, 'Peixe fresco grelhado com legumes.', 1),
-	(35, 'Arroz de Marisco', 'Peixe', 'imgs/peixe/arroz_marisco.jpg', 45, 'Arroz malandrinho com camarão, amêijoas e delícias do mar.', 5),
-	(36, 'Polvo à Lagareiro', 'Peixe', 'imgs/peixe/polvo.jpeg', 90, 'Polvo tenro assado no forno com muito azeite e batatas a murro.', 1),
-	(37, 'Sardinhas Assadas', 'Peixe', 'imgs/peixe/sardinhas.jpg', 20, 'O prato típico dos Santos Populares.', 6),
-	(38, 'Cataplana de Peixe', 'Peixe', 'imgs/peixe/cataplana.jpg', 40, 'Uma explosão de sabores do mar cozinhados a vapor.', 1),
-	(39, 'Pastéis de Bacalhau', 'Peixe', 'imgs/peixe/pasteis_bacalhau.jpg', 60, 'Salgadinhos tradicionais estaladiços por fora e macios por dentro.', 1),
-	(40, 'Filetes de Pescada', 'Peixe', 'imgs/peixe/filetes.jpg', 30, 'Filetes dourados com arroz de tomate.', 1),
-	(41, 'Arroz Doce', 'Sobremesa', 'imgs/sobremesa/arrozdoce.jpg', 40, 'Cremoso e polvilhado com canela, como a avó fazia.', 8),
-	(42, 'Mousse de Chocolate', 'Sobremesa', 'imgs/sobremesa/mousse.jpg', 20, 'A sobremesa clássica que agrada a todos.', 2),
-	(43, 'Baba de Camelo', 'Sobremesa', 'imgs/sobremesa/babacamelo.jpg', 15, 'Muito simples e deliciosa, feita com leite condensado.', 2),
-	(44, 'Leite Creme', 'Sobremesa', 'imgs/sobremesa/leitecreme.jpg', 30, 'Leite creme queimado com açúcar crocante.', NULL),
-	(45, 'Pudim de Ovos', 'Sobremesa', 'imgs/sobremesa/pudim.jpg', 60, 'Pudim caseiro com muito caramelo.', 2),
-	(46, 'Salada de Fruta', 'Sobremesa', 'imgs/sobremesa/saladafruta.jpg', 20, 'Fresca e saudável, com frutos da época.', 2);
+-- A despejar dados para tabela web2.receitas: ~33 rows (aproximadamente)
+INSERT INTO `receitas` (`id`, `titulo`, `categoria`, `imagem`, `tempo_preparo`, `descricao`, `id_chef`, `id_utilizador`, `estado`) VALUES
+	(1, 'Picanha', 'Receitas de carne', 'imgs/carne/picanha.jpg', 0, 'Deliciosa receita que combina o suculento sabor da picanha com flor de sal.', 10, NULL, 1),
+	(2, 'Bolonhesa', 'Receitas de carne', 'imgs/carne/bolonhesa.jpg', 35, 'Deliciosa receita de esparguete à bolonhesa com carne de novilho e molho de tomate.', 9, NULL, 1),
+	(10, 'Bolo de morango', 'Sobremesa', 'imgs/sobremesa/bolo.morango.webp', 40, 'Um bolo suave e húmido, recheado com compota e decorado com morangos frescos.', 2, NULL, 1),
+	(11, 'Bolo de cenoura', 'Sobremesa', 'imgs/sobremesa/bolodecenoura.png', 40, 'O clássico bolo de cenoura, fofo e delicioso, perfeito para o lanche.', 2, NULL, 1),
+	(19, 'Bacalhau à Brás', 'Peixe', 'imgs/peixe/bacalhau.jpg', 40, 'O prato de bacalhau mais famoso de Portugal, com ovos e batata palha.', 1, NULL, 1),
+	(20, 'Caldo Verde', 'Sopas e Cremes', 'imgs/sopas/caldoverde.webp', 45, 'A rainha das sopas portuguesas, com couve galega e chouriço.', 3, NULL, 1),
+	(21, 'Sopa de Legumes', 'Sopas e Cremes', 'imgs/sopas/sopalegumes.avif', 30, 'Uma sopa rica em vitaminas, perfeita para iniciar qualquer refeição.', 4, NULL, 1),
+	(22, 'Creme de Abóbora', 'Sopas e Cremes', 'imgs/sopas/cremeabobora.jpg', 35, 'Um creme aveludado e doce, com um toque de especiarias.', 3, NULL, 1),
+	(23, 'Canja de Galinha', 'Sopas e Cremes', 'imgs/sopas/canja.jpg', 45, 'A tradicional canja reconfortante, ideal para dias frios.', 3, NULL, 1),
+	(24, 'Sopa da Pedra', 'Sopas e Cremes', 'imgs/sopas/sopapedra.jpg', 90, 'A famosa sopa de Almeirim, rica e consistente.', 7, NULL, 1),
+	(25, 'Gaspacho Alentejano', 'Sopas e Cremes', 'imgs/sopas/gaspacho.jpeg', 20, 'Sopa fria típica do Alentejo, perfeita para o verão.', 3, NULL, 1),
+	(26, 'Sopa de Tomate', 'Sopas e Cremes', 'imgs/sopas/sopatomate.webp', 30, 'Sopa reconfortante com ovos escalfados.', 4, NULL, 1),
+	(27, 'Creme de Cenoura', 'Sopas e Cremes', 'imgs/sopas/cremecenoura.jpg', 25, 'Simples, rápido e delicioso.', 4, NULL, 1),
+	(28, 'Bife à Portuguesa', 'Receitas de carne', 'imgs/carne/bife_portuguesa.webp', 25, 'Bife do lombo com molho de alho, presunto e ovo a cavalo.', 7, NULL, 1),
+	(29, 'Carne de Porco à Alentejana', 'Receitas de carne', 'imgs/carne/carne_alentejana.jpg', 60, 'A combinação perfeita entre carne e marisco.', 3, NULL, 1),
+	(30, 'Frango Assado no Forno', 'Receitas de carne', 'imgs/carne/frango_forno.jpg', 75, 'Frango suculento com limão e ervas.', 4, NULL, 1),
+	(31, 'Rojões à Minhota', 'Receitas de carne', 'imgs/carne/rojoes.jpg', 90, 'Prato tradicional do norte com carne de porco e cominhos.', 3, NULL, 1),
+	(32, 'Cozido à Portuguesa', 'Receitas de carne', 'imgs/carne/cozido.jpeg', 120, 'O prato rei da cozinha portuguesa.', 3, NULL, 1),
+	(33, 'Arroz de Pato', 'Receitas de carne', 'imgs/carne/arroz_pato.jpg', 80, 'Arroz solto cozido no caldo do pato e gratinado no forno.', 4, NULL, 1),
+	(34, 'Dourada Grelhada', 'Peixe', 'imgs/peixe/dourada.jpg', 30, 'Peixe fresco grelhado com legumes.', 1, NULL, 1),
+	(35, 'Arroz de Marisco', 'Peixe', 'imgs/peixe/arroz_marisco.jpg', 45, 'Arroz malandrinho com camarão, amêijoas e delícias do mar.', 5, NULL, 1),
+	(36, 'Polvo à Lagareiro', 'Peixe', 'imgs/peixe/polvo.jpeg', 90, 'Polvo tenro assado no forno com muito azeite e batatas a murro.', 1, NULL, 1),
+	(37, 'Sardinhas Assadas', 'Peixe', 'imgs/peixe/sardinhas.jpg', 20, 'O prato típico dos Santos Populares.', 6, NULL, 1),
+	(38, 'Cataplana de Peixe', 'Peixe', 'imgs/peixe/cataplana.jpg', 40, 'Uma explosão de sabores do mar cozinhados a vapor.', 1, NULL, 1),
+	(39, 'Pastéis de Bacalhau', 'Peixe', 'imgs/peixe/pasteis_bacalhau.jpg', 60, 'Salgadinhos tradicionais estaladiços por fora e macios por dentro.', 1, NULL, 1),
+	(40, 'Filetes de Pescada', 'Peixe', 'imgs/peixe/filetes.jpg', 30, 'Filetes dourados com arroz de tomate.', 1, NULL, 1),
+	(41, 'Arroz Doce', 'Sobremesa', 'imgs/sobremesa/arrozdoce.jpg', 40, 'Cremoso e polvilhado com canela, como a avó fazia.', 8, NULL, 1),
+	(42, 'Mousse de Chocolate', 'Sobremesa', 'imgs/sobremesa/mousse.jpg', 20, 'A sobremesa clássica que agrada a todos.', 2, NULL, 1),
+	(43, 'Baba de Camelo', 'Sobremesa', 'imgs/sobremesa/babacamelo.jpg', 15, 'Muito simples e deliciosa, feita com leite condensado.', 2, NULL, 1),
+	(44, 'Leite Creme', 'Sobremesa', 'imgs/sobremesa/leitecreme.jpg', 30, 'Leite creme queimado com açúcar crocante.', NULL, NULL, 1),
+	(45, 'Pudim de Ovos', 'Sobremesa', 'imgs/sobremesa/pudim.jpg', 60, 'Pudim caseiro com muito caramelo.', 2, NULL, 1),
+	(46, 'Salada de Fruta', 'Sobremesa', 'imgs/sobremesa/saladafruta.jpg', 20, 'Fresca e saudável, com frutos da época.', 2, NULL, 1),
+	(50, 'Pataniscas', 'Comunidade', 'imgs/comunidade/receita_user_10_1765636322.jpg', 35, 'Pataniscas de bacalhau é um prato típico da culinária portuguesa, com origem na região da Estremadura.', NULL, 10, 1);
 
 -- A despejar estrutura para tabela web2.utilizadores
 DROP TABLE IF EXISTS `utilizadores`;
@@ -486,17 +517,19 @@ CREATE TABLE IF NOT EXISTS `utilizadores` (
   `utilizador` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `email` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
   `pass` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
+  `estado` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`iduser`) USING BTREE,
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.utilizadores: ~5 rows (aproximadamente)
-INSERT INTO `utilizadores` (`iduser`, `utilizador`, `email`, `pass`) VALUES
-	(3, 'Rafael', 'rafaze08@gmail.com', '$2y$10$gaLOJCXaLAC6NQDh1H97j.ymLruI1ukiZuEQhuwN5qYXCCv3ZeMu.'),
-	(4, 'Rui', 'teste@gmail.com', '$2y$10$K/ZFTy1anMfftPG6N2kn2OQ/c574fpVEe1LTkiS9d9VXd8txLdY2e'),
-	(5, 'Pedro', 'teste2@gmail.com', '$2y$10$JJ9U4HH1gq4D2Yugwt6Kk.UD1GzLQfgWME/5F7cFu4hKDvsvaPTWO'),
-	(6, 'Beatriz', 'biaae5@gmail.com', '$2y$10$k1Mw6jWDKKLVVsJe1zRGXe7piBCFxDo1zAWXY2uqsckezoxJ1xGua'),
-	(9, 'rafael', 'teste3@gmail.com', '$2y$10$3fl1deJfVvM1NGmRsC5xreb1SFC4fqPQR2CA.PBDe9epLDjd3mfJq');
+-- A despejar dados para tabela web2.utilizadores: ~6 rows (aproximadamente)
+INSERT INTO `utilizadores` (`iduser`, `utilizador`, `email`, `pass`, `estado`) VALUES
+	(3, 'Rafael', 'rafaze08@gmail.com', '$2y$10$gaLOJCXaLAC6NQDh1H97j.ymLruI1ukiZuEQhuwN5qYXCCv3ZeMu.', 1),
+	(4, 'Rui', 'teste@gmail.com', '$2y$10$K/ZFTy1anMfftPG6N2kn2OQ/c574fpVEe1LTkiS9d9VXd8txLdY2e', 1),
+	(5, 'Pedro', 'teste2@gmail.com', '$2y$10$JJ9U4HH1gq4D2Yugwt6Kk.UD1GzLQfgWME/5F7cFu4hKDvsvaPTWO', 1),
+	(6, 'Beatriz', 'biaae5@gmail.com', '$2y$10$k1Mw6jWDKKLVVsJe1zRGXe7piBCFxDo1zAWXY2uqsckezoxJ1xGua', 1),
+	(9, 'rafael', 'teste3@gmail.com', '$2y$10$3fl1deJfVvM1NGmRsC5xreb1SFC4fqPQR2CA.PBDe9epLDjd3mfJq', 1),
+	(10, 'Guilherme', 'gui@gmail.com', '$2y$10$ljTMwFUrFTbk6QHDwUI53ucxTvvjOKSKn8SfoxbDhdVUWu0T5Yuri', 1);
 
 /*!40103 SET TIME_ZONE=IFNULL(@OLD_TIME_ZONE, 'system') */;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -19,7 +19,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($dbh)) {
 }
     ?>
         
-    <nav class="navbar navbar-expand-lg fixed-top" style="background-color: rgb(245, 240, 214);">
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm " style="background-color: rgb(245, 240, 214);">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php">
                 <img src="imgs/pitada.logo.png" alt="Logótipo" width="100" height="auto">
@@ -44,6 +44,8 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($dbh)) {
                             <li><a class="dropdown-item" href="categoria.php?tipo=sobremesa">Sobremesa</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item" href="categoria.php?tipo=sopa">Sopas e Cremes</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="categoria.php?tipo=comunidade">Comunidade</a></li>                           
                         </ul>
                     </li>
                     <li class="nav-item"><a class="nav-link active fs-5 ms-lg-3" href="chefs.php">Chef`s</a></li>

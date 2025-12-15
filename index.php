@@ -38,6 +38,7 @@ require('includes/connection.php');
                   FROM receitas r 
                   LEFT JOIN chefs c ON r.id_chef = c.id 
                   LEFT JOIN favoritos f ON r.id = f.id_receita AND f.ativado = 1
+                  WHERE r.categoria != 'Comunidade' AND r.estado = 1 
                   GROUP BY r.id 
                   ORDER BY total_likes DESC, r.id DESC 
                   LIMIT 8";
@@ -109,7 +110,7 @@ require('includes/connection.php');
                     </div>
 
                     <p class="card-text text-truncate-2"><?= $descricao ?></p>
-                    <a href="<?= $referencia ?>" class="btn btn-style2 mt-auto">Abrir receita</a>
+                    <a href="<?= $referencia ?>" class="btn btn-style2 mt-auto">Abrir Receita</a>
                   </div>
                 </div>
               </div>
@@ -151,58 +152,95 @@ require('includes/connection.php');
       </div>
     </div>
 
-   <div class="container text-center mt-5 mb-5">
-      <h2 class="mb-4">As receitas dos nossos utilizadores!</h2>
-      <p class="text-muted mb-5">Descobre as criações deliciosas dos nossos visitantes 🍰</p>
-    </div>
-
-    <div class="d-flex justify-content-center">
-      <div id="carouselExampleInterval" class="carousel slide carousel-fade w-100 w-lg-60 carrossel-responsivo"
-           data-bs-ride="carousel" data-bs-touch="true">
-
-        <div class="carousel-inner">
-          <div class="carousel-item active" data-bs-interval="2000">
-            <img src="imgs/sobremesa/bolo.morango.webp" class="d-block w-100 carousel-img-fixed rounded-3" alt="bolo de ananas">
-            <div class="carousel-caption">
-            <div class="caixa-texto">
-              <h5>Bolo de cenoura</h5>
-              <p>confecionado pela Odete Soares</p>
-            </div>
-          </div>
-          </div>
-
-          <div class="carousel-item" data-bs-interval="2000">
-            <img src="imgs/receitadeuti.jpg" class="d-block w-100 carousel-img-fixed rounded-3" alt="picanha">
-            <div class="carousel-caption">
-              <div class="caixa-texto">
-              <h5>Picanha</h5>
-              <p>confecionada pelo Joaquim Pereira</p>
-            </div>
-          </div>
-          </div>
-
-          <div class="carousel-item" data-bs-interval="2000">
-            <img src="imgs/cenoura-uti.jpg" class="d-block w-100 carousel-img-fixed rounded-3" alt="bolo de cenoura">
-            <div class="carousel-caption">
-            <div class="caixa-texto">
-              <h5>Bolo de cenoura</h5>
-              <p>confecionado pela Odete Soares</p>
-            </div>
-            </div>
-          </div>
+  <div class="container mt-5 mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold fs-4 mb-1">As receitas dos nossos utilizadores!</h2>
+            <p class="text-muted mb-0 small">Descobre as criações deliciosas dos nossos visitantes </p>
         </div>
-
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Anterior</span>
-        </button>
-
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleInterval" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Seguinte</span>
-        </button>
       </div>
-    </div>
+
+      <div class="row align-items-stretch g-4 row-cols-1 row-cols-sm-2 row-cols-lg-4">
+          <?php
+            // QUERY COMUNIDADE: Buscar 4 receitas aleatórias (ou recentes)
+            $stmtComunidade = $dbh->query("SELECT r.*, u.utilizador as autor, COUNT(f.id) as total_likes
+                                           FROM receitas r 
+                                           LEFT JOIN utilizadores u ON r.id_utilizador = u.iduser
+                                           LEFT JOIN favoritos f ON r.id = f.id_receita AND f.ativado = 1
+                                           WHERE r.categoria = 'Comunidade' AND r.estado = 1
+                                           GROUP BY r.id
+                                           ORDER BY RAND() LIMIT 4");
+            
+            $listaComunidade = $stmtComunidade->fetchAll(PDO::FETCH_ASSOC);
+
+            if(count($listaComunidade) > 0):
+                foreach($listaComunidade as $rec):
+                    $id = $rec['id'];
+                    $nome = $rec['titulo'];
+                    $imagem = $rec['imagem'];
+                    $autor = !empty($rec['autor']) ? $rec['autor'] : 'Anónimo';
+                    $referencia = "receita.php?id=" . $id;
+
+                    // Verificar Favorito (Reutilizamos a lógica)
+                    $e_favorito = false;
+                    if ($id_utilizador_logado > 0) {
+                        $checkFav = $dbh->prepare("SELECT id FROM favoritos WHERE id_utilizador = ? AND id_receita = ? AND ativado = 1");
+                        $checkFav->execute([$id_utilizador_logado, $id]);
+                        if ($checkFav->rowCount() > 0) $e_favorito = true;
+                    }
+                    $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
+          ?>
+                <div class="col">
+                    <div class="card h-100 position-relative border-0 shadow-sm">
+                        
+                        <!-- Badge Comunidade -->
+                        <span class="position-absolute top-0 start-0 m-2 badge bg-warning text-dark shadow-sm" style="z-index: 5;">
+                            <i class="bi bi-people-fill me-1"></i>Comunidade
+                        </span>
+
+                        <div style="height: 200px; overflow: hidden;" class="rounded-top">
+                            <img src="<?php echo $imagem; ?>" class="w-100 h-100 object-fit-cover" alt="<?php echo $nome; ?>">
+                        </div>
+
+                        <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
+                                onclick="toggleFavorito(this, <?= $id ?>, '<?= addslashes($nome) ?>', '<?= $imagem ?>', '<?= $referencia ?>')"
+                                aria-label="Adicionar aos favoritos">
+                            <i class="bi bi-heart-fill <?= $classe_coracao ?>"></i>
+                        </button>
+
+                        <div class="card-body text-center d-flex flex-column">
+                            <h5 class="card-title fw-bold"><?php echo $nome; ?></h5>
+                            
+                            <div class="mb-2 small text-muted">
+                                <i class="bi bi-heart-fill text-danger"></i> 
+                                <span id="likes-texto-<?= $id ?>">
+                                    <?php 
+                                        if ($rec['total_likes'] == 1) {
+                                            echo "1 pessoa gostou";
+                                        } else {
+                                            echo $rec['total_likes'] . " pessoas gostaram";
+                                        }
+                                    ?>        
+                                </span>            
+                            </div>
+
+                            <p class="card-text small text-muted">Confecionado por: <strong><?php echo $autor; ?></strong></p>
+                            
+                            <a href="<?php echo $referencia; ?>" class="btn btn-style2 mt-auto">Abrir Receita</a>
+                        </div>
+                    </div>
+                </div>
+          <?php 
+                endforeach;
+            else:
+          ?>
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">Ainda não há receitas da comunidade. Sê o primeiro a partilhar!</p>
+                <a href="submeter-receita.php" class="btn btn-success mt-2">Partilhar Receita</a>
+            </div>
+          <?php endif; ?>
+      </div>
+   </div>
 
   <div class="container-fluid" >
     <div class="container text-center py-5 my-4">
@@ -211,7 +249,7 @@ require('includes/connection.php');
             Partilhe a sua obra-prima com a nossa comunidade e veja-a em destaque no nosso site!
         </p>
         
-        <a href="submeter-receita.php" class="btn btn-style2 btn-lg">
+        <a href="submeterreceita.php" class="btn btn-style2 btn-lg">
             <i class="bi bi-upload me-2"></i>Enviar a minha receita
         </a>
     </div>

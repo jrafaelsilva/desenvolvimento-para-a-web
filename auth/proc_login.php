@@ -5,7 +5,7 @@ session_start();
 # 1. VALIDAÇÃO DO MÉTODO DE ENVIO
 # =========================================================
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    // Se tentarem aceder direto pelo link, manda para o login
+    // Se tentarem aceder direto pelo link, manda para o 403
     header('Location: ../403.php'); 
     exit;
 }
@@ -50,13 +50,18 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 # =========================================================
 try {
     // Busca o ID, NOME (utilizador) e SENHA (pass)
-    $stmt = $dbh->prepare("SELECT iduser, utilizador, pass FROM utilizadores WHERE email = ?");
+    $stmt = $dbh->prepare("SELECT iduser, utilizador, pass, estado FROM utilizadores WHERE email = ?");
     $stmt->execute([$email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     // Se user existe E a senha bate certo com a encriptação
     if ($user && password_verify($pass, $user['pass'])) {
-
+    // --- ALTERAÇÃO DE SEGURANÇA: Verificar se a conta está ativa ---
+        if ($user['estado'] == 0) {
+            $_SESSION['erro_login'] = 'A sua conta foi bloqueada. Por favor, contacte o administrador.';
+            header('Location: ../login.php');
+            exit;
+        }
         # --- LOGIN SUCESSO ---
         session_regenerate_id(true); // Previne roubo de sessão
 
@@ -70,7 +75,7 @@ try {
 
     } else {
         # --- LOGIN FALHOU ---
-        $_SESSION['erro_login'] = 'Email ou palavra-passe incorretos.';
+        $_SESSION['erro_login'] = 'Email e/ou palavra-passe incorreto(s).';
         header('Location: ../login.php');
         exit;
     }

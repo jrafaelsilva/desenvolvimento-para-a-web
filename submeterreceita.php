@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// 1. Verificar se está logado (Apenas utilizadores registados podem enviar)
+// 1. Verificar se está logado
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
     header("Location: login.php");
     exit;
@@ -32,7 +32,7 @@ if (isset($_SESSION['erro_submissao'])) {
   <link href="css/style.css" rel="stylesheet">
 </head>
 
-<body class="bg-light">
+<body>
     <?php require('includes/nav.php'); ?>
 
     <div class="container my-5">
@@ -42,7 +42,7 @@ if (isset($_SESSION['erro_submissao'])) {
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                     <div class="card-header bg-white border-0 pt-4 pb-0 text-center">
                         <h2 class="fw-bold display-6" style="color: rgb(182, 125, 95);">Partilha a tua Receita</h2>
-                        <p class="text-muted">Preenche os dados abaixo para adicionares a tua obra-prima ao nosso livro.</p>
+                        <p class="text-muted">A tua receita será publicada na secção da <strong>Comunidade</strong>.</p>
                     </div>
 
                     <div class="card-body p-4 p-md-5">
@@ -53,28 +53,20 @@ if (isset($_SESSION['erro_submissao'])) {
                             </div>
                         <?php endif; ?>
 
-                        <!-- FORMULÁRIO -->
-                        <!-- enctype é OBRIGATÓRIO para envio de ficheiros (imagens) -->
-                        <form action="auth/processar_submissao.php" method="POST" enctype="multipart/form-data">
+                        <form action="auth/proc_submissao.php" method="POST" enctype="multipart/form-data">
                             
                             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
-                            <!-- 1. TÍTULO E CATEGORIA -->
-                            <div class="row g-3 mb-4">
-                                <div class="col-md-8">
-                                    <label class="form-label fw-bold text-muted">Nome da Receita</label>
-                                    <input type="text" name="titulo" class="form-control form-control-lg" placeholder="Ex: Bacalhau com Natas" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label fw-bold text-muted">Categoria</label>
-                                    <select name="categoria" class="form-select form-select-lg" required>
-                                        <option value="" selected disabled>Escolher...</option>
-                                        <option value="Receitas de carne">Carne</option>
-                                        <option value="Peixe">Peixe</option>
-                                        <option value="Sobremesa">Sobremesa</option>
-                                        <option value="Sopas e Cremes">Sopas</option>
-                                    </select>
-                                </div>
+                            <!-- 1. TÍTULO (Ocupa a linha toda agora) -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-muted">Nome da Receita</label>
+                                <input type="text" name="titulo" class="form-control form-control-lg" placeholder="Ex: O meu Bacalhau com Natas" required>
+                            </div>
+
+                            <!-- 1. TÍTULO (Ocupa a linha toda agora) -->
+                            <div class="mb-4">
+                                <label class="form-label fw-bold text-muted">Descrição da receita</label>
+                                <input type="text" name="descricao" class="form-control form-control-lg" placeholder="Ex: Uma receita deliciosa para experimentar." required>
                             </div>
 
                             <!-- 2. TEMPO E IMAGEM -->
@@ -145,7 +137,6 @@ if (isset($_SESSION['erro_submissao'])) {
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -153,7 +144,7 @@ if (isset($_SESSION['erro_submissao'])) {
     <?php require('includes/footer.php'); ?>
     <script src="js/bootstrap.bundle.min.js"></script>
 
-    <!-- Scripts para adicionar campos dinamicamente -->
+    <!-- Scripts JS (Mantém-se igual) -->
     <script>
         function adicionarIngrediente() {
             const container = document.getElementById('lista-ingredientes');
@@ -183,14 +174,7 @@ if (isset($_SESSION['erro_submissao'])) {
 
         function removerPasso(btn) {
             btn.parentElement.remove();
-            // Opcional: Renumerar passos se quiseres ser perfeccionista, 
-            // mas para BD a ordem de envio (array) é que conta.
         }
     </script>
-
-    <style>
-        .fade-in { animation: fadeIn 0.3s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
 </body>
 </html>

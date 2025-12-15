@@ -5,7 +5,6 @@ session_start();
 # CRIAÇÃO DE UM TOKEN PARA VALIDAÇÃO (CSRF)
 # =========================================================
 if (empty($_SESSION['csrf_token'])) {
-    // Só gera se ainda não existir um token na sessão
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); 
 }
 
@@ -34,19 +33,27 @@ if (isset($_GET['sucesso']) && $_GET['sucesso'] == 1) {
   <link href="css/style.css" rel="stylesheet">
 </head>
 
-<body class="d-flex align-items-center py-4 h-100 bg-fade">
+<!-- Alterei h-100 para min-vh-100 para garantir que ocupa o ecrã todo sem forçar scroll -->
+<body class="d-flex align-items-center py-4 min-vh-100 bg-fade">
 
-<main class="form-signin ms-auto me-auto p-3" style="max-width: 400px;">
+<!-- AUMENTEI AQUI: max-width de 400px para 550px -->
+<main class="form-signin ms-auto me-auto p-3" style="max-width: 550px; width: 100%;">
   
   <div class="card shadow-lg border-0 rounded-4">
-    <div class="card-body p-4 p-md-5">
+    <!-- Adicionei 'position-relative' para posicionar o ícone de voltar -->
+    <div class="card-body p-4 p-md-5 position-relative">
+
+      <!-- ÍCONE DE VOLTAR -->
+      <a href="index.php" class="text-dark position-absolute top-0 start-0 m-3" title="Voltar à Página Inicial">
+        <i class="bi bi-arrow-left fs-4"></i>
+      </a>
 
       <!-- LOGÓTIPO -->
       <a href="index.php" class="d-flex justify-content-center mx-auto mb-4">
         <img src="imgs/pitada.logo.png" height="80" width="120" alt="Logótipo Pitada na Mesa"/>
       </a>
       
-      <h2 class="text-center fw-bold mb-4 text-secondary">Iniciar Sessão</h2>
+      <h2 class="text-center fw-bold mb-4 text-dark">Iniciar Sessão</h2>
 
       <!-- MENSAGENS -->
       <?php if (!empty($mensagem_sucesso)): ?>
@@ -68,18 +75,18 @@ if (isset($_GET['sucesso']) && $_GET['sucesso'] == 1) {
         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
 
         <div class="mb-3">
-          <label for="email" class="form-label fw-medium text-secondary">Email</label>
-          <input type="email" class="form-control form-control-lg fs-6" id="email" name="email" required placeholder="exemplo@gmail.com">
+          <label for="email" class="form-label fw-medium text-dark">Email</label>
+          <input type="email" class="form-control form-control-lg fs-6" id="email" name="email" required placeholder="Insira o seu email">
         </div>
 
         <div class="mb-3">
-          <label for="password" class="form-label fw-medium text-secondary">Palavra-passe</label>
+          <label for="password" class="form-label fw-medium text-dark">Palavra-passe</label>
           <input type="password" class="form-control form-control-lg fs-6" id="password" name="pass" required placeholder="********">
         </div>
 
         <button class="btn btn-style2 w-100 py-2 mt-3 fw-bold shadow-sm" type="submit">Entrar</button>
         
-        <p class="mt-4 text-center text-muted fs-6 mb-0">
+        <p class="mt-4 text-center text-dark fs-6 mb-0">
           Não tem uma conta? 
           <a href="registo.php" class="fw-semibold text-decoration-none text-success">Registe-se</a>
         </p>

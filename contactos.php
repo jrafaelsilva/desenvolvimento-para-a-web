@@ -44,7 +44,7 @@ require('includes/connection.php');
                         <i class="bi bi-envelope-paper display-4"></i>
                     </div>
                     <h4 class="fw-bold">Email</h4>
-                    <p class="text-muted">Para parcerias ou questões gerais:</p>
+                    <p class="text-muted">Para parcerias ou questões:</p>
                     <a href="mailto:geral@pitadanamesa.pt" class="btn btn-outline-success rounded-pill px-4">geral@pitadanamesa.pt</a>
                 </div>
             </div>

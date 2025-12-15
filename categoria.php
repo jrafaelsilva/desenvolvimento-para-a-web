@@ -22,6 +22,10 @@ $mapa_categorias = [
     'sopa' => [
         'bd'     => 'Sopas e Cremes', 
         'titulo' => 'Sopas e Cremes'
+    ],
+    'comunidade' => [
+        'bd'     => 'Comunidade', 
+        'titulo' => 'Comunidade'
     ]
 ];
 
@@ -73,7 +77,7 @@ if (array_key_exists($tipo, $mapa_categorias)) {
             $sql = "SELECT r.*, c.id as id_chef, c.nome as nome_chef, c.imagem as imagem_chef 
                     FROM receitas r 
                     LEFT JOIN chefs c ON r.id_chef = c.id 
-                    WHERE r.categoria = ?";
+                    WHERE r.categoria = ? AND r.estado = 1";
             
             $stmt = $dbh->prepare($sql);
             $stmt->execute([$cat_atual['bd']]);

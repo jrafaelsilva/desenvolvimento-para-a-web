@@ -1,42 +1,35 @@
 <?php
-// 1. Ler o JSON recebido (antes da conexão)
-$input = json_decode(file_get_contents("php://input"), true);
+// 1. Ligar à base de dados
+require('../includes/connection.php');
 
-// Usa o operador '??' para evitar erros se 'id' não existir
-$idReceita = $input["id"] ?? null;
+// 2. Lê o corpo da requisição (JSON)
+$input = file_get_contents("php://input");
 
-// Validação simples
-if ($idReceita === null) {
-    echo json_encode(["total" => 0, "erro" => "ID não informado"]);
+// 3. Converte JSON para array associativo
+$data = json_decode($input, true);
+$id = isset($data["id"]) ? $data["id"] : null; // Previne erro se não vier ID
+
+if ($id === null) {
+    echo json_encode(['total' => 0]);
     exit;
 }
 
-// 2. Ligar à Base de Dados
-require('../includes/connection.php');
-
-// Definir cabeçalho JSON
-header('Content-Type: application/json');
-
-// 3. Query SQL para contar os favoritos
+// 4. Query SQL (Conta apenas os ativos)
 $sql = 'SELECT COUNT(id) AS total FROM favoritos WHERE id_receita = :id AND ativado = 1';
-
 $stmt = $dbh->prepare($sql);
-$stmt->bindValue(':id', $idReceita);
+$stmt->bindValue(':id', $id);
 $stmt->execute();
 
 $total = 0;
 
-if ($stmt) {
-    // Busca o resultado como objeto e acede à propriedade 'total' definida no SQL
+if($stmt){
+    // Busca o resultado como objeto, tal como no teu exemplo
     $total = $stmt->fetchObject()->total;
 }
 
-// 4. Devolver a resposta
-echo json_encode([
-    "total" => $total
-]);
+// 5. Devolve o JSON final
+echo json_encode(['total' => $total]);
 
-// 5. Limpeza
 $stmt = null;
 exit;
 ?>

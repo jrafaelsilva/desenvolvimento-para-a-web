@@ -10,28 +10,15 @@ if (!isset($_GET['id'])) {
 
 $id_receita = $_GET['id'];
 
-// 2. Processar envio de Comentário
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['comentario'])) {
-    if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
-        $texto_comentario = trim($_POST['comentario']);
-        $id_user = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
-
-        if (!empty($texto_comentario)) {
-            $stmtCom = $dbh->prepare("INSERT INTO comentarios (id_receita, id_utilizador, comentario) VALUES (?, ?, ?)");
-            $stmtCom->execute([$id_receita, $id_user, $texto_comentario]);
-            header("Location: receita.php?id=" . $id_receita);
-            exit;
-        }
-    } else {
-        $erro_login = "Precisa de fazer login para comentar.";
-    }
-}
-
-// 3. Buscar Detalhes da Receita E DO CHEF
-$sql = "SELECT r.*, c.id as id_chef, c.nome as nome_chef, c.imagem as imagem_chef 
+// 3. Buscar Detalhes da Receita E DO CHEF e do UTILIZADOR
+$sql = "SELECT r.*, 
+               c.id as id_chef, c.nome as nome_chef, c.imagem as imagem_chef,
+               u.iduser as id_utilizador, u.utilizador as nome_utilizador, dp.avatar as avatar_utilizador
         FROM receitas r 
         LEFT JOIN chefs c ON r.id_chef = c.id 
-        WHERE r.id = ?";
+        LEFT JOIN utilizadores u ON r.id_utilizador = u.iduser
+        LEFT JOIN dados_perfil dp ON u.iduser = dp.id_utilizador
+        WHERE r.id = ?"; 
 $stmt = $dbh->prepare($sql);
 $stmt->execute([$id_receita]);
 $receita = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -97,58 +84,113 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
     <div class="ms-3 mt-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
-            <li class="breadcrumb-item"><a href="#"><?php echo htmlspecialchars($receita['categoria']); ?></a></li>
+      <?php
+            // 2. Configuração: Mapear o URL para o Nome na Base de Dados
+                $mapa_slugs = [
+                    'Receitas de carne' => 'carne',
+                    'Peixe'             => 'peixe',
+                    'Sobremesa'         => 'sobremesa',
+                    'Sopas e Cremes'    => 'sopa',
+                    'Comunidade'        => 'comunidade'
+                ];
+                
+                $catNome = $receita['categoria'];
+                // Se existir no mapa usa o slug, se não, fica link vazio (#)
+                $catLink = isset($mapa_slugs[$catNome]) ? "categoria.php?tipo=" . $mapa_slugs[$catNome] : "#";?>
+            <li class="breadcrumb-item"><a href="<?php echo $catLink; ?>"><?php echo htmlspecialchars($catNome); ?></a></li>
             <li class="breadcrumb-item active" aria-current="page"><?php echo htmlspecialchars($receita['titulo']); ?></li>
         </ol>
     </div>
 
-    <div class="container">
+<div class="container">
         <div class="fw-bold mb-4 mt-5 fs-2 text-center"><?php echo htmlspecialchars($receita['titulo']); ?></div>
         
         <!-- ====================================================== -->
-        <!-- ÁREA PRINCIPAL: IMAGEM + CHEF + TEMPORIZADOR -->
+        <!-- ÁREA PRINCIPAL: IMAGEM + AUTOR (Chef ou User) -->
         <!-- ====================================================== -->
-        <?php if (!empty($receita['id_chef'])): ?>
+        <?php 
+            // Determinar se existe um autor (Chef ou Utilizador)
+            $temAutor = !empty($receita['id_chef']) || !empty($receita['id_utilizador']);
             
-            <!-- CASO A: RECEITA COM CHEF -->
+            // Variáveis para preencher o cartão
+            $nomeAutor = "";
+            $imgAutor = "imgs/avatar/avpadrao.jpg";
+            $linkAutor = "#";
+            $labelAutor = "";
+            $classeLink = "text-decoration-none text-dark d-flex flex-column flex-lg-row align-items-center mt-3 p-2 rounded hover-bg-white transition";
+
+            if ($temAutor) {
+                if (!empty($receita['id_chef'])) {
+                    // É UM CHEF
+                    $nomeAutor = $receita['nome_chef'];
+                    $labelAutor = "Receita do Chef:";
+                    $linkAutor = "chefs.php#chef-" . $receita['id_chef'];
+                    if (!empty($receita['imagem_chef']) && file_exists($receita['imagem_chef'])) {
+                        $imgAutor = $receita['imagem_chef'];
+                    }
+                } else {
+                    // É UM UTILIZADOR DA COMUNIDADE
+                    $nomeAutor = $receita['nome_utilizador'];
+                    $labelAutor = "Receita da Comunidade:";
+                    $linkAutor = "#"; // Utilizadores normais não têm página pública de perfil por enquanto
+                    $classeLink = "text-decoration-none text-dark d-flex flex-column flex-lg-row align-items-center mt-3 p-2 rounded"; // Remove hover effect se não tiver link
+
+                    // Lógica do Avatar do Utilizador
+                    $avatar_db = $receita['avatar_utilizador'];
+                    if (!empty($avatar_db) && $avatar_db != 'default') {
+                        if (file_exists("imgs/avatar/" . $avatar_db)) {
+                            $imgAutor = "imgs/avatar/" . $avatar_db;
+                        } elseif (file_exists($avatar_db)) {
+                            $imgAutor = $avatar_db;
+                        }
+                    }
+                }
+            }
+        ?>
+
+        <?php if ($temAutor): ?>
+            
+            <!-- CASO A: TEM AUTOR (Layout 2 Colunas) -->
             <div class="row justify-content-center align-items-start mb-3">
                 
                 <!-- Coluna Esquerda: Imagem da Receita -->
                 <div class="col-12 col-lg-8 mb-4 mb-lg-0">
                     <img src="<?php echo htmlspecialchars($receita['imagem']); ?>" 
                          class="img-fluid w-100 border border-4 rounded shadow-sm" 
-                         style="max-height: 600px; object-fit: cover;"
+                         style="max-height: 600px; object-fit: cover; border-color: rgba(253, 126, 20, 1) !important;"
                          alt="<?php echo htmlspecialchars($receita['titulo']); ?>">
                 </div>
 
-                <!-- Coluna Direita: Wrapper para Chef e Temporizador -->
+                <!-- Coluna Direita: Autor e Temporizador -->
                 <div class="col-12 col-lg-4">
                     
                     <div class="row align-items-center">
                         
-                        <!-- 1. CHEF -->
+                        <!-- 1. CARTÃO DO AUTOR (Chef ou Utilizador) -->
                         <div class="col-12 col-md-6 col-lg-12 mb-3">
                             <div class="card border-0 shadow-sm bg-light rounded-4 p-3 h-100">
                                 <div class="card-body text-center text-lg-start">
-                                    <small class="text-uppercase text-muted fw-bold ls-1">Receita de:</small>
+                                    <small class="text-uppercase text-muted fw-bold ls-1"><?php echo $labelAutor; ?></small>
                                     
-                                    <a href="chefs.php#chef-<?php echo $receita['id_chef']; ?>" class="text-decoration-none text-dark d-flex flex-column flex-lg-row align-items-center mt-3 p-2 rounded hover-bg-white transition">
-                                        <?php 
-                                            $imgChef = !empty($receita['imagem_chef']) && file_exists($receita['imagem_chef']) ? $receita['imagem_chef'] : 'imgs/avatar/avpadrao.jpg';
-                                        ?>
-                                        <img src="<?php echo $imgChef; ?>" 
+                                    <a href="<?php echo $linkAutor; ?>" class="<?php echo $classeLink; ?>">
+                                        <img src="<?php echo $imgAutor; ?>" 
                                              class="rounded-circle border border-2 border-white shadow-sm mb-2 mb-lg-0 me-lg-3" 
                                              style="width: 80px; height: 80px; object-fit: cover;" 
-                                             alt="<?php echo htmlspecialchars($receita['nome_chef']); ?>">
+                                             alt="<?php echo htmlspecialchars($nomeAutor); ?>">
                                         
                                         <div>
-                                            <h5 class="fw-bold mb-0 text-break"><?php echo htmlspecialchars($receita['nome_chef']); ?></h5>
-                                            <small class="text-primary fw-semibold">Ver perfil <i class="bi bi-arrow-right"></i></small>
+                                            <h5 class="fw-bold mb-0 text-break"><?php echo htmlspecialchars($nomeAutor); ?></h5>
+                                            <?php if (!empty($receita['id_chef'])): ?>
+                                                <small class="text-primary fw-semibold">Ver perfil <i class="bi bi-arrow-right"></i></small>
+                                            <?php else: ?>
+                                                <small class="text-success fw-semibold"><i class="bi bi-star-fill"></i> Membro verificado</small>
+                                            <?php endif; ?>
                                         </div>
                                     </a>
                                 </div>
                             </div>
                         </div>
+
 
                         <!-- 2. TEMPORIZADOR -->
                         <div class="col-12 col-md-6 col-lg-12">
@@ -169,12 +211,12 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 
         <?php else: ?>
 
-            <!-- CASO B: RECEITA SEM CHEF -->
+            <!-- CASO B: SEM AUTOR (Admin/Anónimo) - Layout Centrado -->
             <img src="<?php echo htmlspecialchars($receita['imagem']); ?>" 
                  class="d-flex mx-auto w-100 w-lg-60 border border-4 rounded mb-4 shadow-sm" 
                  alt="<?php echo htmlspecialchars($receita['titulo']); ?>">
 
-            <div id="timer-wrapper" class="text-center my-4">
+            <div id="timer-wrapper" class="text-center mt-4 mb-2">
                 <h4 class="fw-bold mb-1">Temporizador</h4>
                 <h2 id="timer" class="display-4 fw-bold text-success mb-4">00:00</h2>
                 <div class="gap-3 timer-controls-original">
@@ -279,15 +321,15 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
                     <div class="card-body">
                         <h5 class="card-title mb-3">Deixe o seu comentário</h5>
                         <?php if (isset($_SESSION['logado']) && $_SESSION['logado'] === true): ?>
-                            <form action="receita.php?id=<?php echo $id_receita; ?>" method="POST">
-                                <div class="form-floating mb-3">
-                                    <textarea class="form-control" name="comentario" placeholder="Escreva aqui..." id="floatingTextarea2" style="height: 100px" required></textarea>
-                                    <label for="floatingTextarea2">O que achou desta receita?</label>
-                                </div>
-                                <div class="d-grid d-md-flex justify-content-md-end">
-                                    <button type="submit" class="btn btn-success">Publicar Comentário</button>
-                                </div>
-                            </form>
+                        <form id="formComentario">
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" name="comentario" placeholder="Escreva aqui..." id="floatingTextarea2" style="height: 100px" required></textarea>
+                                <label for="floatingTextarea2">O que achou desta receita?</label>
+                            </div>
+                            <div class="d-grid d-md-flex justify-content-md-end">
+                                <button type="submit" class="btn btn-success">Publicar Comentário</button>
+                            </div>
+                        </form>
                         <?php else: ?>
                             <div class="alert alert-warning mb-0 text-center">
                                 <a href="login.php" class="link-underline-success link-underline-opacity-0 link-underline-opacity-100-hover text-success">Faça login</a> para deixar um comentário.
@@ -391,11 +433,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
             atualizarDisplay();
             if (tempoRestante <= 0) {
                 clearInterval(cronometro);
-                
-                // Tocar som (se existir)
-                if(alarme) {
-                    alarme.play().catch(e => console.log("Sem áudio")); 
-                }
                 
                 // ABRIR O MODAL
                 const modalTimer = new bootstrap.Modal(document.getElementById('modalTimer'));
@@ -530,6 +567,61 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
             .catch(error => console.error('Erro:', error));
         }
         document.addEventListener("DOMContentLoaded", atualizarLikes);
-    </script>
+        
+    // --- SCRIPT PARA COMENTÁRIOS ASSÍNCRONOS ---
+    const formComentario = document.getElementById('formComentario');
+    
+    if (formComentario) {
+        formComentario.addEventListener('submit', function(e) {
+            e.preventDefault(); // Impede a página de recarregar
+
+            const comentarioTexto = document.getElementById('floatingTextarea2').value;
+            const receitaId = <?php echo $id_receita; ?>; // ID da receita vindo do PHP
+
+            // Enviar para o PHP via AJAX
+            fetch('ajax/adicionar_comentario.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    id_receita: receitaId,
+                    comentario: comentarioTexto
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'sucesso') {
+                    // 1. Limpar a caixa de texto
+                    document.getElementById('floatingTextarea2').value = '';
+
+                    // 2. Adicionar o novo comentário no topo da lista
+                    const lista = document.getElementById('lista-comentarios');
+                    
+                    // Se a lista tiver a mensagem "Ainda não existem comentários", remove-a
+                    const mensagemVazia = lista.querySelector('p.fst-italic');
+                    if (mensagemVazia) mensagemVazia.remove();
+
+                    // Insere o HTML que veio do PHP logo no início da lista
+                    lista.insertAdjacentHTML('afterbegin', data.html);
+
+                    // 3. Atualizar o contador de comentários (Opcional, visual)
+                    const tituloComentarios = document.querySelector('h3.fw-bold.mb-4');
+                    if(tituloComentarios) {
+                        // Extrai o número atual, soma 1 e atualiza o texto
+                        let textoAtual = tituloComentarios.innerText;
+                        let numeroMatch = textoAtual.match(/\d+/);
+                        if(numeroMatch) {
+                            let novoNumero = parseInt(numeroMatch[0]) + 1;
+                            tituloComentarios.innerText = `Comentários (${novoNumero})`;
+                        }
+                    }
+
+                } else {
+                    alert('Erro: ' + data.mensagem);
+                }
+            })
+            .catch(error => console.error('Erro:', error));
+        });
+    }
+</script>
 </body>
 </html>

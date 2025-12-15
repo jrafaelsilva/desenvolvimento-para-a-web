@@ -65,8 +65,8 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                     
                     <!-- RECEITAS DESTE CHEF (Sub-Query) -->
                     <?php
-                        // Buscar até 4 receitas deste chef específico
-                        $sqlRec = "SELECT * FROM receitas WHERE id_chef = ? LIMIT 12";
+                        // Buscar receitas deste chef específico
+                        $sqlRec = "SELECT * FROM receitas WHERE id_chef = ? AND estado =1 LIMIT 12";
                         $stmtRec = $dbh->prepare($sqlRec);
                         $stmtRec->execute([$chef['id']]);
                         $receitasChef = $stmtRec->fetchAll(PDO::FETCH_ASSOC);
