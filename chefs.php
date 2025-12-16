@@ -2,11 +2,10 @@
 session_start();
 require('includes/connection.php');
 
-// 1. Buscar todos os Chefs por ordem alfabética
+//  Buscar todos os Chefs por ordem alfabética
 $stmtChefs = $dbh->query("SELECT * FROM chefs ORDER BY nome ASC");
 $lista_chefs = $stmtChefs->fetchAll(PDO::FETCH_ASSOC);
 
-// Preparar ID do utilizador para os corações (Favoritos)
 $id_utilizador_logado = 0;
 if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
     $id_utilizador_logado = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
@@ -41,15 +40,12 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
         <?php if (count($lista_chefs) > 0): ?>
             
             <?php foreach($lista_chefs as $chef): ?>
-                <!-- BLOCO DO CHEF (Usa o ID para o link, ex: #chef-1) -->
                 <div id="chef-<?php echo $chef['id']; ?>" class="mb-5 pb-4 border-bottom">
                     
-                    <!-- PERFIL DO CHEF -->
                     <div class="d-flex flex-column flex-md-row align-items-center mb-4">
                         <div class="mb-3 mb-md-0">
                             <?php 
                                 // Verifica se a imagem existe na pasta
-                                // Nota: Guarda as imagens dos chefs em "imgs/" ou "imgs/chefs/" e o caminho completo na BD
                                 $imgChef = !empty($chef['imagem']) && file_exists($chef['imagem']) ? $chef['imagem'] : 'imgs/avatar/avpadrao.jpg';
                             ?>
                             <img src="<?php echo $imgChef; ?>" alt="<?php echo $chef['nome']; ?>" 
@@ -63,7 +59,6 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                         </div>
                     </div>
                     
-                    <!-- RECEITAS DESTE CHEF (Sub-Query) -->
                     <?php
                         // Buscar receitas deste chef específico
                         $sqlRec = "SELECT * FROM receitas WHERE id_chef = ? AND estado =1 LIMIT 12";
@@ -83,7 +78,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                                 $descricao = !empty($row['descricao']) ? $row['descricao'] : "Uma receita deliciosa.";
                                 $referencia = "receita.php?id=" . $id;
 
-                                // Verificar Favorito (Lógica ATIVA)
+                                // Verificar Favorito 
                                 $e_favorito = false;
                                 if ($id_utilizador_logado > 0) {
                                     $checkFav = $dbh->prepare("SELECT id FROM favoritos WHERE id_utilizador = ? AND id_receita = ? AND ativado = 1");
@@ -148,7 +143,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
           </div>
           <div class="modal-footer border-0 justify-content-center pb-4">
             <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-            <a href="login.php" class="btn btn-success rounded-pill px-4">Fazer Login</a>
+            <a href="auth/login.php" class="btn btn-success rounded-pill px-4">Fazer Login</a>
           </div>
         </div>
       </div>
@@ -157,7 +152,6 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
     <?php require('includes/footer.php'); ?>
     <script src="js/bootstrap.bundle.min.js"></script>
 
-    <!-- SCRIPT DE LIKES (Aponta para a pasta AJAX) -->
     <script>
       const isLogado = <?php echo (isset($_SESSION['logado']) && $_SESSION['logado'] === true) ? 'true' : 'false'; ?>;
 

@@ -26,14 +26,11 @@ require('includes/connection.php');
 
       <div class="row align-items-stretch mt-3 g-4 row-cols-1 row-cols-sm-2 row-cols-lg-4">
         <?php
-          // 1. Preparar ID do utilizador
           $id_utilizador_logado = 0;
           if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
               $id_utilizador_logado = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
           }
 
-          // 2. QUERY DINÂMICA
-          // ALTERAÇÃO: Adicionado o JOIN com a tabela CHEFS para buscar a imagem e nome
           $sql = "SELECT r.*, c.id as id_chef, c.nome as nome_chef, c.imagem as imagem_chef, COUNT(f.id) as total_likes 
                   FROM receitas r 
                   LEFT JOIN chefs c ON r.id_chef = c.id 
@@ -66,14 +63,13 @@ require('includes/connection.php');
               }
               $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 
-              // ALTERAÇÃO: Verificar se tem chef para mostrar a bolinha
+              // Verificar se tem chef para mostrar a bolinha
               $temChef = !empty($row['id_chef']);
               $imgChef = ($temChef && file_exists($row['imagem_chef'])) ? $row['imagem_chef'] : 'imgs/avatar/avpadrao.jpg';
         ?>
               <div class="col">
                 <div class="card h-100 position-relative border-0 shadow-sm">
                   
-                  <!-- ALTERAÇÃO: CÍRCULO DO CHEF (Canto Superior Esquerdo) -->
                   <?php if ($temChef): ?>
                       <a href="chefs.php#chef-<?php echo $row['id_chef']; ?>" 
                          class="position-absolute top-0 start-0 m-2 rounded-circle shadow-sm border border-2 border-white overflow-hidden bg-white" 
@@ -131,13 +127,11 @@ require('includes/connection.php');
 
       <div class="row row-cols-2 row-cols-lg-4 g-4">
         <?php
-            // 1. Buscar apenas os 4 primeiros chefs para o index
             $stmtChefsHome = $dbh->query("SELECT id, nome, imagem FROM chefs LIMIT 4");
             
             while($chef = $stmtChefsHome->fetch(PDO::FETCH_ASSOC)):
-                // Fallback para a imagem
                 $imgChef = !empty($chef['imagem']) && file_exists($chef['imagem']) ? $chef['imagem'] : 'imgs/avatar/avpadrao.jpg';
-                // Link com âncora para a página de detalhes (chefs.php#chef-1)
+                // Link com âncora para a página de detalhes 
                 $linkChef = "chefs.php#chef-" . $chef['id'];
         ?>
             <div class="col">
@@ -162,7 +156,7 @@ require('includes/connection.php');
 
       <div class="row align-items-stretch g-4 row-cols-1 row-cols-sm-2 row-cols-lg-4">
           <?php
-            // QUERY COMUNIDADE: Buscar 4 receitas aleatórias (ou recentes)
+            // Buscar 4 receitas aleatórias
             $stmtComunidade = $dbh->query("SELECT r.*, u.utilizador as autor, COUNT(f.id) as total_likes
                                            FROM receitas r 
                                            LEFT JOIN utilizadores u ON r.id_utilizador = u.iduser
@@ -181,7 +175,7 @@ require('includes/connection.php');
                     $autor = !empty($rec['autor']) ? $rec['autor'] : 'Anónimo';
                     $referencia = "receita.php?id=" . $id;
 
-                    // Verificar Favorito (Reutilizamos a lógica)
+                    // Verificar Favorito 
                     $e_favorito = false;
                     if ($id_utilizador_logado > 0) {
                         $checkFav = $dbh->prepare("SELECT id FROM favoritos WHERE id_utilizador = ? AND id_receita = ? AND ativado = 1");
@@ -193,7 +187,6 @@ require('includes/connection.php');
                 <div class="col">
                     <div class="card h-100 position-relative border-0 shadow-sm">
                         
-                        <!-- Badge Comunidade -->
                         <span class="position-absolute top-0 start-0 m-2 badge bg-warning text-dark shadow-sm" style="z-index: 5;">
                             <i class="bi bi-people-fill me-1"></i>Comunidade
                         </span>
@@ -276,7 +269,7 @@ require('includes/connection.php');
 
       <div class="modal-footer border-0 justify-content-center pb-4">
         <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-        <a href="login.php" class="btn btn-success rounded-pill px-4">Fazer Login</a>
+        <a href="auth/login.php" class="btn btn-success rounded-pill px-4">Fazer Login</a>
       </div>
 
     </div>

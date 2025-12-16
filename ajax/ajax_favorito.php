@@ -13,19 +13,53 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 $idUser = $_SESSION['iduser'] ?? $_SESSION['id'] ?? 0;
 $input = json_decode(file_get_contents("php://input"), true);
 
-// Validação dos dados
-$idReceita  = $input['id_receita'] ?? null;
-$titulo     = $input['titulo'] ?? 'Sem título';
-$imagem     = $input['imagem'] ?? '';
-$referencia = $input['referencia'] ?? '#';
-
+// Validação básica
+$idReceita = $input['id_receita'] ?? null;
 if ($idReceita === null) {
     echo json_encode(['status' => 'erro', 'mensagem' => 'ID inválido']);
     exit;
 }
 
 try {
-    // 2. Verificar se o registo JÁ EXISTE (independentemente de estar ativo ou inativo)
+
+    $sqlReceita = "SELECT titulo, imagem, categoria FROM receitas WHERE id = :idReceita";
+    $stmtRec = $dbh->prepare($sqlReceita);
+    $stmtRec->bindValue(':idReceita', $idReceita);
+    $stmtRec->execute();
+    $dadosReceita = $stmtRec->fetch(PDO::FETCH_ASSOC);
+
+    // Valores por defeito caso a receita não seja encontrada ou venha do input
+    $tituloFinal = $dadosReceita['titulo'] ?? $input['titulo'] ?? 'Sem título';
+    $imagemNome  = $dadosReceita['imagem'] ?? $input['imagem'] ?? ''; 
+    $categoria   = $dadosReceita['categoria'] ?? '';
+    
+    $apenasNomeFicheiro = basename($imagemNome); 
+
+    // 2. Aplicar o teu MAPA DE PASTAS
+    $mapaPastas = [
+        'Receitas de carne' => 'carne',
+        'Peixe'             => 'peixe',
+        'Sobremesa'         => 'sobremesa',
+        'Sopas e Cremes'    => 'sopas',
+        'Comunidade'        => 'comunidade'
+    ];
+
+    // Verificar qual a pasta com base na categoria
+    $pastaDestino = isset($mapaPastas[$categoria]) ? $mapaPastas[$categoria] : '';
+
+    // 3. Construir o caminho final para guardar nos favoritos (caminhoBD)
+    if ($pastaDestino) {
+        $imagemFinal = "imgs/" . $pastaDestino . "/" . $apenasNomeFicheiro;
+    } else {
+        $imagemFinal = "imgs/" . $apenasNomeFicheiro;
+    }
+    
+    // Referência 
+    $referencia = $input['referencia'] ?? '#';
+
+
+
+    // 4. Verificar se o registo JÁ EXISTE nos favoritos
     $sqlCheck = "SELECT id, ativado FROM favoritos WHERE id_utilizador = :idUser AND id_receita = :idReceita";
     $stmt = $dbh->prepare($sqlCheck);
     $stmt->bindValue(':idUser', $idUser);
@@ -45,19 +79,18 @@ try {
         $stmtUpd->bindValue(':id', $favorito['id']);
         $stmtUpd->execute();
 
-        // Dizemos ao JS se foi "adicionado" (ativo) ou "removido" (inativo) para ele pintar o coração
         $status = ($novoEstado == 1) ? 'adicionado' : 'removido';
 
     } else {
-        // === CENÁRIO B: Nunca deu like, criar novo registo (ativado = 1) ===
+        // === CENÁRIO B: Nunca deu like, criar novo registo ===
         
         $sqlAdd = "INSERT INTO favoritos (id_utilizador, id_receita, titulo_receita, imagem_receita, referencia, ativado) 
                    VALUES (:idUser, :idReceita, :titulo, :imagem, :ref, 1)";
         $stmtAdd = $dbh->prepare($sqlAdd);
         $stmtAdd->bindValue(':idUser', $idUser);
         $stmtAdd->bindValue(':idReceita', $idReceita);
-        $stmtAdd->bindValue(':titulo', $titulo);
-        $stmtAdd->bindValue(':imagem', $imagem);
+        $stmtAdd->bindValue(':titulo', $tituloFinal); 
+        $stmtAdd->bindValue(':imagem', $imagemFinal); 
         $stmtAdd->bindValue(':ref', $referencia);
         $stmtAdd->execute();
 

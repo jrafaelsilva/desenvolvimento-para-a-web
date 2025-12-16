@@ -2,10 +2,10 @@
 session_start();
 require('includes/connection.php');
 
-// 1. Receber o tipo de categoria pelo URL
+//  Receber o tipo de categoria pelo URL
 $tipo = isset($_GET['tipo']) ? $_GET['tipo'] : '';
 
-// 2. Configuração: Mapear o URL para o Nome na Base de Dados
+//  Configuração: Mapear o URL para o Nome na Base de Dados
 $mapa_categorias = [
     'carne' => [
         'bd'     => 'Receitas de carne', 
@@ -29,7 +29,7 @@ $mapa_categorias = [
     ]
 ];
 
-// 3. Verificar se a categoria é válida
+//  Verificar se a categoria é válida
 if (array_key_exists($tipo, $mapa_categorias)) {
     $cat_atual = $mapa_categorias[$tipo];
 } else {
@@ -63,17 +63,16 @@ if (array_key_exists($tipo, $mapa_categorias)) {
     <div class="container">
         <div class="fw-bold mb-4 mt-5 fs-4 text-start"><?php echo $cat_atual['titulo']; ?></div>
 
-        <!-- 'align-items-stretch' garante que as colunas esticam -->
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-3 align-items-stretch">
             
             <?php
-            // Preparar ID para verificar favoritos
+            //  verificar favoritos
             $id_utilizador_logado = 0;
             if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                 $id_utilizador_logado = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
             }
 
-            // 4. QUERY DINÂMICA COM JOIN PARA BUSCAR O CHEF
+            //   BUSCAR O CHEF
             $sql = "SELECT r.*, c.id as id_chef, c.nome as nome_chef, c.imagem as imagem_chef 
                     FROM receitas r 
                     LEFT JOIN chefs c ON r.id_chef = c.id 
@@ -89,7 +88,7 @@ if (array_key_exists($tipo, $mapa_categorias)) {
                     $imagem = $row['imagem'];
                     $descricao = !empty($row['descricao']) ? $row['descricao'] : "Uma receita deliciosa para experimentar.";
 
-                    // Verificar Favorito (ATIVO)
+                    // Verificar Favorito 
                     $e_favorito = false;
                     if ($id_utilizador_logado > 0) {
                         $checkFav = $dbh->prepare("SELECT id FROM favoritos WHERE id_utilizador = ? AND id_receita = ? AND ativado = 1");
@@ -105,10 +104,8 @@ if (array_key_exists($tipo, $mapa_categorias)) {
                     $imgChef = ($temChef && file_exists($row['imagem_chef'])) ? $row['imagem_chef'] : 'imgs/avatar/avpadrao.jpg';
             ?>
                     <div class="col">
-                        <!-- ALTERAÇÃO AQUI: Mudei de 'h-1' para 'h-100' -->
                         <div class="card h-100 position-relative shadow-sm border-0">
                             
-                            <!-- CÍRCULO DO CHEF -->
                             <?php if ($temChef): ?>
                                 <a href="chefs.php#chef-<?php echo $row['id_chef']; ?>" 
                                    class="position-absolute top-0 start-0 m-2 rounded-circle shadow-sm border border-2 border-white overflow-hidden bg-white" 
@@ -118,12 +115,10 @@ if (array_key_exists($tipo, $mapa_categorias)) {
                                 </a>
                             <?php endif; ?>
 
-                            <!-- IMAGEM -->
                             <div style="height: 200px; overflow: hidden;" class="rounded-top">
                                 <img src="<?php echo $imagem; ?>" class="w-100 h-100 object-fit-cover" alt="<?php echo $nome; ?>">
                             </div>
 
-                            <!-- BOTÃO FAVORITO -->
                             <button class="btn btn-light position-absolute top-0 end-0 m-2 rounded-circle shadow-sm favorite-btn" 
                                     onclick="toggleFavorito(this, <?= $id ?>, '<?= addslashes($nome) ?>', '<?= $imagem ?>', 'receita.php?id=<?= $id ?>')">
                                 <i class="bi bi-heart-fill <?php echo $classe_coracao; ?>"></i>
@@ -170,7 +165,7 @@ if (array_key_exists($tipo, $mapa_categorias)) {
 
           <div class="modal-footer border-0 justify-content-center pb-4">
             <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-            <a href="login.php" class="btn btn-success rounded-pill px-4">Fazer Login</a>
+            <a href="auth/login.php" class="btn btn-success rounded-pill px-4">Fazer Login</a>
           </div>
 
         </div>

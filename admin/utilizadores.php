@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// 3. LÓGICA DE ATIVAR/DESATIVAR (GET)
+// 3. LÓGICA DE bloquaer (GET)
 if (isset($_GET['toggle_id']) && isset($_GET['novo_estado'])) {
     $idToggle = (int)$_GET['toggle_id'];
     $novoEstado = (int)$_GET['novo_estado'];
@@ -170,7 +170,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
 
-                                    <!-- Botão Bloquear/Ativar (Agora abre o Modal) -->
+                                    <!-- Botão Bloquear/desbloquear  -->
                                     <?php if($estado == 1): ?>
                                         <!-- ESTADO 1 -> QUER BLOQUEAR (0) -->
                                         <button class="btn btn-sm btn-outline-danger rounded-circle me-1"
@@ -178,7 +178,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             <i class="bi bi-ban"></i>
                                         </button>
                                     <?php else: ?>
-                                        <!-- ESTADO 0 -> QUER ATIVAR (1) -->
+                                        <!-- ESTADO 0 -> QUER desbloquear (1) -->
                                         <button class="btn btn-sm btn-outline-success rounded-circle me-1"
                                                 onclick="abrirModalStatus(<?= $user['iduser'] ?>, 1, '<?= addslashes($user['utilizador']) ?>')">
                                             <i class="bi bi-check-lg"></i>
@@ -232,7 +232,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
 
-    <!-- 2. MODAL DE ALTERAR ESTADO (BLOQUEAR/ATIVAR) -->
+    <!-- 2. MODAL DE ALTERAR ESTADO (BLOQUEAR/desbloquear) -->
     <div class="modal fade" id="modalStatus" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow border-0">
@@ -293,7 +293,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             modal.show();
         }
 
-        // --- FUNÇÕES DE BLOQUEAR/ATIVAR (NOVO) ---
+        // --- FUNÇÕES DE BLOQUEAR/Desbloquear (NOVO) ---
         let urlDestino = ""; // Variável global para guardar o link
 
         function abrirModalStatus(id, novoEstado, nomeUser) {
@@ -303,11 +303,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             const iconContainer = document.getElementById('statusIconContainer');
             const icon = document.getElementById('statusIcon');
 
-            // Constrói o URL para onde vamos redirecionar se confirmar
+            // Constrói o URL para onde vai redirecionar se confirmar
             urlDestino = "utilizadores.php?toggle_id=" + id + "&novo_estado=" + novoEstado;
 
             if (novoEstado === 0) {
-                // MODO BLOQUEAR (Vermelho)
+                // MODO BLOQUEAR 
                 modalTitle.innerText = "Bloquear Utilizador";
                 modalBody.innerHTML = "Tem a certeza que deseja <strong>bloquear</strong> o acesso a " + nomeUser + "?";
                 
@@ -317,15 +317,15 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 btnConfirm.className = "btn btn-danger rounded-pill px-4 fw-bold";
                 btnConfirm.innerText = "Sim, Bloquear";
             } else {
-                // MODO ATIVAR (Verde)
-                modalTitle.innerText = "Ativar Utilizador";
-                modalBody.innerHTML = "Tem a certeza que deseja <strong>reativar</strong> o acesso a " + nomeUser + "?";
+                // MODO desbloquear 
+                modalTitle.innerText = "Desbloquear Utilizador";
+                modalBody.innerHTML = "Tem a certeza que deseja <strong>Desbloquear</strong> o acesso a " + nomeUser + "?";
 
                 iconContainer.className = "mb-3 bg-success bg-opacity-10 text-success rounded-circle p-3 d-inline-block";
                 icon.className = "bi bi-check-circle fs-1";
 
                 btnConfirm.className = "btn btn-success rounded-pill px-4 fw-bold";
-                btnConfirm.innerText = "Sim, Ativar";
+                btnConfirm.innerText = "Sim, Desbloquear";
             }
 
             const modalStatus = new bootstrap.Modal(document.getElementById('modalStatus'));

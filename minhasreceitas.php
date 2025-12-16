@@ -2,17 +2,14 @@
 session_start();
 require('includes/connection.php');
 
-// 1. Verificar se está logado
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-    header("Location: login.php");
+    header("Location: auth/login.php");
     exit;
 }
 
-// 2. Definir o ID do utilizador
 $id_utilizador = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
 
-// 3. BUSCAR FAVORITOS (Query 1 - Com verificação de estado)
-// ALTERAÇÃO: JOIN com receitas para garantir que r.estado = 1
+//  BUSCAR FAVORITOS 
 $sqlFav = "SELECT f.* FROM favoritos f
            JOIN receitas r ON f.id_receita = r.id
            WHERE f.id_utilizador = ? 
@@ -24,7 +21,7 @@ $stmtFav = $dbh->prepare($sqlFav);
 $stmtFav->execute([$id_utilizador]);
 $meus_favoritos = $stmtFav->fetchAll(PDO::FETCH_ASSOC);
 
-// 4. BUSCAR SUBMISSÕES (Query 2 - Receitas criadas por este utilizador)
+//  BUSCAR SUBMISSÕES 
 $stmtSub = $dbh->prepare("SELECT * FROM receitas WHERE id_utilizador = ? AND estado = 1 ORDER BY id DESC");
 $stmtSub->execute([$id_utilizador]);
 $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
@@ -53,9 +50,7 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
             <p class="lead text-muted">Gere os teus favoritos e as tuas próprias criações.</p>
         </div>
 
-        <!-- ================================================= -->
-        <!-- SECÇÃO 1: FAVORITOS -->
-        <!-- ================================================= -->
+        <!-- FAVORITOS -->
         <div class="mb-4 border-bottom pb-2 d-flex align-items-center">
             <h3 class="fw-bold m-0">
                 <i class="bi bi-heart-fill me-2 text-danger"></i>Meus Favoritos
@@ -69,7 +64,6 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
                     <div class="col" id="fav-card-<?php echo $fav['id_receita']; ?>">
                         <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden position-relative">
                             
-                            <!-- Botão remover favorito -->
                             <button class="btn btn-light btn-sm position-absolute top-0 end-0 m-2 rounded-circle shadow-sm text-danger" 
                                     title="Remover dos favoritos"
                                     onclick="removerFavorito(this, <?= $fav['id_receita'] ?>, '<?= addslashes($fav['titulo_receita']) ?>', '<?= $fav['imagem_receita'] ?>', '<?= $fav['referencia'] ?>')">
@@ -86,7 +80,6 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             
                             <div class="card-footer bg-transparent border-top-0 pb-3">
-                                <!-- BOTÃO PADRÃO -->
                                 <a href="<?php echo $fav['referencia']; ?>" class="btn btn-style2 w-100">Cozinhar</a>
                             </div>
                         </div>
@@ -101,13 +94,10 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
         <?php endif; ?>
 
 
-        <!-- Espaçamento -->
         <div class="my-5"></div>
 
 
-        <!-- ================================================= -->
-        <!-- SECÇÃO 2: MINHAS SUBMISSÕES -->
-        <!-- ================================================= -->
+        <!--  MINHAS SUBMISSÕES -->
         <div class="mb-4 border-bottom pb-2 d-flex justify-content-between align-items-center">
             <h3 class="fw-bold m-0">
                 <i class="bi bi-journal-text me-2 text-warning"></i>Minhas Contribuições
@@ -125,7 +115,6 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
                             
                             <div style="height: 200px; overflow: hidden; position: relative;">
                                 <img src="<?php echo $rec['imagem']; ?>" class="w-100 h-100 object-fit-cover" alt="<?php echo $rec['titulo']; ?>">
-                                <!-- Badge "Minha" -->
                                 <span class="position-absolute top-0 start-0 m-2 badge bg-success shadow-sm">Minha Receita</span>
                             </div>
                             
@@ -137,7 +126,6 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
                             </div>
                             
                             <div class="card-footer bg-transparent border-top-0 pb-3">
-                                <!-- BOTÃO ATUALIZADO: Agora igual ao de cima (btn-style2 w-100) -->
                                 <a href="receita.php?id=<?php echo $rec['id']; ?>" class="btn btn-style2 w-100">Ver Receita</a>
                             </div>
                         </div>

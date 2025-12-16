@@ -1,18 +1,15 @@
 <?php
 session_start();
 
-// 1. Verificar se está logado
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-    header("Location: login.php");
+    header("Location: auth/login.php");
     exit;
 }
 
-// 2. Gerar Token CSRF
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// 3. Ler mensagens de erro/sucesso
 $erro = "";
 if (isset($_SESSION['erro_submissao'])) {
     $erro = $_SESSION['erro_submissao'];
@@ -57,29 +54,26 @@ if (isset($_SESSION['erro_submissao'])) {
                             
                             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
-                            <!-- 1. TÍTULO (Ocupa a linha toda agora) -->
                             <div class="mb-4">
-                                <label class="form-label fw-bold text-muted">Nome da Receita</label>
+                                <label class="form-label fw-bold text-dark">Nome da Receita</label>
                                 <input type="text" name="titulo" class="form-control form-control-lg" placeholder="Ex: O meu Bacalhau com Natas" required>
                             </div>
 
-                            <!-- 1. TÍTULO (Ocupa a linha toda agora) -->
                             <div class="mb-4">
-                                <label class="form-label fw-bold text-muted">Descrição da receita</label>
+                                <label class="form-label fw-bold text-dark">Descrição da receita</label>
                                 <input type="text" name="descricao" class="form-control form-control-lg" placeholder="Ex: Uma receita deliciosa para experimentar." required>
                             </div>
 
-                            <!-- 2. TEMPO E IMAGEM -->
                             <div class="row g-3 mb-5">
                                 <div class="col-md-4">
-                                    <label class="form-label fw-bold text-muted">Tempo (minutos)</label>
+                                    <label class="form-label fw-bold text-dark">Tempo (minutos)</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="bi bi-stopwatch"></i></span>
                                         <input type="number" name="tempo" class="form-control" placeholder="45" min="1" required>
                                     </div>
                                 </div>
                                 <div class="col-md-8">
-                                    <label class="form-label fw-bold text-muted">Foto do Prato</label>
+                                    <label class="form-label fw-bold text-dark">Foto do Prato</label>
                                     <input type="file" name="imagem" class="form-control" accept="image/*" required>
                                     <div class="form-text">Formatos aceites: JPG, PNG, WEBP.</div>
                                 </div>
@@ -87,7 +81,6 @@ if (isset($_SESSION['erro_submissao'])) {
 
                             <hr class="my-4">
 
-                            <!-- 3. INGREDIENTES (Dinâmico) -->
                             <div class="mb-5">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h4 class="fw-bold mb-0 text-center w-100">Ingredientes</h4>
@@ -107,7 +100,6 @@ if (isset($_SESSION['erro_submissao'])) {
                                 </div>
                             </div>
 
-                            <!-- 4. MODO DE PREPARAÇÃO (Dinâmico) -->
                             <div class="mb-5">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h4 class="fw-bold mb-0 text-center w-100">Modo de Preparação</h4>
@@ -127,10 +119,9 @@ if (isset($_SESSION['erro_submissao'])) {
                                 </div>
                             </div>
 
-                            <!-- BOTÃO ENVIAR -->
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-success btn-lg py-3 fw-bold rounded-pill shadow-sm">
-                                    <i class="bi bi-check2-circle me-2"></i>Publicar Receita
+                                    <i class="bi bi-check2-circle me-2"></i>Partilhar Receita
                                 </button>
                             </div>
 
@@ -144,7 +135,6 @@ if (isset($_SESSION['erro_submissao'])) {
     <?php require('includes/footer.php'); ?>
     <script src="js/bootstrap.bundle.min.js"></script>
 
-    <!-- Scripts JS (Mantém-se igual) -->
     <script>
         function adicionarIngrediente() {
             const container = document.getElementById('lista-ingredientes');

@@ -6,7 +6,6 @@
 
 // Só procura na base de dados se estiver logado E se a conexão $dbh existir
 if (isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($dbh)) {
-    // Tenta apanhar o ID (seja iduser ou id)
     $id_nav = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : (isset($_SESSION['id']) ? $_SESSION['id'] : 0);
     
     $stmtNav = $dbh->prepare("SELECT avatar FROM dados_perfil WHERE id_utilizador = ?");
@@ -77,13 +76,12 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($dbh)) {
                     <li class="nav-item dropdown d-flex flex-column align-items-center">
                         <a class="nav-link p-0 dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 
-                                <!-- LÓGICA DE EXIBIÇÃO DO AVATAR NA NAV -->
                                 <?php if ($avatar_nav != "default" && file_exists("imgs/avatar/" . $avatar_nav)): ?>
                                     <!-- Se existir avatar, mostra a imagem -->
                                     <img src="imgs/avatar/<?php echo $avatar_nav; ?>" alt="Avatar" 
                                         style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 2px solid rgb(182, 125, 95);">
                                 <?php else: ?>
-                                    <!-- Se não existir, mostra o boneco padrão -->
+                                    <!-- Se não existir, mostra o avatar padrão -->
                                         <img src="imgs/avatar/avpadrao.jpg" alt="Avatar Padrão" 
                                          style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%; border: 2px solid rgb(182, 125, 95);">
                                 <?php endif; ?>                               
@@ -103,7 +101,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($dbh)) {
                     </li>
                 <?php else: ?>
                     <li class="nav-item d-flex align-items-center align-self-lg-center">
-                        <a href="login.php" class="nav-link p-0"><i class="bi bi-person-circle fs-2 "></i></a>
+                        <a href="auth/login.php" class="nav-link p-0"><i class="bi bi-person-circle fs-2 "></i></a>
                     </li>
                 <?php endif; ?>
                 </ul>
@@ -114,7 +112,6 @@ document.addEventListener("DOMContentLoaded", function() {
     const input = document.getElementById('inputPesquisa');
     const lista = document.getElementById('listaResultados');
 
-    // Função que corre sempre que levantas uma tecla
     input.addEventListener('input', function() {
         const termo = this.value.trim();
 

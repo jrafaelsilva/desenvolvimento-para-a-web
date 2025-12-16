@@ -2,9 +2,8 @@
 session_start();
 require('includes/connection.php');
 
-// 1. Verificar Login
 if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
-    header("Location: login.php");
+    header("Location: auth/login.php");
     exit;
 }
 
@@ -14,7 +13,20 @@ $id_utilizador = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['i
 $mensagem = "";
 $tipo_alerta = "";
 
-// 2. BUSCAR DADOS ATUAIS (Fazemos isto ANTES de processar o POST para saber o que já existe)
+
+//  BUSCAR DADOS ATUAIS 
+
+
+// Buscar o Email à tabela de utilizadores
+$stmtEmail = $dbh->prepare("SELECT email FROM utilizadores WHERE iduser = ?");
+$stmtEmail->execute([$id_utilizador]);
+$dados_user = $stmtEmail->fetch(PDO::FETCH_ASSOC);
+
+// Define a variavel $email para usar no HTML la em baixo
+$email = $dados_user ? $dados_user['email'] : "Email não encontrado";
+
+
+//  BUSCAR DADOS ATUAIS 
 $stmt = $dbh->prepare("SELECT idade, prato_favorito, avatar FROM dados_perfil WHERE id_utilizador = ?");
 $stmt->execute([$id_utilizador]);
 $dados_atuais = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -24,7 +36,7 @@ $idade_db = $dados_atuais ? $dados_atuais['idade'] : "";
 $prato_db = $dados_atuais ? $dados_atuais['prato_favorito'] : "";
 $avatar_db = ($dados_atuais && !empty($dados_atuais['avatar'])) ? $dados_atuais['avatar'] : "avpadrao.jpg"; 
 
-// 3. PROCESSAR O FORMULÁRIO
+//  PROCESSAR O FORMULÁRIO
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Tratamento da Idade: Se estiver vazio, define como NULL
@@ -34,33 +46,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $novo_prato = !empty($_POST['prato_favorito']) ? $_POST['prato_favorito'] : NULL;
     
     // Tratamento do Avatar:
-    // Se o utilizador escolheu um novo no formulário, usa esse.
-    // Se não escolheu nada, mantém o que já tinha ($avatar_db).
     $novo_avatar = isset($_POST['avatar']) ? $_POST['avatar'] : $avatar_db;
 
-    // Verifica se vamos fazer INSERT ou UPDATE
     if ($dados_atuais) {
-        // ATUALIZAR (UPDATE)
+        // UPDATE
         $sql = "UPDATE dados_perfil SET idade = ?, prato_favorito = ?, avatar = ? WHERE id_utilizador = ?";
         $stmt = $dbh->prepare($sql);
         if($stmt->execute([$nova_idade, $novo_prato, $novo_avatar, $id_utilizador])) {
             $mensagem = "Perfil atualizado com sucesso!";
             $tipo_alerta = "success";
             
-            // Atualiza as variáveis visuais para mostrar as mudanças imediatamente
             $idade_db = $nova_idade;
             $prato_db = $novo_prato;
             $avatar_db = $novo_avatar;
         }
     } else {
-        // CRIAR NOVO (INSERT)
+        // INSERT
         $sql = "INSERT INTO dados_perfil (id_utilizador, idade, prato_favorito, avatar) VALUES (?, ?, ?, ?)";
         $stmt = $dbh->prepare($sql);
         if($stmt->execute([$id_utilizador, $nova_idade, $novo_prato, $novo_avatar])) {
             $mensagem = "Perfil criado com sucesso!";
             $tipo_alerta = "success";
             
-            // Atualiza as variáveis visuais
             $idade_db = $nova_idade;
             $prato_db = $novo_prato;
             $avatar_db = $novo_avatar;
@@ -68,7 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Lógica de exibição (Texto bonito)
 $mostrar_idade = !empty($idade_db) ? $idade_db . " anos" : '<span class="text-muted fst-italic">Não definido</span>';
 $mostrar_prato = !empty($prato_db) ? $prato_db : '<span class="text-muted fst-italic">Não definido</span>';
 
@@ -84,23 +90,6 @@ $mostrar_prato = !empty($prato_db) ? $prato_db : '<span class="text-muted fst-it
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-icons.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
-    
-    <style>
-        /* Estilo para a seleção de avatar */
-        .avatar-option { display: none; }
-        .avatar-label img {
-            border: 3px solid transparent;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 60px; height: 60px;
-            object-fit: cover;
-            transition: transform 0.2s;
-        }
-        .avatar-option:checked + .avatar-label img {
-            border-color: rgb(182, 125, 95);
-            transform: scale(1.1);
-        }
-    </style>
 </head>
 
 <body>
@@ -149,6 +138,11 @@ $mostrar_prato = !empty($prato_db) ? $prato_db : '<span class="text-muted fst-it
                         <div class="mb-3 border-bottom pb-2">
                             <label class="text-uppercase text-muted small fw-bold">Nome de Utilizador</label>
                             <div class="fs-5 text-dark"><?php echo $nomeUtilizador; ?></div>
+                        </div>
+
+                        <div class="mb-3 border-bottom pb-2">
+                            <label class="text-uppercase text-muted small fw-bold">Email</label>
+                            <div class="fs-5 text-dark"><?php echo $email; ?></div>
                         </div>
 
                         <div class="mb-3 border-bottom pb-2">

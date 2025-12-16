@@ -5,9 +5,7 @@ require('includes/connection.php');
 $mensagem = "";
 $erro = "";
 
-// =========================================================
-// 2. LÓGICA DE EDITAR (POST) - Apenas Edição aqui
-// =========================================================
+//  LÓGICA DE EDITAR (POST) - Apenas Edição aqui
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? '';
     $idReceita = $_POST['id_receita'] ?? 0;
@@ -18,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idChef = !empty($_POST['id_chef']) ? $_POST['id_chef'] : null;
     $caminhoImagem = $_POST['imagem_atual'] ?? ''; 
     
-    // Upload de Imagem (apenas se vier uma nova)
+    // Upload de Imagem 
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === 0) {
         $ext = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
         $permitidos = ['jpg', 'jpeg', 'png', 'webp'];
@@ -52,22 +50,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// =========================================================
-// 3. LÓGICA DE ATIVAR/DESATIVAR (GET)
-// =========================================================
+// LÓGICA DE ATIVAR/DESATIVAR 
 if (isset($_GET['toggle_id']) && isset($_GET['novo_estado'])) {
     $idToggle = (int)$_GET['toggle_id'];
     $novoEstado = (int)$_GET['novo_estado'];
     
     $stmtUpd = $dbh->prepare("UPDATE receitas SET estado = ? WHERE id = ?");
     $stmtUpd->execute([$novoEstado, $idToggle]);
-    
-
 }
 
-// =========================================================
-// 4. BUSCAR DADOS
-// =========================================================
+// BUSCAR DADOS
 $chefs = $dbh->query("SELECT id, nome FROM chefs ORDER BY nome ASC")->fetchAll(PDO::FETCH_ASSOC);
 
 $filtro = isset($_GET['filtro']) ? $_GET['filtro'] : 'todas';
@@ -153,13 +145,11 @@ foreach ($todasReceitas as $rec) {
                 <h2 class="fw-bold m-0 text-dark">Receitas</h2>
                 <span class="text-muted small">Total: <?php echo count($todasReceitas); ?></span>
             </div>
-            <!-- ALTERAÇÃO AQUI: Botão agora é um link para nova página -->
             <a href="nova-receita.php" class="btn btn-success rounded-pill px-4 shadow-sm">
                 <i class="bi bi-plus-lg me-2"></i>Nova Receita
             </a>
         </div>
 
-        <!-- TABELA 1: RECEITAS DA COMUNIDADE -->
         <?php if (count($receitasComunidade) > 0 || $filtro == 'comunidade'): ?>
         <h5 class="fw-bold text-dark mb-3 mt-5 ps-3 border-start border-4 border-warning">Receitas da Comunidade <span class="badge bg-light text-dark border ms-2"><?php echo count($receitasComunidade); ?></span></h5>
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
@@ -167,12 +157,12 @@ foreach ($todasReceitas as $rec) {
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light text-secondary text-uppercase small fw-bold">
                         <tr>
-                            <th class="ps-2 py-3">Prato</th>
-                            <th>Categoria</th>
-                            <th>Utilizador</th> <!-- Coluna Extra -->
-                            <th>Tempo</th>
-                            <th>Estado</th>
-                            <th class="text-end pe-4">Ações</th>
+                            <th class="ps-2 py-3" style="width: 40%;">Prato</th>
+                            <th style="width: 15%;">Categoria</th>
+                            <th style="width: 15%;">Utilizador</th>
+                            <th style="width: 10%;">Tempo</th>
+                            <th style="width: 10%;">Estado</th>
+                            <th class="text-end pe-4" style="width: 10%;">Ações</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white border-top-0">
@@ -191,10 +181,8 @@ foreach ($todasReceitas as $rec) {
                                         </div>
                                     </div>
                                 </td>
-                                 <!-- Coluna Categoria (Alinhada com a de cima) -->
                                 <td><span class="badge bg-light  text-dark border">Comunidade</span></td>
 
-                                <!-- Coluna Autor -->
                                 <td class="text-secondary fw-medium">
                                     <i class="bi bi-person-circle me-1"></i>
                                     <?php echo !empty($rec['nome_utilizador']) ? htmlspecialchars($rec['nome_utilizador']) : 'Desconhecido'; ?>
@@ -208,7 +196,6 @@ foreach ($todasReceitas as $rec) {
                                     <?php endif; ?>
                                 </td>
                                 <td class="text-end pe-4">
-                                    <!-- Botões Iguais -->
                                     <button class="btn btn-sm btn-outline-primary rounded-circle me-1" 
                                             data-receita='<?php echo htmlspecialchars(json_encode($rec), ENT_QUOTES, 'UTF-8'); ?>'
                                             onclick="abrirModalEditar(this)" title="Editar">
@@ -229,7 +216,7 @@ foreach ($todasReceitas as $rec) {
                             </tr>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <tr><td colspan="5" class="text-center py-5 text-muted">Nenhuma receita da comunidade encontrada.</td></tr>
+                            <tr><td colspan="6" class="text-center py-5 text-muted">Nenhuma receita da comunidade encontrada.</td></tr>
                         <?php endif; ?>
                     </tbody>
                 </table>
@@ -238,8 +225,6 @@ foreach ($todasReceitas as $rec) {
         <?php endif; ?>
 
 
-        <!-- TABELA 2: RECEITAS OFICIAIS -->
-
         <?php if (count($receitasOficiais) > 0 || $filtro != 'comunidade'): ?>
         <h5 class="fw-bold text-dark mb-3 mt-5 ps-3 border-start border-4 border-primary">Receitas Oficiais <span class="badge bg-light text-dark border ms-2"><?php echo count($receitasOficiais); ?></span></h5>
         <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
@@ -247,12 +232,12 @@ foreach ($todasReceitas as $rec) {
                 <table class="table table-hover align-middle mb-0">
                     <thead class="bg-light text-secondary text-uppercase small fw-bold">
                         <tr>
-                            <th class="ps-4 py-3">Prato</th>
-                            <th>Categoria</th>
-                            <th>Chef</th>
-                            <th>Tempo</th>
-                            <th>Estado</th>
-                            <th class="text-end pe-4">Ações</th>
+                            <th class="ps-4 py-3" style="width: 40%;">Prato</th>
+                            <th style="width: 15%;">Categoria</th>
+                            <th style="width: 15%;">Chef</th>
+                            <th style="width: 10%;">Tempo</th>
+                            <th style="width: 10%;">Estado</th>
+                            <th class="text-end pe-4" style="width: 10%;">Ações</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white border-top-0">
@@ -312,7 +297,6 @@ foreach ($todasReceitas as $rec) {
         </div>
         <?php endif; ?>
     </div>
-    <!-- MODAL DE EDITAR (Apenas Editar agora) -->
     <div class="modal fade" id="modalReceita" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
@@ -368,9 +352,7 @@ foreach ($todasReceitas as $rec) {
               </div>
               <div class="modal-footer border-0 pt-0">
                 <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-                <!-- LINK PARA PÁGINA DE EDITAR CONTEÚDOS -->
-                            <!-- O ID da receita é inserido via JS no onclick -->
-                            <a href="editar-receita.php" id="btnEditarConteudos" class="btn btn-warning fw-bold text-dark">
+                <a href="editar-receita.php" id="btnEditarConteudos" class="btn btn-warning fw-bold text-dark">
                                Editar Ingredientes e Modo de Preparo
                             </a>
                 <button type="submit" class="btn btn-success rounded-pill px-4 fw-bold">Guardar Alterações</button>
@@ -380,7 +362,6 @@ foreach ($todasReceitas as $rec) {
       </div>
     </div>
 
-    <!-- MODAL DE ALTERAR ESTADO -->
     <div class="modal fade" id="modalStatus" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow border-0">

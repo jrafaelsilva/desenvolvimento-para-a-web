@@ -27,7 +27,7 @@ $tempo = (int)$_POST['tempo'];
 $ingredientes = $_POST['ingredientes']; 
 $passos = $_POST['passos']; 
 
-// AQUI: Definimos a categoria fixa e obtemos o ID do utilizador da sessão
+// Definir a categoria fixa e obter o ID do utilizador da sessão
 $categoria = "Comunidade";
 $idUtilizador = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
 
@@ -37,33 +37,7 @@ if (empty($titulo) || empty($tempo) || empty($ingredientes) || empty($passos)) {
     exit;
 }
 
-// 4. Processar Upload da Imagem
-if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === 0) {
-    
-    $extensao = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
-    $permitidos = ['jpg', 'jpeg', 'png', 'webp'];
-    
-    if (!in_array($extensao, $permitidos)) {
-        $_SESSION['erro_submissao'] = "Formato de imagem inválido. Use JPG, PNG ou WEBP.";
-        header("Location: ../submeterreceita.php");
-        exit;
-    }
 
-    $novoNome = "receita_user_" . $idUtilizador . "_" . time() . "." . $extensao;
-    $destino = "../imgs/comunidade/" . $novoNome;
-    $caminhoBD = "imgs/comunidade/" . $novoNome;
-
-    if (!move_uploaded_file($_FILES['imagem']['tmp_name'], $destino)) {
-        $_SESSION['erro_submissao'] = "Falha ao guardar a imagem no servidor.";
-        header("Location: ../submeterreceita.php");
-        exit;
-    }
-
-} else {
-    $_SESSION['erro_submissao'] = "É obrigatório enviar uma imagem.";
-    header("Location: ../submeterreceita.php");
-    exit;
-}
 
 try {
     // Iniciar Transação (Segurança da BD)

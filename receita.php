@@ -2,7 +2,6 @@
 session_start();
 require('includes/connection.php');
 
-// 1. Verificar se recebemos um ID na URL
 if (!isset($_GET['id'])) {
     header("Location: index.php");
     exit;
@@ -10,7 +9,6 @@ if (!isset($_GET['id'])) {
 
 $id_receita = $_GET['id'];
 
-// 3. Buscar Detalhes da Receita E DO CHEF e do UTILIZADOR
 $sql = "SELECT r.*, 
                c.id as id_chef, c.nome as nome_chef, c.imagem as imagem_chef,
                u.iduser as id_utilizador, u.utilizador as nome_utilizador, dp.avatar as avatar_utilizador
@@ -28,17 +26,17 @@ if (!$receita) {
     exit;
 }
 
-// 4. Buscar Ingredientes
+//  Buscar Ingredientes
 $stmtIng = $dbh->prepare("SELECT * FROM ingredientes WHERE id_receita = ?");
 $stmtIng->execute([$id_receita]);
 $ingredientes = $stmtIng->fetchAll(PDO::FETCH_ASSOC);
 
-// 5. Buscar Passos de Preparação
+//  Buscar Passos de Preparação
 $stmtPrep = $dbh->prepare("SELECT * FROM preparacao WHERE id_receita = ? ORDER BY ordem ASC");
 $stmtPrep->execute([$id_receita]);
 $passos = $stmtPrep->fetchAll(PDO::FETCH_ASSOC);
 
-// 6. Buscar Comentários
+//  Buscar Comentários
 $sqlComentarios = "
     SELECT c.*, u.utilizador, dp.avatar 
     FROM comentarios c 
@@ -51,7 +49,7 @@ $stmtComments = $dbh->prepare($sqlComentarios);
 $stmtComments->execute([$id_receita]);
 $lista_comentarios = $stmtComments->fetchAll(PDO::FETCH_ASSOC);
 
-// 7. Verificar Favorito (ATIVADO = 1)
+//  Verificar Favorito 
 $e_favorito = false;
 if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
     $id_user_logado = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
@@ -85,7 +83,7 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
       <?php
-            // 2. Configuração: Mapear o URL para o Nome na Base de Dados
+            // Mapear o URL para o Nome na Base de Dados
                 $mapa_slugs = [
                     'Receitas de carne' => 'carne',
                     'Peixe'             => 'peixe',
@@ -95,7 +93,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
                 ];
                 
                 $catNome = $receita['categoria'];
-                // Se existir no mapa usa o slug, se não, fica link vazio (#)
                 $catLink = isset($mapa_slugs[$catNome]) ? "categoria.php?tipo=" . $mapa_slugs[$catNome] : "#";?>
             <li class="breadcrumb-item"><a href="<?php echo $catLink; ?>"><?php echo htmlspecialchars($catNome); ?></a></li>
             <li class="breadcrumb-item active" aria-current="page"><?php echo htmlspecialchars($receita['titulo']); ?></li>
@@ -105,9 +102,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 <div class="container">
         <div class="fw-bold mb-4 mt-5 fs-2 text-center"><?php echo htmlspecialchars($receita['titulo']); ?></div>
         
-        <!-- ====================================================== -->
-        <!-- ÁREA PRINCIPAL: IMAGEM + AUTOR (Chef ou User) -->
-        <!-- ====================================================== -->
         <?php 
             // Determinar se existe um autor (Chef ou Utilizador)
             $temAutor = !empty($receita['id_chef']) || !empty($receita['id_utilizador']);
@@ -132,10 +126,9 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
                     // É UM UTILIZADOR DA COMUNIDADE
                     $nomeAutor = $receita['nome_utilizador'];
                     $labelAutor = "Receita da Comunidade:";
-                    $linkAutor = "#"; // Utilizadores normais não têm página pública de perfil por enquanto
-                    $classeLink = "text-decoration-none text-dark d-flex flex-column flex-lg-row align-items-center mt-3 p-2 rounded"; // Remove hover effect se não tiver link
+                    $linkAutor = "#"; 
+                    $classeLink = "text-decoration-none text-dark d-flex flex-column flex-lg-row align-items-center mt-3 p-2 rounded"; 
 
-                    // Lógica do Avatar do Utilizador
                     $avatar_db = $receita['avatar_utilizador'];
                     if (!empty($avatar_db) && $avatar_db != 'default') {
                         if (file_exists("imgs/avatar/" . $avatar_db)) {
@@ -150,23 +143,23 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 
         <?php if ($temAutor): ?>
             
-            <!-- CASO A: TEM AUTOR (Layout 2 Colunas) -->
+            <!--  TEM AUTOR  -->
             <div class="row justify-content-center align-items-start mb-3">
                 
-                <!-- Coluna Esquerda: Imagem da Receita -->
+                <!-- Imagem da Receita -->
                 <div class="col-12 col-lg-8 mb-4 mb-lg-0">
                     <img src="<?php echo htmlspecialchars($receita['imagem']); ?>" 
                          class="img-fluid w-100 border border-4 rounded shadow-sm" 
-                         style="max-height: 600px; object-fit: cover; border-color: rgba(253, 126, 20, 1) !important;"
+                         style="max-height: 600px; object-fit: cover; "
                          alt="<?php echo htmlspecialchars($receita['titulo']); ?>">
                 </div>
 
-                <!-- Coluna Direita: Autor e Temporizador -->
+                <!--  Autor e Temporizador -->
                 <div class="col-12 col-lg-4">
                     
                     <div class="row align-items-center">
                         
-                        <!-- 1. CARTÃO DO AUTOR (Chef ou Utilizador) -->
+                        <!--  CARTÃO DO AUTOR  -->
                         <div class="col-12 col-md-6 col-lg-12 mb-3">
                             <div class="card border-0 shadow-sm bg-light rounded-4 p-3 h-100">
                                 <div class="card-body text-center text-lg-start">
@@ -192,7 +185,7 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
                         </div>
 
 
-                        <!-- 2. TEMPORIZADOR -->
+                        <!--  TEMPORIZADOR -->
                         <div class="col-12 col-md-6 col-lg-12">
                             <div id="timer-wrapper" class="text-center my-4">
                                 <h4 class="fw-bold mb-1">Temporizador</h4>
@@ -211,7 +204,7 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 
         <?php else: ?>
 
-            <!-- CASO B: SEM AUTOR (Admin/Anónimo) - Layout Centrado -->
+            <!--  SEM AUTOR  -->
             <img src="<?php echo htmlspecialchars($receita['imagem']); ?>" 
                  class="d-flex mx-auto w-100 w-lg-60 border border-4 rounded mb-4 shadow-sm" 
                  alt="<?php echo htmlspecialchars($receita['titulo']); ?>">
@@ -226,7 +219,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
             </div>
 
         <?php endif; ?>
-        <!-- ====================================================== -->
 
         <div class="container overflow-hidden">
             <div class="row gx-4 py-1 align-items-start">
@@ -258,7 +250,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 
         <div class="row justify-content-center mb-5">
             <div class="col-md-8">
-                <!-- ÁREA DE LIKES -->
                 <div class="d-flex align-items-center mb-4 p-3 rounded-3 shadow-sm" style="background-color: white;">
                     <div class="me-3">
                         <button class="btn btn-link p-0 border-0 text-decoration-none" 
@@ -278,7 +269,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
                     </div>
                 </div>
 
-                <!-- ÁREA DE COMENTÁRIOS -->
                 <h3 class="fw-bold mb-4">Comentários (<?php echo count($lista_comentarios); ?>)</h3>
                 <div class="mb-4" id="lista-comentarios">
                     <?php if (count($lista_comentarios) > 0): ?>
@@ -332,7 +322,7 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
                         </form>
                         <?php else: ?>
                             <div class="alert alert-warning mb-0 text-center">
-                                <a href="login.php" class="link-underline-success link-underline-opacity-0 link-underline-opacity-100-hover text-success">Faça login</a> para deixar um comentário.
+                                <a href="auth/login.php" class="link-underline-success link-underline-opacity-0 link-underline-opacity-100-hover text-success">Faça login</a> para deixar um comentário.
                             </div>
                         <?php endif; ?>
                     </div>
@@ -359,7 +349,7 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
           </div>
           <div class="modal-footer border-0 justify-content-center pb-4">
             <button type="button" class="btn btn-light rounded-pill px-4" data-bs-dismiss="modal">Cancelar</button>
-            <a href="login.php" class="btn btn-success rounded-pill px-4">Fazer Login</a>
+            <a href="auth/login.php" class="btn btn-success rounded-pill px-4">Fazer Login</a>
           </div>
         </div>
       </div>
@@ -396,23 +386,19 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 
     <script src="js/bootstrap.bundle.min.js"></script>
     
-    <!-- SCRIPTS -->
     <script>
-        // TEMPORIZADOR (Atualizado com Modal)
+        // TEMPORIZADOR 
         const tempoReceitaMinutos = <?php echo $receita['tempo_preparo']; ?>;
         let tempoRestante = tempoReceitaMinutos * 60; 
         let cronometro = null;
         let aDecorrer = false;
         const timerDisplay = document.getElementById("timer");
         const startBtn = document.getElementById("startBtn");
-        const alarme = document.getElementById("alarme"); 
         const timerWrapper = document.getElementById("timer-wrapper");
         const stickyPauseBtn = document.getElementById("sticky-pause-btn");
 
-        // Referência para o Modal do Temporizador
         const modalTimerEl = document.getElementById('modalTimer');
         
-        // Função para parar som quando o modal fecha
         if (modalTimerEl) {
             modalTimerEl.addEventListener('hidden.bs.modal', function () {
                 if(alarme) {
@@ -434,7 +420,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
             if (tempoRestante <= 0) {
                 clearInterval(cronometro);
                 
-                // ABRIR O MODAL
                 const modalTimer = new bootstrap.Modal(document.getElementById('modalTimer'));
                 modalTimer.show();
 
@@ -476,7 +461,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
         if(stickyPauseBtn) stickyPauseBtn.addEventListener("click", togglePausaResume); 
         if(timerDisplay) atualizarDisplay();
 
-        // VER MAIS COMENTÁRIOS
         document.addEventListener("DOMContentLoaded", function() {
             const comentarios = document.querySelectorAll('.comentario-item');
             const btnVerMais = document.getElementById('btnVerMais');
@@ -505,7 +489,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
             }
         });
 
-        // LIKES
         const isLogado = <?php echo (isset($_SESSION['logado']) && $_SESSION['logado'] === true) ? 'true' : 'false'; ?>;
         const dadosElement = document.getElementById('dados-receita');
         const receitaIdAtual = dadosElement ? dadosElement.dataset.receitaid : 0;
@@ -568,7 +551,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
         }
         document.addEventListener("DOMContentLoaded", atualizarLikes);
         
-    // --- SCRIPT PARA COMENTÁRIOS ASSÍNCRONOS ---
     const formComentario = document.getElementById('formComentario');
     
     if (formComentario) {
@@ -578,7 +560,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
             const comentarioTexto = document.getElementById('floatingTextarea2').value;
             const receitaId = <?php echo $id_receita; ?>; // ID da receita vindo do PHP
 
-            // Enviar para o PHP via AJAX
             fetch('ajax/adicionar_comentario.php', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -590,23 +571,18 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'sucesso') {
-                    // 1. Limpar a caixa de texto
                     document.getElementById('floatingTextarea2').value = '';
 
-                    // 2. Adicionar o novo comentário no topo da lista
                     const lista = document.getElementById('lista-comentarios');
                     
-                    // Se a lista tiver a mensagem "Ainda não existem comentários", remove-a
                     const mensagemVazia = lista.querySelector('p.fst-italic');
                     if (mensagemVazia) mensagemVazia.remove();
 
-                    // Insere o HTML que veio do PHP logo no início da lista
                     lista.insertAdjacentHTML('afterbegin', data.html);
 
-                    // 3. Atualizar o contador de comentários (Opcional, visual)
+                    //  Atualizar o contador de comentários (Opcional, visual)
                     const tituloComentarios = document.querySelector('h3.fw-bold.mb-4');
                     if(tituloComentarios) {
-                        // Extrai o número atual, soma 1 e atualiza o texto
                         let textoAtual = tituloComentarios.innerText;
                         let numeroMatch = textoAtual.match(/\d+/);
                         if(numeroMatch) {
