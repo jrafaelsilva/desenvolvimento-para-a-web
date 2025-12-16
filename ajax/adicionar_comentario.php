@@ -27,7 +27,6 @@ try {
     $stmt->execute([$id_receita, $id_user, $texto]);
 
     // 4. Buscar dados do utilizador para desenhar o cartão (Avatar e Nome)
-    // Precisamos disto para devolver o HTML correto
     $stmtUser = $dbh->prepare("SELECT u.utilizador, dp.avatar 
                                FROM utilizadores u 
                                LEFT JOIN dados_perfil dp ON u.iduser = dp.id_utilizador 
@@ -35,11 +34,10 @@ try {
     $stmtUser->execute([$id_user]);
     $user = $stmtUser->fetch(PDO::FETCH_ASSOC);
 
-    // Preparar Avatar
     $avatar_final = "imgs/avatar/avpadrao.jpg";
     $avatar_db = $user['avatar'] ?? '';
     
-    // Ajuste de caminhos (como este ficheiro está em ajax/, subimos um nível ../)
+    // Ajuste de caminhos
     if (!empty($avatar_db) && $avatar_db != 'default') {
         if (file_exists("../imgs/avatar/" . $avatar_db)) {
             $avatar_final = "imgs/avatar/" . $avatar_db;
@@ -49,7 +47,6 @@ try {
     }
 
     // 5. Construir o HTML do novo comentário
-    // Nota: Usamos htmlspecialchars para segurança
     $html = '
     <div class="card mb-3 border-0 shadow-sm comentario-item" style="background-color: rgb(253, 249, 243); animation: fadeIn 0.5s;">
         <div class="card-body">

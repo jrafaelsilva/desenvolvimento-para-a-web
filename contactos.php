@@ -16,10 +16,8 @@ require('includes/connection.php');
 
 <body>
 
-    <!-- NAVBAR -->
     <?php require('includes/nav.php'); ?>
 
-    <!-- BREADCRUMB -->
     <div class="ms-3 mt-4">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="index.php">Home</a></li>
@@ -27,7 +25,6 @@ require('includes/connection.php');
         </ol>
     </div>
 
-    <!-- CONTEÚDO PRINCIPAL -->
     <div class="container my-5">
         
         <div class="text-center mb-5">
@@ -37,7 +34,6 @@ require('includes/connection.php');
 
         <div class="row justify-content-center g-4">
             
-            <!-- CARTÃO DE EMAIL -->
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center bg-light">
                     <div class="mb-3 text-success">
@@ -49,7 +45,6 @@ require('includes/connection.php');
                 </div>
             </div>
 
-            <!-- CARTÃO DE REDES SOCIAIS -->
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center bg-light">
                     <div class="mb-3 text-primary">
@@ -65,7 +60,6 @@ require('includes/connection.php');
                 </div>
             </div>
 
-            <!-- CARTÃO DE LOCALIZAÇÃO  -->
             <div class="col-md-4">
                 <div class="card h-100 border-0 shadow-sm rounded-4 p-4 text-center bg-light">
                     <div class="mb-3 text-danger">
@@ -81,7 +75,6 @@ require('includes/connection.php');
 
     </div>
 
-    <!-- FOOTER -->
     <?php require('includes/footer.php'); ?>
 
     <script src="js/bootstrap.bundle.min.js"></script>

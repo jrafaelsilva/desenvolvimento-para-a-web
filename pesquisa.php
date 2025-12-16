@@ -2,11 +2,10 @@
 session_start();
 require('includes/connection.php');
 
-// 1. Receber o termo de pesquisa
-// Se não houver termo (alguém tentar entrar direto), define como vazio
+// Se não houver termo, define como vazio
 $termo = isset($_GET['q']) ? trim($_GET['q']) : '';
 
-// Se a pesquisa estiver vazia, volta para o index ou não faz nada
+// Se a pesquisa estiver vazia, volta para o index 
 if (empty($termo)) {
     header("Location: index.php");
     exit;
@@ -35,9 +34,6 @@ if (empty($termo)) {
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-3">
             
             <?php
-            // 2. QUERY DE PESQUISA
-            // Usamos %palavra% para encontrar texto antes ou depois (ex: 'bolo' encontra 'bolo de arroz')
-            // Pesquisamos no Título e na Categoria (opcional)
             $sql = "SELECT * FROM receitas WHERE titulo LIKE :termo OR categoria LIKE :termo";
             $stmt = $dbh->prepare($sql);
             $stmt->execute([':termo' => "%" . $termo . "%"]);

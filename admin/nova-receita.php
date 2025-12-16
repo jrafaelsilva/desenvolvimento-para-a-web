@@ -8,9 +8,7 @@ $sucesso = "";
 // Buscar Chefs para o select
 $chefs = $dbh->query("SELECT id, nome FROM chefs ORDER BY nome ASC")->fetchAll(PDO::FETCH_ASSOC);
 
-// =========================================================
-// LÓGICA DE GRAVAÇÃO (Executa quando clicas em "Criar Receita")
-// =========================================================
+// LÓGICA DE GRAVAÇÃO 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     $titulo = trim($_POST['titulo']);
@@ -43,13 +41,9 @@ if (in_array($ext, $permitidos)) {
                 'Comunidade'        => 'comunidade'
             ];
 
-            // Se a categoria existir no mapa, usa a pasta, senão usa raiz ou 'outros'
             $pastaDestino = isset($mapaPastas[$categoria]) ? $mapaPastas[$categoria] : '';
-            
-            // Criar nome único
             $novoNome = "receita_" . time() . "_" . rand(100,999) . "." . $ext;
             
-            // Definir caminhos (Adicionando a pasta da categoria)
             if ($pastaDestino) {
                 $destino = "../imgs/" . $pastaDestino . "/" . $novoNome;
                 $caminhoBD = "imgs/" . $pastaDestino . "/" . $novoNome;
@@ -63,7 +57,7 @@ if (in_array($ext, $permitidos)) {
             if (move_uploaded_file($_FILES['imagem']['tmp_name'], $destino)) {
                 
                 try {
-                    // Iniciar Transação (Segurança: ou grava tudo ou não grava nada)
+                    // Iniciar Transação 
                     $dbh->beginTransaction();
 
                     // 1. Inserir Receita (Estado = 1 -> Ativo)
@@ -94,7 +88,6 @@ if (in_array($ext, $permitidos)) {
                     // Confirmar Gravação
                     $dbh->commit();
                     
-                    // --- MUDANÇA AQUI: Não redireciona no PHP, ativa a flag para o JS ---
                     $sucesso = true;
 
                 } catch (PDOException $e) {
@@ -216,7 +209,7 @@ if (in_array($ext, $permitidos)) {
 
                             <hr class="my-4">
 
-                            <!-- 4. INGREDIENTES (Dinâmico) -->
+                            <!-- 4. INGREDIENTES -->
                             <div class="mb-5">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h4 class="fw-bold mb-0 text-center w-100">Ingredientes</h4>
@@ -236,7 +229,7 @@ if (in_array($ext, $permitidos)) {
                                 </div>
                             </div>
 
-                            <!-- 5. MODO DE PREPARAÇÃO (Dinâmico) -->
+                            <!-- 5. MODO DE PREPARAÇÃO-->
                             <div class="mb-5">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h4 class="fw-bold mb-0 text-center w-100">Modo de Preparação</h4>
@@ -325,11 +318,8 @@ if (in_array($ext, $permitidos)) {
 
         // --- SCRIPT DO MODAL BOOTSTRAP ---
         <?php if ($sucesso): ?>
-            // Quando a página carrega, inicializa e mostra o modal
             const successModal = new bootstrap.Modal(document.getElementById('successModal'));
             successModal.show();
-
-            // Ao clicar no botão, redireciona
             document.getElementById('btnRedirect').addEventListener('click', function() {
                 window.location.href = 'gerir-receitas.php';
             });

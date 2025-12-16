@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   `comentario` text NOT NULL,
   `data_comentario` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.comentarios: ~11 rows (aproximadamente)
+-- A despejar dados para tabela web2.comentarios: ~12 rows (aproximadamente)
 INSERT INTO `comentarios` (`id`, `id_receita`, `id_utilizador`, `comentario`, `data_comentario`) VALUES
 	(1, 2, 4, 'muito deliciosa, recomendo experimentarem!', '2025-11-24 20:36:58'),
 	(2, 2, 4, 'boa!', '2025-11-24 20:37:44'),
@@ -60,7 +60,8 @@ INSERT INTO `comentarios` (`id`, `id_receita`, `id_utilizador`, `comentario`, `d
 	(12, 20, 6, 'Adorei a receita, ficou igualzinho', '2025-11-26 18:16:59'),
 	(13, 45, 4, 'bela', '2025-11-29 15:34:23'),
 	(14, 45, 3, 'muito bom', '2025-12-11 14:30:29'),
-	(16, 2, 10, 'deliciosa', '2025-12-13 14:25:51');
+	(16, 2, 10, 'deliciosa', '2025-12-13 14:25:51'),
+	(17, 45, 3, 'adorei!', '2025-12-16 18:26:08');
 
 -- A despejar estrutura para tabela web2.dados_perfil
 DROP TABLE IF EXISTS `dados_perfil`;
@@ -71,14 +72,15 @@ CREATE TABLE IF NOT EXISTS `dados_perfil` (
   `prato_favorito` varchar(255) DEFAULT NULL,
   `avatar` varchar(50) DEFAULT 'avpadrao.jpg',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.dados_perfil: ~4 rows (aproximadamente)
+-- A despejar dados para tabela web2.dados_perfil: ~5 rows (aproximadamente)
 INSERT INTO `dados_perfil` (`id`, `id_utilizador`, `idade`, `prato_favorito`, `avatar`) VALUES
 	(1, 3, NULL, 'francesinha', 'av4.png'),
 	(2, 4, 23, 'arroz de pato', 'av1.png'),
 	(3, 5, 22, NULL, 'avpadrao.png'),
-	(4, 6, NULL, NULL, 'avpadrao.jpg');
+	(4, 6, NULL, NULL, 'avpadrao.jpg'),
+	(5, 10, NULL, NULL, 'avpadrao.jpg');
 
 -- A despejar estrutura para tabela web2.favoritos
 DROP TABLE IF EXISTS `favoritos`;
@@ -91,9 +93,9 @@ CREATE TABLE IF NOT EXISTS `favoritos` (
   `referencia` varchar(255) DEFAULT NULL,
   `ativado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=94 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.favoritos: ~23 rows (aproximadamente)
+-- A despejar dados para tabela web2.favoritos: ~22 rows (aproximadamente)
 INSERT INTO `favoritos` (`id`, `id_utilizador`, `id_receita`, `titulo_receita`, `imagem_receita`, `referencia`, `ativado`) VALUES
 	(68, 4, 44, 'Leite Creme', 'imgs/sobremesa/leitecreme.jpg', 'receita.php?id=44', 1),
 	(69, 4, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 1),
@@ -101,23 +103,23 @@ INSERT INTO `favoritos` (`id`, `id_utilizador`, `id_receita`, `titulo_receita`, 
 	(71, 4, 45, 'Pudim de Ovos', 'imgs/sobremesa/pudim.jpg', 'receita.php?id=45', 1),
 	(72, 9, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 1),
 	(73, 9, 45, 'Pudim de Ovos', 'imgs/sobremesa/pudim.jpg', 'receita.php?id=45', 1),
-	(74, 3, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 0),
-	(75, 3, 45, 'Pudim de Ovos', 'imgs/sobremesa/pudim.jpg', 'receita.php?id=45', 0),
+	(74, 3, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 1),
+	(75, 3, 45, 'Pudim de Ovos', 'imgs/sobremesa/pudim.jpg', 'receita.php?id=45', 1),
 	(76, 3, 44, 'Leite Creme', 'imgs/sobremesa/leitecreme.jpg', 'receita.php?id=44', 1),
 	(77, 3, 41, 'Arroz Doce', 'imgs/sobremesa/arrozdoce.jpg', 'receita.php?id=41', 1),
-	(78, 3, 2, 'Bolonhesa', 'imgs/bolonhesa.jpg', 'receita.php?id=2', 0),
-	(79, 3, 1, 'Picanha', 'imgs/picanha.jpg', 'receita.php?id=1', 0),
-	(80, 3, 28, 'Bife à Portuguesa', 'imgs/bife_portuguesa.jpg', 'receita.php?id=28', 0),
-	(81, 3, 32, 'Cozido à Portuguesa', 'imgs/cozido.jpg', 'receita.php?id=32', 0),
-	(82, 3, 42, 'Mousse de Chocolate', 'imgs/sobremesa/mousse.jpg', 'receita.php?id=42', 0),
-	(83, 4, 2, 'Bolonhesa', 'imgs/bolonhesa.jpg', 'receita.php?id=2', 0),
-	(84, 4, 32, 'Cozido à Portuguesa', 'imgs/cozido.jpg', 'receita.php?id=32', 1),
+	(82, 3, 42, 'Mousse de Chocolate', 'imgs/sobremesa/mousse.jpg', 'receita.php?id=42', 1),
 	(85, 4, 42, 'Mousse de Chocolate', 'imgs/sobremesa/mousse.jpg', 'receita.php?id=42', 1),
 	(86, 4, 43, 'Baba de Camelo', 'imgs/sobremesa/babacamelo.jpg', 'receita.php?id=43', 1),
 	(87, 4, 24, 'Sopa da Pedra', 'imgs/sopas/sopapedra.jpg', 'receita.php?id=24', 0),
 	(88, 3, 40, 'Filetes de Pescada', 'imgs/peixe/filetes.jpg', 'receita.php?id=40', 0),
 	(90, 10, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 1),
-	(91, 3, 50, 'pataniscas', 'imgs/comunidade/receita_user_10_1765636322.jpg', 'receita.php?id=50', 1);
+	(91, 3, 50, 'pataniscas', 'imgs/comunidade/receita_user_10_1765636322.jpg', 'receita.php?id=50', 1),
+	(94, 10, 34, 'Dourada Grelhada', 'imgs/peixe/dourada.jpg', 'receita.php?id=34', 1),
+	(95, 3, 34, 'Dourada Grelhada', 'imgs/peixe/dourada.jpg', 'receita.php?id=34', 1),
+	(96, 3, 43, 'Baba de Camelo', 'imgs/sobremesa/babacamelo.jpg', 'receita.php?id=43', 1),
+	(97, 3, 22, 'Creme de Abóbora', 'imgs/sopas/cremeabobora.jpg', 'receita.php?id=22', 1),
+	(98, 3, 1, 'Picanha', 'imgs/carne/picanha.jpg', 'receita.php?id=1', 1),
+	(99, 3, 2, 'Bolonhesa', 'imgs/carne/bolonhesa.jpg', 'receita.php?id=2', 1);
 
 -- A despejar estrutura para tabela web2.ingredientes
 DROP TABLE IF EXISTS `ingredientes`;
@@ -126,7 +128,7 @@ CREATE TABLE IF NOT EXISTS `ingredientes` (
   `id_receita` int NOT NULL,
   `nome` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=275 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=276 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- A despejar dados para tabela web2.ingredientes: ~169 rows (aproximadamente)
 INSERT INTO `ingredientes` (`id`, `id_receita`, `nome`) VALUES
@@ -308,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `preparacao` (
   `passo` text NOT NULL,
   `ordem` int NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=252 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- A despejar dados para tabela web2.preparacao: ~146 rows (aproximadamente)
 INSERT INTO `preparacao` (`id`, `id_receita`, `passo`, `ordem`) VALUES
@@ -472,7 +474,7 @@ CREATE TABLE IF NOT EXISTS `receitas` (
   `id_utilizador` int DEFAULT NULL,
   `estado` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- A despejar dados para tabela web2.receitas: ~33 rows (aproximadamente)
 INSERT INTO `receitas` (`id`, `titulo`, `categoria`, `imagem`, `tempo_preparo`, `descricao`, `id_chef`, `id_utilizador`, `estado`) VALUES

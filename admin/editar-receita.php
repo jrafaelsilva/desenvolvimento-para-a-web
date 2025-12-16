@@ -1,7 +1,7 @@
 <?php
 require('includes/connection.php');
 
-// 2. VERIFICAÇÃO DE ID DA RECEITA
+//  VERIFICAÇÃO DE ID DA RECEITA
 if (!isset($_GET['id'])) {
     header("Location: gerir-receitas.php");
     exit;
@@ -11,7 +11,7 @@ $idReceita = (int)$_GET['id'];
 $mensagem = "";
 $erro = "";
 
-// 3. BUSCAR DADOS DA RECEITA (Para o título)
+//  BUSCAR DADOS DA RECEITA (Para o título)
 $stmt = $dbh->prepare("SELECT titulo FROM receitas WHERE id = ?");
 $stmt->execute([$idReceita]);
 $receita = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -21,7 +21,7 @@ if (!$receita) {
     exit;
 }
 
-// 4. LÓGICA DE GRAVAÇÃO (UPSERT - UPDATE OR INSERT)
+//  LÓGICA DE GRAVAÇÃO (UPSERT - UPDATE OR INSERT)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     
     // Arrays de Ingredientes (IDs e Textos)
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // --- B. PROCESSAR PASSOS ---
+        // ---  PROCESSAR PASSOS ---
         $sqlUpdPasso = $dbh->prepare("UPDATE preparacao SET passo = ?, ordem = ? WHERE id = ? AND id_receita = ?");
         $sqlInsPasso = $dbh->prepare("INSERT INTO preparacao (id_receita, ordem, passo) VALUES (?, ?, ?)");
 
@@ -87,8 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// 5. BUSCAR DADOS ATUAIS (Para preencher o formulário)
-// Ingredientes
+//  BUSCAR DADOS ATUAIS 
 $stmtIng = $dbh->prepare("SELECT * FROM ingredientes WHERE id_receita = ?");
 $stmtIng->execute([$idReceita]);
 $listaIngredientes = $stmtIng->fetchAll(PDO::FETCH_ASSOC);
@@ -164,14 +163,12 @@ $listaPassos = $stmtPassos->fetchAll(PDO::FETCH_ASSOC);
                                             <input type="hidden" name="ing_id[]" value="<?php echo $ing['id']; ?>">
                                             <input type="text" name="ing_texto[]" class="form-control" value="<?php echo htmlspecialchars($ing['nome']); ?>" required>
                                             
-                                            <!-- Ícone Lápis (Visual) -->
                                             <span class="input-group-text bg-white text-secondary">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </span>
                                         </div>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <!-- Campo vazio para começar -->
                                     <div class="input-group mb-2">
                                         <input type="hidden" name="ing_id[]" value="">
                                         <input type="text" name="ing_texto[]" class="form-control" placeholder="Ex: 500g de batatas" required>
@@ -249,7 +246,6 @@ $listaPassos = $stmtPassos->fetchAll(PDO::FETCH_ASSOC);
             const container = document.getElementById('lista-ingredientes');
             const div = document.createElement('div');
             div.className = 'input-group mb-2 fade-in';
-            // Novo ingrediente com ícone de lápis em vez de remover
             div.innerHTML = `
                 <input type="hidden" name="ing_id[]" value="">
                 <input type="text" name="ing_texto[]" class="form-control" placeholder="Novo Ingrediente" required>
@@ -265,7 +261,6 @@ $listaPassos = $stmtPassos->fetchAll(PDO::FETCH_ASSOC);
             const numPassos = container.children.length + 1;
             const div = document.createElement('div');
             div.className = 'd-flex gap-2 mb-2 align-items-start passo-item fade-in';
-            //  passo com ícone de lápis
             div.innerHTML = `
                 <span class="badge bg-dark rounded-circle p-2 mt-1 step-number">${numPassos}</span>
                 <input type="hidden" name="passo_id[]" value="">

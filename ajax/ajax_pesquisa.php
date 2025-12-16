@@ -3,7 +3,7 @@ require('../includes/connection.php');
 
 header('Content-Type: application/json');
 
-// Recebe o termo via GET (ex: ajax_pesquisa.php?termo=bolo)
+// Recebe o termo via GET 
 $termo = isset($_GET['termo']) ? trim($_GET['termo']) : '';
 
 if (strlen($termo) < 1) {
