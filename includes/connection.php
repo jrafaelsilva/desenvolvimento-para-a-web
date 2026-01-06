@@ -1,10 +1,11 @@
 <?php
-
+// Definição das variáveis de acesso ao servidor de base de dados
 $host = 'localhost';
 $user = 'web2';
 $pass = 'web2';
 $dbname = 'web2';
 
+// Tenta estabelecer a ligação utilizando a função mysqli_connect
 $link = mysqli_connect($host, $user, $pass, $dbname);
 
 if (!$link) {

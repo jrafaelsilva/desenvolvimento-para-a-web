@@ -63,7 +63,7 @@ require('includes/connection.php');
               }
               $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 
-              // Verificar se tem chef para mostrar a bolinha
+              // Verificar se tem chef 
               $temChef = !empty($row['id_chef']);
               $imgChef = ($temChef && file_exists($row['imagem_chef'])) ? $row['imagem_chef'] : 'imgs/avatar/avpadrao.jpg';
         ?>
@@ -246,9 +246,8 @@ require('includes/connection.php');
             <i class="bi bi-upload me-2"></i>Enviar a minha receita
         </a>
     </div>
-</div>
+  </div>
 
-<!-- MODAL DE LOGIN -->
 <div class="modal fade" id="modalLogin" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-4 shadow border-0">
@@ -302,8 +301,8 @@ require('includes/connection.php');
         })
         .catch(err => console.error("Erro ao atualizar likes:", err));
     }
-
-    function toggleFavorito(btn, id, titulo, imagem, referencia) {
+      // Função para alternar favorito via ajax
+      function toggleFavorito(btn, id, titulo, imagem, referencia) {
         
         if (!isLogado) {
             const modalElement = document.getElementById('modalLogin');
@@ -311,7 +310,7 @@ require('includes/connection.php');
             modal.show();
             return;
         }
-
+        // Faz uma requisição assíncrona para o servidor sem recarregar a página
         fetch('ajax/ajax_favorito.php', {
             method: 'POST',
             headers: {

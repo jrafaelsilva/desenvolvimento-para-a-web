@@ -11,7 +11,7 @@ $idReceita = (int)$_GET['id'];
 $mensagem = "";
 $erro = "";
 
-//  BUSCAR DADOS DA RECEITA (Para o título)
+//  BUSCAR DADOS DA RECEITA 
 $stmt = $dbh->prepare("SELECT titulo FROM receitas WHERE id = ?");
 $stmt->execute([$idReceita]);
 $receita = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $dbh->beginTransaction();
 
-        // --- A. PROCESSAR INGREDIENTES ---
+        // PROCESSAR INGREDIENTES 
         $sqlUpdIng = $dbh->prepare("UPDATE ingredientes SET nome = ? WHERE id = ? AND id_receita = ?");
         $sqlInsIng = $dbh->prepare("INSERT INTO ingredientes (id_receita, nome) VALUES (?, ?)");
 
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        // ---  PROCESSAR PASSOS ---
+        // PROCESSAR PASSOS 
         $sqlUpdPasso = $dbh->prepare("UPDATE preparacao SET passo = ?, ordem = ? WHERE id = ? AND id_receita = ?");
         $sqlInsPasso = $dbh->prepare("INSERT INTO preparacao (id_receita, ordem, passo) VALUES (?, ?, ?)");
 
@@ -111,7 +111,6 @@ $listaPassos = $stmtPassos->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 
-    <!-- Navbar Admin -->
     <nav class="navbar navbar-expand-lg shadow-sm fixed-top" style="background-color: rgb(245, 240, 214);">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="../index.php">
@@ -149,7 +148,6 @@ $listaPassos = $stmtPassos->fetchAll(PDO::FETCH_ASSOC);
                 
                 <form action="" method="POST">
                     
-                    <!-- 1. CARTÃO INGREDIENTES -->
                     <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
                         <div class="card-header bg-white border-bottom-0 pt-4 px-4">
                             <h5 class="fw-bold m-0"><i class="bi bi-basket me-2 text-warning"></i>Ingredientes</h5>
@@ -159,7 +157,6 @@ $listaPassos = $stmtPassos->fetchAll(PDO::FETCH_ASSOC);
                                 <?php if(count($listaIngredientes) > 0): ?>
                                     <?php foreach($listaIngredientes as $ing): ?>
                                         <div class="input-group mb-2">
-                                            <!-- ID HIDDEN: Permite ao PHP saber qual linha atualizar -->
                                             <input type="hidden" name="ing_id[]" value="<?php echo $ing['id']; ?>">
                                             <input type="text" name="ing_texto[]" class="form-control" value="<?php echo htmlspecialchars($ing['nome']); ?>" required>
                                             
@@ -185,7 +182,6 @@ $listaPassos = $stmtPassos->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
 
-                    <!-- 2. CARTÃO PREPARAÇÃO -->
                     <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
                         <div class="card-header bg-white border-bottom-0 pt-4 px-4">
                             <h5 class="fw-bold m-0"><i class="bi bi-list-ol me-2 text-primary"></i>Modo de Preparação</h5>
@@ -197,7 +193,6 @@ $listaPassos = $stmtPassos->fetchAll(PDO::FETCH_ASSOC);
                                         <div class="d-flex gap-2 mb-2 align-items-start passo-item">
                                             <span class="badge bg-dark rounded-circle p-2 mt-1 step-number"><?php echo $index + 1; ?></span>
                                             
-                                            <!-- ID HIDDEN -->
                                             <input type="hidden" name="passo_id[]" value="<?php echo $passo['id']; ?>">
                                             <textarea name="passo_texto[]" class="form-control" rows="2" required><?php echo htmlspecialchars($passo['passo']); ?></textarea>
                                             

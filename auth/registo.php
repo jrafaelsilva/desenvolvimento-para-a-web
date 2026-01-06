@@ -1,12 +1,10 @@
 <?php
 session_start();
 
-// 1. GERAR TOKEN CSRF
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
 
-// 2. LER ERROS
 $erro = "";
 if (isset($_SESSION['erro_registo'])) {
     $erro = $_SESSION['erro_registo'];
@@ -34,7 +32,6 @@ if (isset($_SESSION['erro_registo'])) {
     
     <div class="card-body p-4 p-md-5 position-relative">
 
-      <!-- ÍCONE DE VOLTAR ATRÁS -->
       <a href="login.php" class="text-dark position-absolute top-0 start-0 m-3" title="Voltar à Página Inicial">
         <i class="bi bi-arrow-left fs-4"></i>
       </a>
@@ -55,19 +52,16 @@ if (isset($_SESSION['erro_registo'])) {
             </div>
         <?php endif; ?>
 
-        <!-- CAMPO UTILIZADOR-->
         <div class="mb-3">
           <label for="floatingUser" class="form-label fw-medium text-dark">Nome de utilizador</label>
           <input type="text" class="form-control form-control-lg fs-6" id="floatingUser" name="utilizador" required placeholder="Escolha um nome de utilizador">
         </div>
         
-        <!-- CAMPO EMAIL -->
         <div class="mb-3">
           <label for="floatingEmail" class="form-label fw-medium text-dark">Endereço de Email</label>
           <input type="email" class="form-control form-control-lg fs-6" id="floatingEmail" name="email" required placeholder="Insira o seu email">
         </div>
         
-        <!-- CAMPO PASSWORD -->
         <div class="mb-1">
           <label for="floatingPassword" class="form-label fw-medium text-dark">Palavra-Passe</label>
           <input type="password" class="form-control form-control-lg fs-6" id="floatingPassword" name="pass" required placeholder="********" minlength="8">

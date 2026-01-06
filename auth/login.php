@@ -1,12 +1,10 @@
 <?php
 session_start();
 
-# CRIAÇÃO DE UM TOKEN PARA VALIDAÇÃO (CSRF)
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32)); 
 }
 
-// Ler mensagens de erro ou sucesso
 $erro = "";
 if (isset($_SESSION['erro_login'])) {
     $erro = $_SESSION['erro_login'];
@@ -38,19 +36,16 @@ if (isset($_GET['sucesso']) && $_GET['sucesso'] == 1) {
   <div class="card shadow-lg border-0 rounded-4">
     <div class="card-body p-4 p-md-5 position-relative">
 
-      <!-- ÍCONE DE VOLTAR -->
       <a href="../index.php" class="text-dark position-absolute top-0 start-0 m-3" title="Voltar à Página Inicial">
         <i class="bi bi-arrow-left fs-4"></i>
       </a>
 
-      <!-- LOGÓTIPO -->
       <a href="../index.php" class="d-flex justify-content-center mx-auto mb-4">
         <img src="../imgs/pitada.logo.png" height="80" width="120" alt="Logótipo Pitada na Mesa"/>
       </a>
       
       <h2 class="text-center fw-bold mb-4 text-dark">Iniciar Sessão</h2>
 
-      <!-- MENSAGENS -->
       <?php if (!empty($mensagem_sucesso)): ?>
           <div class="alert alert-success text-center py-2 fs-6" role="alert">
               <?php echo htmlspecialchars($mensagem_sucesso); ?>
@@ -63,10 +58,8 @@ if (isset($_GET['sucesso']) && $_GET['sucesso'] == 1) {
           </div>
       <?php endif; ?>
 
-      <!-- FORMULÁRIO -->
       <form action="proc_login.php" method="POST">
         
-        <!-- TOKEN CSRF (CAMPO OCULTO) -->
         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($_SESSION['csrf_token']); ?>">
 
         <div class="mb-3">

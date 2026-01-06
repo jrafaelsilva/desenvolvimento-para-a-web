@@ -14,10 +14,7 @@ $mensagem = "";
 $tipo_alerta = "";
 
 
-//  BUSCAR DADOS ATUAIS 
-
-
-// Buscar o Email à tabela de utilizadores
+// Buscar o email à tabela de utilizadores
 $stmtEmail = $dbh->prepare("SELECT email FROM utilizadores WHERE iduser = ?");
 $stmtEmail->execute([$id_utilizador]);
 $dados_user = $stmtEmail->fetch(PDO::FETCH_ASSOC);
@@ -26,7 +23,7 @@ $dados_user = $stmtEmail->fetch(PDO::FETCH_ASSOC);
 $email = $dados_user ? $dados_user['email'] : "Email não encontrado";
 
 
-//  BUSCAR DADOS ATUAIS 
+//  buscar dados atuais
 $stmt = $dbh->prepare("SELECT idade, prato_favorito, avatar FROM dados_perfil WHERE id_utilizador = ?");
 $stmt->execute([$id_utilizador]);
 $dados_atuais = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -36,7 +33,7 @@ $idade_db = $dados_atuais ? $dados_atuais['idade'] : "";
 $prato_db = $dados_atuais ? $dados_atuais['prato_favorito'] : "";
 $avatar_db = ($dados_atuais && !empty($dados_atuais['avatar'])) ? $dados_atuais['avatar'] : "avpadrao.jpg"; 
 
-//  PROCESSAR O FORMULÁRIO
+//  PROCESSA O FORMULÁRIO
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // Tratamento da Idade: Se estiver vazio, define como NULL

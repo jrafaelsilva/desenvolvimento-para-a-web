@@ -136,6 +136,7 @@ if (isset($_SESSION['erro_submissao'])) {
     <script src="js/bootstrap.bundle.min.js"></script>
 
     <script>
+        // Adiciona um novo campo de input de ingrediente 
         function adicionarIngrediente() {
             const container = document.getElementById('lista-ingredientes');
             const div = document.createElement('div');
@@ -148,6 +149,7 @@ if (isset($_SESSION['erro_submissao'])) {
             container.appendChild(div);
         }
 
+        //Adiciona um novo campo de texto para os passos
         let contadorPassos = 1;
         function adicionarPasso() {
             contadorPassos++;

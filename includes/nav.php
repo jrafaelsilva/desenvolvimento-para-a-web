@@ -4,8 +4,8 @@
     $nomeUtilizador = $logado ? htmlspecialchars($_SESSION['utilizador']) : '';
     $avatar_nav = "default"; // Define o padrão
 
-// Só procura na base de dados se estiver logado E se a conexão $dbh existir
-if (isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($dbh)) {
+    // Só procura na base de dados se estiver logado E se a conexão $dbh existir
+    if (isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($dbh)) {
     $id_nav = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : (isset($_SESSION['id']) ? $_SESSION['id'] : 0);
     
     $stmtNav = $dbh->prepare("SELECT avatar FROM dados_perfil WHERE id_utilizador = ?");
@@ -108,59 +108,59 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true && isset($dbh)) {
             </div>
         </div>
         <script>
-document.addEventListener("DOMContentLoaded", function() {
-    const input = document.getElementById('inputPesquisa');
-    const lista = document.getElementById('listaResultados');
+            document.addEventListener("DOMContentLoaded", function() {
+                const input = document.getElementById('inputPesquisa');
+                const lista = document.getElementById('listaResultados');
 
-    input.addEventListener('input', function() {
-        const termo = this.value.trim();
+                input.addEventListener('input', function() {
+                    const termo = this.value.trim();
 
-        // Se tiver uma letra, mostra as opçoes
-        if (termo.length < 1) {
-            lista.innerHTML = '';
-            lista.classList.add('d-none');
-            return;
-        }
+                    // Se tiver uma letra, mostra as opçoes
+                    if (termo.length < 1) {
+                        lista.innerHTML = '';
+                        lista.classList.add('d-none');
+                        return;
+                    }
 
-        // Faz o pedido ao PHP
- fetch(`ajax/ajax_pesquisa.php?termo=${encodeURIComponent(termo)}`)
-            .then(response => {
-                if (!response.ok) throw new Error('Erro na rede');
-                return response.json();
-            })
-            .then(data => {
-                lista.innerHTML = ''; 
+                    // Faz o pedido ao PHP
+            fetch(`ajax/ajax_pesquisa.php?termo=${encodeURIComponent(termo)}`)
+                        .then(response => {
+                            if (!response.ok) throw new Error('Erro na rede');
+                            return response.json();
+                        })
+                        .then(data => {
+                            lista.innerHTML = ''; 
 
-                if (data.length > 0) {
-                    lista.classList.remove('d-none'); 
+                            if (data.length > 0) {
+                                lista.classList.remove('d-none'); 
 
-                    data.forEach(receita => {
-                        const item = document.createElement('a');
-                        item.href = `receita.php?id=${receita.id}`;
-                        item.className = 'list-group-item list-group-item-action d-flex align-items-center p-2 border-0 border-bottom';
-                        item.style.backgroundColor = "rgba(255, 255, 255, 0.98)"; 
-                        
-                        item.innerHTML = `
-                            <img src="${receita.imagem}" class="rounded-circle me-3 shadow-sm" style="width: 40px; height: 40px; object-fit: cover;">
-                            <span class="small fw-semibold text-dark">${receita.titulo}</span>
-                        `;
-                        
-                        lista.appendChild(item);
-                    });
-                } else {
-                     lista.classList.add('d-none');
-                }
-            })
-            .catch(err => console.error('Erro na pesquisa:', err));
-    });
+                                data.forEach(receita => {
+                                    const item = document.createElement('a');
+                                    item.href = `receita.php?id=${receita.id}`;
+                                    item.className = 'list-group-item list-group-item-action d-flex align-items-center p-2 border-0 border-bottom';
+                                    item.style.backgroundColor = "rgba(255, 255, 255, 0.98)"; 
+                                    
+                                    item.innerHTML = `
+                                        <img src="${receita.imagem}" class="rounded-circle me-3 shadow-sm" style="width: 40px; height: 40px; object-fit: cover;">
+                                        <span class="small fw-semibold text-dark">${receita.titulo}</span>
+                                    `;
+                                    
+                                    lista.appendChild(item);
+                                });
+                            } else {
+                                lista.classList.add('d-none');
+                            }
+                        })
+                        .catch(err => console.error('Erro na pesquisa:', err));
+                });
 
-    // Fechar ao clicar fora
-    document.addEventListener('click', function(e) {
-        if (!input.contains(e.target) && !lista.contains(e.target)) {
-            lista.classList.add('d-none');
-        }
-    });
-});
-</script>
+                // Fechar ao clicar fora
+                document.addEventListener('click', function(e) {
+                    if (!input.contains(e.target) && !lista.contains(e.target)) {
+                        lista.classList.add('d-none');
+                    }
+                });
+            });
+        </script>
     </nav>
     

@@ -66,13 +66,13 @@ if (array_key_exists($tipo, $mapa_categorias)) {
         <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4 mt-3 align-items-stretch">
             
             <?php
-            //  verificar favoritos
+            //  verificar qual o ID da sessão do utilizador, se estiver logado
             $id_utilizador_logado = 0;
             if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                 $id_utilizador_logado = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
             }
 
-            //   BUSCAR O CHEF
+            //  pede as receitas por categoria e chef
             $sql = "SELECT r.*, c.id as id_chef, c.nome as nome_chef, c.imagem as imagem_chef 
                     FROM receitas r 
                     LEFT JOIN chefs c ON r.id_chef = c.id 
@@ -86,9 +86,10 @@ if (array_key_exists($tipo, $mapa_categorias)) {
                     $id = $row['id'];
                     $nome = $row['titulo'];
                     $imagem = $row['imagem'];
+                    // Define descrição padrão caso a base de dados esteja vazia
                     $descricao = !empty($row['descricao']) ? $row['descricao'] : "Uma receita deliciosa para experimentar.";
 
-                    // Verificar Favorito 
+                    // Verificar se já é favorito 
                     $e_favorito = false;
                     if ($id_utilizador_logado > 0) {
                         $checkFav = $dbh->prepare("SELECT id FROM favoritos WHERE id_utilizador = ? AND id_receita = ? AND ativado = 1");
@@ -97,9 +98,10 @@ if (array_key_exists($tipo, $mapa_categorias)) {
                             $e_favorito = true;
                         }
                     }
+                    // vermelho se favorito, cinza se não
                     $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 
-                    // Verificar se tem chef para mostrar a bolinha
+                    // Verificar se tem chef associado
                     $temChef = !empty($row['id_chef']);
                     $imgChef = ($temChef && file_exists($row['imagem_chef'])) ? $row['imagem_chef'] : 'imgs/avatar/avpadrao.jpg';
             ?>
@@ -144,7 +146,6 @@ if (array_key_exists($tipo, $mapa_categorias)) {
         </div>
     </div>
 
-    <!-- MODAL DE LOGIN -->
     <div class="modal fade" id="modalLogin" tabindex="-1" aria-labelledby="modalLoginLabel" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow border-0">
@@ -177,7 +178,7 @@ if (array_key_exists($tipo, $mapa_categorias)) {
 
     <script>
       const isLogado = <?php echo (isset($_SESSION['logado']) && $_SESSION['logado'] === true) ? 'true' : 'false'; ?>;
-
+      // Função para alternar favorito via ajax
       function toggleFavorito(btn, id, titulo, imagem, referencia) {
         
         if (!isLogado) {
@@ -186,7 +187,7 @@ if (array_key_exists($tipo, $mapa_categorias)) {
             modal.show();
             return;
         }
-
+        // Faz uma requisição assíncrona para o servidor sem recarregar a página
         fetch('ajax/ajax_favorito.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

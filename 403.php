@@ -10,7 +10,7 @@
     <link href="css/style.css" rel="stylesheet">
 
 </head>
-<body class="d-flex align-items-center justify-content-center min-vh-100 bg-light p-4">
+<body class="d-flex align-items-center justify-content-center min-vh-100 p-4">
     
     <div class="card border-0 shadow-lg rounded-4 p-4 p-md-5 text-center" style="max-width: 550px; width: 100%;">
         

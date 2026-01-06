@@ -5,7 +5,7 @@ require('includes/connection.php');
 $mensagem = "";
 $erro = "";
 
-//  LÓGICA DE EDITAR (POST) - Apenas Edição aqui
+//  LÓGICA DE EDITAR (POST) 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? '';
     $idReceita = $_POST['id_receita'] ?? 0;
@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $caminhoBD = "imgs/" . $novoNome;
             
             if (move_uploaded_file($_FILES['imagem']['tmp_name'], $destino)) {
-                $caminhoImagem = $caminhoBD;
+                $caminhoImagem = $caminhoBD;// Atualiza o caminho para a nova imagem
             } else {
                 $erro = "Falha ao gravar a imagem no servidor.";
             }

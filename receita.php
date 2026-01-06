@@ -331,7 +331,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
         </div>
     </div>
 
-    <!-- MODAL DE LOGIN  -->
     <div class="modal fade" id="modalLogin" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow border-0">
@@ -355,7 +354,6 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
       </div>
     </div>
 
-    <!-- NOVO: MODAL DE TEMPO TERMINADO -->
     <div class="modal fade" id="modalTimer" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow border-0">
@@ -467,6 +465,7 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
             const limiteInicial = 5;
             let comentariosVisiveis = limiteInicial;
 
+            // Se houver mais de 5 comentários, esconde os restantes
             if (comentarios.length > limiteInicial) {
                 btnVerMais.style.display = 'inline-block';
                 for (let i = limiteInicial; i < comentarios.length; i++) {
@@ -475,12 +474,16 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
             }
 
             if(btnVerMais) {
+                // Ao clicar, revela os próximos 5 com uma animação de FadeIn
                 btnVerMais.addEventListener('click', function() {
-                    const proximoLimite = comentariosVisiveis + 5;
+                    // comentariosVisiveis começa em 5
+                const proximoLimite = comentariosVisiveis + 5;// O novo limite passa a ser 10
+                    // O ciclo FOR começa no 5 (o primeiro escondido) e vai até ao 10
                     for (let i = comentariosVisiveis; i < proximoLimite && i < comentarios.length; i++) {
-                        comentarios[i].classList.remove('d-none'); 
-                        comentarios[i].style.animation = "fadeIn 0.5s";
+                        comentarios[i].classList.remove('d-none'); // Torna-os visíveis
+                        comentarios[i].style.animation = "fadeIn 0.5s";// Adiciona o efeito visual
                     }
+                    // Atualiza a variável de controlo para que no próximo clique comece no 10
                     comentariosVisiveis = proximoLimite;
                     if (comentariosVisiveis >= comentarios.length) {
                         btnVerMais.style.display = 'none';
@@ -580,7 +583,7 @@ $classe_coracao = $e_favorito ? "text-danger" : "text-secondary";
 
                     lista.insertAdjacentHTML('afterbegin', data.html);
 
-                    //  Atualizar o contador de comentários (Opcional, visual)
+                    //  Atualizar o contador de comentários
                     const tituloComentarios = document.querySelector('h3.fw-bold.mb-4');
                     if(tituloComentarios) {
                         let textoAtual = tituloComentarios.innerText;

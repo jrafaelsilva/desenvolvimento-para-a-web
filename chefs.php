@@ -2,10 +2,11 @@
 session_start();
 require('includes/connection.php');
 
-//  Buscar todos os Chefs por ordem alfabética
+//  Buscar todos os chefs por ordem alfabética
 $stmtChefs = $dbh->query("SELECT * FROM chefs ORDER BY nome ASC");
 $lista_chefs = $stmtChefs->fetchAll(PDO::FETCH_ASSOC);
 
+// Inicia a variável de ID do utilizador como zero (não logado)
 $id_utilizador_logado = 0;
 if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
     $id_utilizador_logado = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
@@ -60,7 +61,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                     </div>
                     
                     <?php
-                        // Buscar receitas deste chef específico
+                        // Procura receitas deste chef específico
                         $sqlRec = "SELECT * FROM receitas WHERE id_chef = ? AND estado =1 LIMIT 12";
                         $stmtRec = $dbh->prepare($sqlRec);
                         $stmtRec->execute([$chef['id']]);
@@ -78,7 +79,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
                                 $descricao = !empty($row['descricao']) ? $row['descricao'] : "Uma receita deliciosa.";
                                 $referencia = "receita.php?id=" . $id;
 
-                                // Verificar Favorito 
+                                // Verificar favorito 
                                 $e_favorito = false;
                                 if ($id_utilizador_logado > 0) {
                                     $checkFav = $dbh->prepare("SELECT id FROM favoritos WHERE id_utilizador = ? AND id_receita = ? AND ativado = 1");
@@ -116,7 +117,6 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
             <?php endforeach; ?>
 
         <?php else: ?>
-            <!-- Caso a tabela de chefs esteja vazia -->
             <div class="text-center py-5">
                 <i class="bi bi-people display-1 text-muted opacity-25"></i>
                 <p class="text-muted mt-3">Ainda não existem chefs registados.</p>
@@ -125,7 +125,6 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
 
     </div>
 
-    <!-- MODAL DE LOGIN -->
     <div class="modal fade" id="modalLogin" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow border-0">
@@ -154,7 +153,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
 
     <script>
       const isLogado = <?php echo (isset($_SESSION['logado']) && $_SESSION['logado'] === true) ? 'true' : 'false'; ?>;
-
+      // Função para alternar favoritos via ajax
       function toggleFavorito(btn, id, titulo, imagem, referencia) {
         
         if (!isLogado) {
@@ -163,7 +162,7 @@ if (isset($_SESSION['logado']) && $_SESSION['logado'] === true) {
             modal.show();
             return;
         }
-
+        // Faz o pedido assíncrono ao servidor para gravar/remover o favorito
         fetch('ajax/ajax_favorito.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

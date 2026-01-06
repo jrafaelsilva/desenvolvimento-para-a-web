@@ -121,7 +121,6 @@ if (in_array($ext, $permitidos)) {
 </head>
 <body>
 
-    <!-- Navbar Admin -->
     <nav class="navbar navbar-expand-lg shadow-sm fixed-top" style="background-color: rgb(245, 240, 214);">
       <div class="container">
         <a class="navbar-brand d-flex align-items-center" href="../index.php">
@@ -156,19 +155,16 @@ if (in_array($ext, $permitidos)) {
                         <!-- O action="" envia para a própria página -->
                         <form action="" method="POST" enctype="multipart/form-data">
                             
-                            <!-- 1. TÍTULO -->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark">Nome da Receita</label>
                                 <input type="text" name="titulo" class="form-control form-control-lg" placeholder="Ex: Arroz de Pato à Antiga" required>
                             </div>
                             
-                            <!-- descrição-->
                             <div class="mb-4">
                                 <label class="form-label fw-bold text-dark">Descrição da Receita</label>
                                 <input type="text" name="descricao" class="form-control form-control-lg" placeholder="Ex:Uma receita deliciosa para experimentar." required>
                             </div>
 
-                            <!-- 2. CATEGORIA E CHEF -->
                             <div class="row g-3 mb-4">
                                 <div class="col-md-6">
                                     <label class="form-label fw-bold text-dark">Categoria</label>
@@ -191,7 +187,6 @@ if (in_array($ext, $permitidos)) {
                                 </div>
                             </div>
 
-                            <!-- 3. TEMPO E IMAGEM -->
                             <div class="row g-3 mb-5">
                                 <div class="col-md-4">
                                     <label class="form-label fw-bold text-dark">Tempo (minutos)</label>
@@ -209,7 +204,6 @@ if (in_array($ext, $permitidos)) {
 
                             <hr class="my-4">
 
-                            <!-- 4. INGREDIENTES -->
                             <div class="mb-5">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h4 class="fw-bold mb-0 text-center w-100">Ingredientes</h4>
@@ -229,7 +223,6 @@ if (in_array($ext, $permitidos)) {
                                 </div>
                             </div>
 
-                            <!-- 5. MODO DE PREPARAÇÃO-->
                             <div class="mb-5">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
                                     <h4 class="fw-bold mb-0 text-center w-100">Modo de Preparação</h4>
@@ -249,7 +242,6 @@ if (in_array($ext, $permitidos)) {
                                 </div>
                             </div>
 
-                            <!-- BOTÃO ENVIAR -->
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-success btn-lg py-3 fw-bold rounded-pill shadow-sm">
                                     <i class="bi bi-check2-circle me-2"></i>Criar Receita
@@ -264,7 +256,6 @@ if (in_array($ext, $permitidos)) {
         </div>
     </div>
               
-     <!-- ESTRUTURA DO MODAL BOOTSTRAP -->
     <div class="modal fade" id="successModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content text-center p-4 rounded-4 shadow">
@@ -284,7 +275,6 @@ if (in_array($ext, $permitidos)) {
 
     <script src="../js/bootstrap.bundle.min.js"></script>
 
-    <!-- Scripts JS para adicionar campos -->
     <script>
         function adicionarIngrediente() {
             const container = document.getElementById('lista-ingredientes');
@@ -316,7 +306,6 @@ if (in_array($ext, $permitidos)) {
             btn.parentElement.remove();
         }
 
-        // --- SCRIPT DO MODAL BOOTSTRAP ---
         <?php if ($sucesso): ?>
             const successModal = new bootstrap.Modal(document.getElementById('successModal'));
             successModal.show();

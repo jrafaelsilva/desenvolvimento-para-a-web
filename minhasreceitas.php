@@ -9,7 +9,7 @@ if (!isset($_SESSION['logado']) || $_SESSION['logado'] !== true) {
 
 $id_utilizador = isset($_SESSION['iduser']) ? $_SESSION['iduser'] : $_SESSION['id'];
 
-//  BUSCAR FAVORITOS 
+//  Buscar favoritos 
 $sqlFav = "SELECT f.* FROM favoritos f
            JOIN receitas r ON f.id_receita = r.id
            WHERE f.id_utilizador = ? 
@@ -19,11 +19,13 @@ $sqlFav = "SELECT f.* FROM favoritos f
 
 $stmtFav = $dbh->prepare($sqlFav);
 $stmtFav->execute([$id_utilizador]);
+//guarda num array
 $meus_favoritos = $stmtFav->fetchAll(PDO::FETCH_ASSOC);
 
-//  BUSCAR SUBMISSÕES 
+//  Buscar receitas submetidas 
 $stmtSub = $dbh->prepare("SELECT * FROM receitas WHERE id_utilizador = ? AND estado = 1 ORDER BY id DESC");
 $stmtSub->execute([$id_utilizador]);
+//guarda num array
 $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -50,7 +52,6 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
             <p class="lead text-muted">Gere os teus favoritos e as tuas próprias criações.</p>
         </div>
 
-        <!-- FAVORITOS -->
         <div class="mb-4 border-bottom pb-2 d-flex align-items-center">
             <h3 class="fw-bold m-0">
                 <i class="bi bi-heart-fill me-2 text-danger"></i>Meus Favoritos
@@ -97,7 +98,6 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
         <div class="my-5"></div>
 
 
-        <!--  MINHAS SUBMISSÕES -->
         <div class="mb-4 border-bottom pb-2 d-flex justify-content-between align-items-center">
             <h3 class="fw-bold m-0">
                 <i class="bi bi-journal-text me-2 text-warning"></i>Minhas Contribuições
@@ -134,7 +134,6 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
             </div>
         <?php else: ?>
             
-            <!-- Estado Vazio para Submissões -->
             <div class="text-center py-5 bg-white rounded-4 shadow-sm border">
                 <i class="bi bi-egg-fried display-1 text-warning opacity-50"></i>
                 <h4 class="mt-3 text-muted">Ainda não partilhaste nenhuma receita.</h4>
@@ -146,7 +145,6 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
 
     </div>
 
-    <!-- MODAL DE CONFIRMAÇÃO DE REMOÇÃO -->
     <div class="modal fade" id="modalRemover" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow border-0">
@@ -190,7 +188,7 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
             modalInstancia = new bootstrap.Modal(modalElement);
             modalInstancia.show();
         }
-
+        // Executa a remoção via ajax
         document.getElementById('btnConfirmarRemocao').addEventListener('click', function() {
             if (!dadosRemocao) return;
             if (modalInstancia) modalInstancia.hide();
@@ -215,7 +213,7 @@ $minhas_submissoes = $stmtSub->fetchAll(PDO::FETCH_ASSOC);
                         cardCol.style.transform = "scale(0.8)";
                         setTimeout(() => {
                             cardCol.remove();
-                            // Verifica se a lista de favoritos ficou vazia
+                            // Se era o último favorito, recarrega a página para mostrar o estado vazio
                             const lista = document.getElementById('listaFavoritos');
                             if(lista && lista.children.length === 0) {
                                 location.reload();

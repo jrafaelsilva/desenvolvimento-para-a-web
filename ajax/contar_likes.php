@@ -23,7 +23,7 @@ $stmt->execute();
 $total = 0;
 
 if($stmt){
-    // Busca o resultado como objeto, tal como no teu exemplo
+    // Busca o resultado como objeto
     $total = $stmt->fetchObject()->total;
 }
 

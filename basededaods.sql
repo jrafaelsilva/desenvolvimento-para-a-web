@@ -46,9 +46,9 @@ CREATE TABLE IF NOT EXISTS `comentarios` (
   `comentario` text NOT NULL,
   `data_comentario` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.comentarios: ~12 rows (aproximadamente)
+-- A despejar dados para tabela web2.comentarios: ~13 rows (aproximadamente)
 INSERT INTO `comentarios` (`id`, `id_receita`, `id_utilizador`, `comentario`, `data_comentario`) VALUES
 	(1, 2, 4, 'muito deliciosa, recomendo experimentarem!', '2025-11-24 20:36:58'),
 	(2, 2, 4, 'boa!', '2025-11-24 20:37:44'),
@@ -61,7 +61,8 @@ INSERT INTO `comentarios` (`id`, `id_receita`, `id_utilizador`, `comentario`, `d
 	(13, 45, 4, 'bela', '2025-11-29 15:34:23'),
 	(14, 45, 3, 'muito bom', '2025-12-11 14:30:29'),
 	(16, 2, 10, 'deliciosa', '2025-12-13 14:25:51'),
-	(17, 45, 3, 'adorei!', '2025-12-16 18:26:08');
+	(17, 45, 3, 'adorei!', '2025-12-16 18:26:08'),
+	(18, 2, 10, 'recomendo muito!', '2026-01-05 19:58:48');
 
 -- A despejar estrutura para tabela web2.dados_perfil
 DROP TABLE IF EXISTS `dados_perfil`;
@@ -93,9 +94,9 @@ CREATE TABLE IF NOT EXISTS `favoritos` (
   `referencia` varchar(255) DEFAULT NULL,
   `ativado` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=100 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=106 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.favoritos: ~22 rows (aproximadamente)
+-- A despejar dados para tabela web2.favoritos: ~23 rows (aproximadamente)
 INSERT INTO `favoritos` (`id`, `id_utilizador`, `id_receita`, `titulo_receita`, `imagem_receita`, `referencia`, `ativado`) VALUES
 	(68, 4, 44, 'Leite Creme', 'imgs/sobremesa/leitecreme.jpg', 'receita.php?id=44', 1),
 	(69, 4, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 1),
@@ -114,12 +115,18 @@ INSERT INTO `favoritos` (`id`, `id_utilizador`, `id_receita`, `titulo_receita`, 
 	(88, 3, 40, 'Filetes de Pescada', 'imgs/peixe/filetes.jpg', 'receita.php?id=40', 0),
 	(90, 10, 46, 'Salada de Fruta', 'imgs/sobremesa/saladafruta.jpg', 'receita.php?id=46', 1),
 	(91, 3, 50, 'pataniscas', 'imgs/comunidade/receita_user_10_1765636322.jpg', 'receita.php?id=50', 1),
-	(94, 10, 34, 'Dourada Grelhada', 'imgs/peixe/dourada.jpg', 'receita.php?id=34', 1),
+	(94, 10, 34, 'Dourada Grelhada', 'imgs/peixe/dourada.jpg', 'receita.php?id=34', 0),
 	(95, 3, 34, 'Dourada Grelhada', 'imgs/peixe/dourada.jpg', 'receita.php?id=34', 1),
 	(96, 3, 43, 'Baba de Camelo', 'imgs/sobremesa/babacamelo.jpg', 'receita.php?id=43', 1),
 	(97, 3, 22, 'Creme de Abóbora', 'imgs/sopas/cremeabobora.jpg', 'receita.php?id=22', 1),
 	(98, 3, 1, 'Picanha', 'imgs/carne/picanha.jpg', 'receita.php?id=1', 1),
-	(99, 3, 2, 'Bolonhesa', 'imgs/carne/bolonhesa.jpg', 'receita.php?id=2', 1);
+	(99, 3, 2, 'Bolonhesa', 'imgs/carne/bolonhesa.jpg', 'receita.php?id=2', 1),
+	(100, 3, 20, 'Caldo Verde', 'imgs/sopas/caldoverde.webp', 'receita.php?id=20', 1),
+	(101, 10, 2, 'Bolonhesa', 'imgs/carne/bolonhesa.jpg', 'receita.php?id=2', 1),
+	(102, 10, 1, 'Picanha', 'imgs/carne/picanha.jpg', 'receita.php?id=1', 1),
+	(103, 10, 50, 'Pataniscas', 'imgs/comunidade/receita_user_10_1765636322.jpg', 'receita.php?id=50', 0),
+	(104, 10, 28, 'Bife à Portuguesa', 'imgs/carne/bife_portuguesa.webp', 'receita.php?id=28', 0),
+	(105, 10, 41, 'Arroz Doce', 'imgs/sobremesa/arrozdoce.jpg', 'receita.php?id=41', 0);
 
 -- A despejar estrutura para tabela web2.ingredientes
 DROP TABLE IF EXISTS `ingredientes`;
@@ -312,7 +319,7 @@ CREATE TABLE IF NOT EXISTS `preparacao` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=253 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- A despejar dados para tabela web2.preparacao: ~146 rows (aproximadamente)
+-- A despejar dados para tabela web2.preparacao: ~145 rows (aproximadamente)
 INSERT INTO `preparacao` (`id`, `id_receita`, `passo`, `ordem`) VALUES
 	(1, 1, 'Escolha uma picanha com gordura entremeada e com gordura firme de 1 dedo de altura.', 1),
 	(2, 1, 'Sele a picanha, de ambos os lados, em lume alto. E, de seguida, deixe repousar a picanha durante 5 minutos.', 2),
@@ -500,7 +507,7 @@ INSERT INTO `receitas` (`id`, `titulo`, `categoria`, `imagem`, `tempo_preparo`, 
 	(34, 'Dourada Grelhada', 'Peixe', 'imgs/peixe/dourada.jpg', 30, 'Peixe fresco grelhado com legumes.', 1, NULL, 1),
 	(35, 'Arroz de Marisco', 'Peixe', 'imgs/peixe/arroz_marisco.jpg', 45, 'Arroz malandrinho com camarão, amêijoas e delícias do mar.', 5, NULL, 1),
 	(36, 'Polvo à Lagareiro', 'Peixe', 'imgs/peixe/polvo.jpeg', 90, 'Polvo tenro assado no forno com muito azeite e batatas a murro.', 1, NULL, 1),
-	(37, 'Sardinhas Assadas', 'Peixe', 'imgs/peixe/sardinhas.jpg', 20, 'O prato típico dos Santos Populares.', 6, NULL, 1),
+	(37, 'Sardinhas Assadas', 'Peixe', 'imgs/peixe/sardinhas.jpg', 20, 'O prato típico dos Santos Populares.', 8, NULL, 1),
 	(38, 'Cataplana de Peixe', 'Peixe', 'imgs/peixe/cataplana.jpg', 40, 'Uma explosão de sabores do mar cozinhados a vapor.', 1, NULL, 1),
 	(39, 'Pastéis de Bacalhau', 'Peixe', 'imgs/peixe/pasteis_bacalhau.jpg', 60, 'Salgadinhos tradicionais estaladiços por fora e macios por dentro.', 1, NULL, 1),
 	(40, 'Filetes de Pescada', 'Peixe', 'imgs/peixe/filetes.jpg', 30, 'Filetes dourados com arroz de tomate.', 1, NULL, 1),

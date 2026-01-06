@@ -6,7 +6,7 @@ require('includes/connection.php');
 $mensagem = "";
 $erro = "";
 
-// 2. LÓGICA DE CRIAR / EDITAR (POST)
+//  LÓGICA DE CRIAR / EDITAR (POST)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $acao = $_POST['acao'] ?? '';
     $idUser = $_POST['id_user'] ?? 0;
@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         } elseif ($acao === 'editar') {
-            // --- EDITAR EXISTENTE ---
+            // EDITAR EXISTENTE
             if (!empty($novaPass)) {
                 $passHash = password_hash($novaPass, PASSWORD_DEFAULT);
                 $stmt = $dbh->prepare("UPDATE utilizadores SET utilizador = ?, email = ?, pass = ? WHERE iduser = ?");
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// 3. LÓGICA DE bloquaer (GET)
+// bloquaer (GET)
 if (isset($_GET['toggle_id']) && isset($_GET['novo_estado'])) {
     $idToggle = (int)$_GET['toggle_id'];
     $novoEstado = (int)$_GET['novo_estado'];
@@ -66,7 +66,7 @@ if (isset($_GET['toggle_id']) && isset($_GET['novo_estado'])) {
     exit;
 }
 
-// 4. BUSCAR UTILIZADORES
+//  BUSCAR UTILIZADORES
 $sql = "SELECT u.iduser, u.utilizador, u.email, u.estado, dp.avatar 
         FROM utilizadores u 
         LEFT JOIN dados_perfil dp ON u.iduser = dp.id_utilizador 
@@ -164,21 +164,17 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </td>
                                 <td class="text-end pe-4">
                                     
-                                    <!-- Botão Editar -->
                                     <button class="btn btn-sm btn-outline-primary rounded-circle me-1" 
                                             onclick='abrirModalEditar(<?php echo json_encode($user); ?>)'>
                                         <i class="bi bi-pencil-fill"></i>
                                     </button>
 
-                                    <!-- Botão Bloquear/desbloquear  -->
                                     <?php if($estado == 1): ?>
-                                        <!-- ESTADO 1 -> QUER BLOQUEAR (0) -->
                                         <button class="btn btn-sm btn-outline-danger rounded-circle me-1"
                                                 onclick="abrirModalStatus(<?= $user['iduser'] ?>, 0, '<?= addslashes($user['utilizador']) ?>')">
                                             <i class="bi bi-ban"></i>
                                         </button>
                                     <?php else: ?>
-                                        <!-- ESTADO 0 -> QUER desbloquear (1) -->
                                         <button class="btn btn-sm btn-outline-success rounded-circle me-1"
                                                 onclick="abrirModalStatus(<?= $user['iduser'] ?>, 1, '<?= addslashes($user['utilizador']) ?>')">
                                             <i class="bi bi-check-lg"></i>
@@ -196,7 +192,6 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 
-    <!-- 1. MODAL DE CRIAR/EDITAR -->
     <div class="modal fade" id="modalUser" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 border-0 shadow">
@@ -232,13 +227,11 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
 
-    <!-- 2. MODAL DE ALTERAR ESTADO (BLOQUEAR/desbloquear) -->
     <div class="modal fade" id="modalStatus" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-4 shadow border-0">
           
           <div class="modal-body text-center py-4">
-            <!-- Ícone Dinâmico -->
             <div id="statusIconContainer" class="mb-3 rounded-circle p-3 d-inline-block">
                 <i id="statusIcon" class="bi"></i>
             </div>

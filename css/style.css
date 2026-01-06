@@ -62,6 +62,7 @@ body {
   font-weight: 500;
 }
 
+/* Links dentro do breadcrumb */
 .breadcrumb a {
   color: rgb(182, 125, 95);
   text-decoration: none;
@@ -104,33 +105,6 @@ body {
   transition: all 0.3s ease;
 }
 
-/*carrosel*/
-.caixa-texto {
-  background-color: rgba(10, 6, 4, 0.816);
-  padding: 10px 20px;
-  border-radius: 8px;
-  display: inline-block;
-  margin-bottom: 1;
-}
-
-.caixa-texto h5 {
-    font-size: 1.5rem; 
-}
-
-.caixa-texto p {
-    font-size: 1rem; 
-}
-
-.carousel-img-fixed {
-  height: 400px;
-  object-fit: cover;
-}
-
-.carrossel-responsivo {
-  width: 95% !important;
-  margin: 0 auto;
-}
-
 @media (min-width: 992px) {
   .w-lg-60 {
     width: 50% !important;
@@ -147,7 +121,7 @@ body {
   border-radius: 8px;
   padding: 1rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 1020;
+  z-index: 1020;/* Garante que fica por cima de outros elementos */
 
   transition: all 0.3s ease;
 
@@ -195,7 +169,7 @@ body {
   object-fit: cover;
   transition: transform 0.2s;
 }
-/* Quando selecionado, a borda fica castanha e a imagem aumenta ligeiramente */
+/* a borda fica castanha e a imagem aumenta ligeiramente */
 .avatar-option:checked + .avatar-label img {
   border-color: rgb(182, 125, 95);
   transform: scale(1.1);

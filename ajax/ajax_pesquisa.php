@@ -7,7 +7,7 @@ header('Content-Type: application/json');
 $termo = isset($_GET['termo']) ? trim($_GET['termo']) : '';
 
 if (strlen($termo) < 1) {
-    echo json_encode([]); // Se for muito curto, não devolve nada
+    echo json_encode([]); 
     exit;
 }
 
